@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-class StyledForms extends StatefulWidget {
+class StyledForms extends StatelessWidget {
   const StyledForms({
     required this.hintText,
     required this.labelText,
     required this.typeForm,
     required this.textController,
     required this.validator,
+    this.prefixIcon,
     super.key,
   });
 
@@ -15,32 +16,20 @@ class StyledForms extends StatefulWidget {
   final TextInputType typeForm;
   final TextEditingController textController;
   final String? Function(String?)? validator;
+  final IconData? prefixIcon;
 
-  @override
-  State<StyledForms> createState() =>
-      _StyledFormsState();
-}
-
-class _StyledFormsState extends State<StyledForms> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      keyboardType: widget.typeForm,
-      maxLines: null,
-      decoration: InputDecoration(
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          borderSide: BorderSide(color: Colors.cyan, width: 2.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(24.0)),
-          borderSide: BorderSide(color: Colors.yellow, width: 2.0),
-        ),
+      controller: textController,
+      keyboardType: typeForm,
+      validator: validator,
+      textInputAction: TextInputAction.next,
+      decoration: _inputDecoration(
+        hintText: hintText,
+        labelText: labelText,
+        prefixIcon: prefixIcon,
       ),
-      validator: widget.validator,
-      controller: widget.textController,
     );
   }
 }
@@ -62,24 +51,28 @@ class StyledFormsPassword extends StatefulWidget {
   final String? Function(String?)? validator;
 
   @override
-  State<StyledFormsPassword> createState() =>
-      _StyledFormsPasswordState();
+  State<StyledFormsPassword> createState() => _StyledFormsPasswordState();
 }
 
-class _StyledFormsPasswordState
-    extends State<StyledFormsPassword> {
+class _StyledFormsPasswordState extends State<StyledFormsPassword> {
   bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.textController,
       keyboardType: widget.typeForm,
-      maxLines: 1,
       obscureText: _obscureText,
-      decoration: InputDecoration(
-        labelText: widget.labelText,
+      validator: widget.validator,
+      textInputAction: TextInputAction.done,
+      decoration: _inputDecoration(
         hintText: widget.hintText,
+        labelText: widget.labelText,
+        prefixIcon: Icons.lock_outline_rounded,
         suffixIcon: IconButton(
+          tooltip: _obscureText
+              ? 'Afficher le mot de passe'
+              : 'Masquer le mot de passe',
           onPressed: () {
             setState(() {
               _obscureText = !_obscureText;
@@ -89,20 +82,61 @@ class _StyledFormsPasswordState
             _obscureText
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
-            color: Colors.cyan,
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          borderSide: BorderSide(color: Colors.cyan, width: 2.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(24.0)),
-          borderSide: BorderSide(color: Colors.yellow, width: 2.0),
-        ),
       ),
-      validator: widget.validator,
-      controller: widget.textController,
     );
   }
+}
+
+InputDecoration _inputDecoration({
+  required String hintText,
+  required String labelText,
+  IconData? prefixIcon,
+  Widget? suffixIcon,
+}) {
+  return InputDecoration(
+    labelText: labelText,
+    hintText: hintText,
+
+    prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+
+    suffixIcon: suffixIcon,
+
+    filled: true,
+    fillColor: Colors.white,
+
+    contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: BorderSide.none,
+    ),
+
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+    ),
+
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: const BorderSide(color: Colors.cyan, width: 2),
+    ),
+
+    errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: const BorderSide(color: Colors.redAccent, width: 1),
+    ),
+
+    focusedErrorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(14),
+      borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+    ),
+
+    labelStyle: TextStyle(color: Colors.grey.shade600),
+
+    hintStyle: TextStyle(color: Colors.grey.shade400),
+
+    prefixIconColor: Colors.grey.shade500,
+  );
 }
