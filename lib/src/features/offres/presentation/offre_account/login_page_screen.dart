@@ -26,6 +26,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
   Future<void> login() async {
     if (!_formKey.currentState!.validate()) {
+      context.goNamed(AppRoute.home.name);
       return;
     }
 
@@ -157,8 +158,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           height: 52,
                           child: ElevatedButton(
                             onPressed: () {
-                              login;
-                              context.goNamed(AppRoute.home.name);
+                              login();
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF6C63FF),
