@@ -25,6 +25,7 @@ class StyledForms extends StatelessWidget {
       keyboardType: typeForm,
       validator: validator,
       textInputAction: TextInputAction.next,
+      style: const TextStyle(color: Color(0xFFF5F6FA)),
       decoration: _inputDecoration(
         hintText: hintText,
         labelText: labelText,
@@ -65,6 +66,7 @@ class _StyledFormsPasswordState extends State<StyledFormsPassword> {
       obscureText: _obscureText,
       validator: widget.validator,
       textInputAction: TextInputAction.done,
+      style: const TextStyle(color: Color(0xFFF5F6FA)),
       decoration: _inputDecoration(
         hintText: widget.hintText,
         labelText: widget.labelText,
@@ -82,6 +84,7 @@ class _StyledFormsPasswordState extends State<StyledFormsPassword> {
             _obscureText
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
+            color: const Color(0xFFA4B0BE),
           ),
         ),
       ),
@@ -98,45 +101,38 @@ InputDecoration _inputDecoration({
   return InputDecoration(
     labelText: labelText,
     hintText: hintText,
-
     prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
-
     suffixIcon: suffixIcon,
-
     filled: true,
-    fillColor: Colors.white,
-
+    // Fond sombre pour le champ de texte (cohérent avec les cartes du mode sombre)
+    fillColor: const Color(0xFF2C2C2C),
     contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(12),
       borderSide: BorderSide.none,
     ),
-
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(
+        color: const Color(0xFF6C63FF).withOpacity(0.3),
+        width: 1,
+      ),
     ),
-
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(color: Colors.cyan, width: 2),
+      borderRadius: BorderRadius.circular(12),
+      // Bordure violette principale lors du focus
+      borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
     ),
-
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(color: Colors.redAccent, width: 1),
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color(0xFFFF4757), width: 1),
     ),
-
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(14),
-      borderSide: const BorderSide(color: Colors.redAccent, width: 2),
+      borderRadius: BorderRadius.circular(12),
+      borderSide: const BorderSide(color: Color(0xFFFF4757), width: 2),
     ),
-
-    labelStyle: TextStyle(color: Colors.grey.shade600),
-
-    hintStyle: TextStyle(color: Colors.grey.shade400),
-
-    prefixIconColor: Colors.grey.shade500,
+    labelStyle: const TextStyle(color: Color(0xFFA4B0BE)),
+    hintStyle: TextStyle(color: const Color(0xFFA4B0BE).withOpacity(0.5)),
+    prefixIconColor: const Color(0xFF6C63FF),
   );
 }

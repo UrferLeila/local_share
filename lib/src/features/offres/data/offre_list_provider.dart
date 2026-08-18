@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 final offreListNotifierProvider = FutureProvider<Map<String, dynamic>>((
   ref,
 ) async {
-  String url = "http://localhost:3000/allOffres";
+  String url = "http://localhost:3000/offres";
 
   final response = await http.get(Uri.parse(url));
 

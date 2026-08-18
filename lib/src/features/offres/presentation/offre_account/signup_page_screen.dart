@@ -75,7 +75,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: const Color(0xFF121212),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -83,32 +83,61 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 450),
               child: Card(
-                elevation: 4,
-                shadowColor: Colors.black12,
+                elevation: 8,
+                shadowColor: Colors.black54,
+                color: const Color(0xFF1E1E1E),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(28),
+                  padding: const EdgeInsets.all(32),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text('Inscription', textAlign: TextAlign.center),
+                        // Icône décorative aux couleurs de l'application
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF6C63FF).withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.person_add_outlined,
+                              color: Color(0xFF6C63FF),
+                              size: 36,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
+                          'Inscription',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFF5F6FA),
+                          ),
+                        ),
                         const SizedBox(height: 8),
-                        Text(
+                        const Text(
                           'Créez votre compte pour commencer',
                           textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFFA4B0BE),
+                          ),
                         ),
                         const SizedBox(height: 32),
-                        Text('Nom d\'utilisateur'),
-                        const SizedBox(height: 8),
+
                         StyledForms(
                           hintText: 'Ex : PaulBrunel23',
                           labelText: 'Nom d\'utilisateur',
                           typeForm: TextInputType.text,
                           textController: nameUserController,
+                          prefixIcon: Icons.person_outline_rounded,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Veuillez remplir ce champ';
@@ -117,13 +146,13 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        Text('Adresse mail'),
-                        const SizedBox(height: 8),
+
                         StyledForms(
                           hintText: 'Ex : hugo.curty@bookly.ch',
                           labelText: 'Adresse mail',
                           typeForm: TextInputType.emailAddress,
                           textController: adressEmailController,
+                          prefixIcon: Icons.email_outlined,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Veuillez remplir ce champ';
@@ -132,8 +161,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        Text('Mot de passe'),
-                        const SizedBox(height: 8),
+
                         StyledFormsPassword(
                           hintText: 'Votre mot de passe',
                           labelText: 'Mot de passe',
@@ -149,12 +177,15 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 32),
                         SizedBox(
                           height: 52,
                           child: ElevatedButton(
                             onPressed: signup,
                             style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF6C63FF),
+                              foregroundColor: const Color(0xFFF5F6FA),
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -163,16 +194,16 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                               'Créer mon compte',
                               style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 24),
                         Row(
                           children: [
                             Expanded(
-                              child: Divider(color: Colors.grey.shade300),
+                              child: Divider(color: Colors.grey.shade800),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -188,7 +219,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                               ),
                             ),
                             Expanded(
-                              child: Divider(color: Colors.grey.shade300),
+                              child: Divider(color: Colors.grey.shade800),
                             ),
                           ],
                         ),
@@ -197,11 +228,19 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                           onPressed: () {
                             context.goNamed(AppRoute.login.name);
                           },
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color.fromARGB(
+                              255,
+                              0,
+                              223,
+                              212,
+                            ),
+                          ),
                           child: const Text(
                             'Vous avez déjà un compte ? Connectez-vous',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
