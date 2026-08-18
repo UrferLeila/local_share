@@ -1,0 +1,20 @@
+[
+    {
+        "_id": "64a2f8c5e4b0a1b2c3d4e5f1",
+        "name": "Développement d'application Web Fullstack",
+        "description": "Création d'une application sur mesure avec Node.js et React pour gérer votre inventaire.",
+        "user": "64a2f8c5e4b0a1b2c3d4e5a1"
+    },
+    {
+        "_id": "64a2f8c5e4b0a1b2c3d4e5f2",
+        "name": "Audit de sécurité et chiffrement",
+        "description": "Analyse complète de vos bases de données et mise en place de bonnes pratiques de hachage.",
+        "user": "64a2f8c5e4b0a1b2c3d4e5a2"
+    },
+    {
+        "_id": "64a2f8c5e4b0a1b2c3d4e5f3",
+        "name": "Refonte UI/UX Design",
+        "description": "Modernisation de l'interface utilisateur de votre plateforme SaaS pour améliorer l'expérience client.",
+        "user": "64a2f8c5e4b0a1b2c3d4e5a3"
+    }
+]
