@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/common_widgets/styled_forms.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPageScreen extends StatefulWidget {
   const LoginPageScreen({super.key});
@@ -22,10 +24,49 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
     super.dispose();
   }
 
+  Future<void> login() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final email = nameUserController.text.trim();
+    final password = passwordController.text;
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account created successfully !')),
+        );
+
+        context.goNamed(AppRoute.login.name);
+      } else {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to contact the server : $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: SafeArea(
@@ -52,17 +93,9 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                         Text(
                           'Connectez-vous à votre compte',
                           textAlign: TextAlign.center,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey.shade600,
-                          ),
                         ),
                         const SizedBox(height: 32),
-                        Text(
-                          'Adresse mail',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        Text('Adresse mail'),
                         const SizedBox(height: 8),
                         StyledForms(
                           hintText: 'Ex : hugo.curty@bookly.ch',
@@ -77,12 +110,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        Text(
-                          'Mot de passe',
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        Text('Mot de passe'),
                         const SizedBox(height: 8),
                         StyledFormsPassword(
                           hintText: 'Votre mot de passe',
@@ -100,9 +128,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                         SizedBox(
                           height: 52,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {}
-                            },
+                            onPressed: login,
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),

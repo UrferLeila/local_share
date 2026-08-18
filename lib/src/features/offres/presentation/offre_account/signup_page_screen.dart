@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/common_widgets/styled_forms.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
+import 'package:http/http.dart' as http;
 
 class SignupPageScreen extends StatefulWidget {
   const SignupPageScreen({super.key});
@@ -22,6 +24,52 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
     adressEmailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> signup() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final username = nameUserController.text.trim();
+    final email = adressEmailController.text.trim();
+    final password = passwordController.text;
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/signup'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account created successfully!')),
+        );
+
+        context.goNamed(AppRoute.login.name);
+      } else {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to contact the server : $e')),
+      );
+    }
   }
 
   @override
@@ -105,9 +153,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                         SizedBox(
                           height: 52,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {}
-                            },
+                            onPressed: signup,
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
