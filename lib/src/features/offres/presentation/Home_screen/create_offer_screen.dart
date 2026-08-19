@@ -4,14 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:local_share/common_widgets/styled_forms.dart';
 import 'package:http/http.dart' as http;
 
-class CreateOfferPageScreen extends StatefulWidget {
-  const CreateOfferPageScreen({super.key});
+class CreateOfferScreen extends StatefulWidget {
+  const CreateOfferScreen({super.key});
 
   @override
-  State<CreateOfferPageScreen> createState() => _CreateOfferPageScreenState();
+  State<CreateOfferScreen> createState() => _CreateOfferScreenState();
 }
 
-class _CreateOfferPageScreenState extends State<CreateOfferPageScreen> {
+class _CreateOfferScreenState extends State<CreateOfferScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
