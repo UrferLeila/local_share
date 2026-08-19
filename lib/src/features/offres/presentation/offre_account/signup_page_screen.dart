@@ -96,7 +96,6 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Icône décorative aux couleurs de l'application
                         Center(
                           child: Container(
                             padding: const EdgeInsets.all(12),
@@ -133,7 +132,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                         const SizedBox(height: 32),
 
                         StyledForms(
-                          hintText: 'Ex : PaulBrunel23',
+                          hintText: 'PaulBrunel23',
                           labelText: 'Nom d\'utilisateur',
                           typeForm: TextInputType.text,
                           textController: nameUserController,
@@ -148,7 +147,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                         const SizedBox(height: 20),
 
                         StyledForms(
-                          hintText: 'Ex : hugo.curty@bookly.ch',
+                          hintText: 'hugo.curty@bookly.ch',
                           labelText: 'Adresse mail',
                           typeForm: TextInputType.emailAddress,
                           textController: adressEmailController,

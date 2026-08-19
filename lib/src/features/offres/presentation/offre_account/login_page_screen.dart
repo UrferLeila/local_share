@@ -1,18 +1,20 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/common_widgets/styled_forms.dart';
+import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:http/http.dart' as http;
 
-class LoginPageScreen extends StatefulWidget {
+class LoginPageScreen extends ConsumerStatefulWidget {
   const LoginPageScreen({super.key});
 
   @override
-  State<LoginPageScreen> createState() => _LoginPageScreenState();
+  ConsumerState<LoginPageScreen> createState() => _LoginPageScreenState();
 }
 
-class _LoginPageScreenState extends State<LoginPageScreen> {
+class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameUserController = TextEditingController();
   final passwordController = TextEditingController();
@@ -25,10 +27,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   }
 
   Future<void> login() async {
-    // 1. Fix validation check: Return early if form is invalid
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
     final email = nameUserController.text.trim();
     final password = passwordController.text;
@@ -44,6 +43,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
       if (response.statusCode == 200) {
         if (!mounted) return;
+
+        ref.read(userProvider.notifier).setUser(data['user']);
 
         ScaffoldMessenger.of(
           context,
@@ -124,9 +125,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           ),
                         ),
                         const SizedBox(height: 32),
-
                         StyledForms(
-                          hintText: 'Ex : hugo.curty@bookly.ch',
+                          hintText: 'hugo.curty@bookly.ch',
                           labelText: 'Adresse mail',
                           typeForm: TextInputType.emailAddress,
                           textController: nameUserController,
@@ -139,7 +139,6 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           },
                         ),
                         const SizedBox(height: 20),
-
                         StyledFormsPassword(
                           hintText: 'Votre mot de passe',
                           labelText: 'Mot de passe',

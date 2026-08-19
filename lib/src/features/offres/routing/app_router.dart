@@ -13,7 +13,9 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/home',
       name: AppRoute.home.name,
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) {
+        return HomeScreen();
+      },
       routes: [
         GoRoute(
           path: '/create',

@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
+import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  final bool isAdmin;
-
-  const HomeScreen({super.key, required this.isAdmin});
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -19,7 +18,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(userProvider);
+    final isAdmin = currentUser?.isAdmin ?? false;
+
     final config = ref.watch(offreListNotifierProvider);
+
     return config.when(
       loading: () => const Scaffold(
         body: Center(
