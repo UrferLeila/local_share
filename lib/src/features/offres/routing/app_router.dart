@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:local_share/src/features/offres/presentation/home_screen/home_screen.dart';
+import 'package:local_share/src/features/offres/presentation/Home_screen/create_offer_screen.dart';
+import 'package:local_share/src/features/offres/presentation/Home_screen/home_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offre_account/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offre_account/signup_page_screen.dart';
 
@@ -17,7 +18,7 @@ final goRouter = GoRouter(
         GoRoute(
           path: '/create',
           name: AppRoute.creatOffer.name,
-          builder: (context, state) => const CreateOfferPageScreen(),
+          builder: (context, state) => const CreateOfferScreen(),
         ),
       ],
     ),
