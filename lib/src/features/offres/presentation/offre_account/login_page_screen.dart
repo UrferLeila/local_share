@@ -42,7 +42,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -90,7 +90,6 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Icône décorative aux couleurs de l'application
                         Center(
                           child: Container(
                             padding: const EdgeInsets.all(12),

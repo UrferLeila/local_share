@@ -12,7 +12,10 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/home',
       name: AppRoute.home.name,
-      builder: (context, state) => const HomeScreen(),
+      builder: (context, state) {
+        final isAdmin = state.extra as bool;
+        return HomeScreen(isAdmin: isAdmin);
+      },
     ),
     GoRoute(
       path: '/login',

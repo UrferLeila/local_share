@@ -4,7 +4,9 @@ import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+  final bool isAdmin;
+
+  const HomeScreen({super.key, required this.isAdmin});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -32,7 +34,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       data: (dataMap) {
         final listOfoffres = dataMap['offres'] as List<Offre>;
-
         return Scaffold(
           appBar: AppBar(
             title: Row(
@@ -48,14 +49,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           body: LayoutBuilder(
             builder: (context, constraints) {
               bool isDesktopOrTablet = constraints.maxWidth > 768;
-
               return Center(
                 child: Container(
                   constraints: BoxConstraints(
                     maxWidth: isDesktopOrTablet ? 700 : double.infinity,
                   ),
                   child: ListView.builder(
-                    // Ajout d'un espace au début de la liste (padding en haut)
                     padding: const EdgeInsets.only(top: 12.0),
                     itemCount: listOfoffres.length,
                     itemBuilder: (context, index) {
