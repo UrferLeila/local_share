@@ -25,8 +25,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   }
 
   Future<void> login() async {
+    // 1. Fix validation check: Return early if form is invalid
     if (!_formKey.currentState!.validate()) {
-      context.goNamed(AppRoute.home.name);
       return;
     }
 
@@ -42,14 +42,14 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account created successfully !')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Login successful!')));
 
-        context.goNamed(AppRoute.login.name);
+        context.goNamed(AppRoute.home.name);
       } else {
         if (!mounted) return;
 

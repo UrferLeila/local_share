@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
+import 'package:local_share/src/features/offres/routing/app_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -172,7 +174,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              context.goNamed(AppRoute.creatOffer.name);
+            },
             backgroundColor: const Color.fromARGB(255, 0, 223, 212),
             child: const Icon(Icons.add, color: Color(0xFF121212)),
           ),
