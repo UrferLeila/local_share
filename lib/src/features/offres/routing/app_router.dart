@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:local_share/common_widgets/scaffold_with_nav_bar.dart';
+import 'package:local_share/src/common_widgets/scaffold_with_nav_bar.dart';
 import 'package:local_share/src/features/offres/presentation/Home_screen/home_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/signup_page_screen.dart';
