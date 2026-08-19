@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
 
 class OffreCard extends StatelessWidget {
-  const OffreCard({
-    super.key, 
-    required this.offre,
-  }); 
+  const OffreCard({super.key, required this.offre, required this.isAdmin});
 
-  final Offre offre; 
+  final Offre offre;
+  final bool isAdmin;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +16,11 @@ class OffreCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(Sizes.p8),
                 border: Border.all(
                   color: const Color(0xFF6C63FF).withValues(alpha: 0.4),
                   width: 1.5,
@@ -41,10 +40,11 @@ class OffreCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            gapW16,
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +84,7 @@ class OffreCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  gapH4,
                   Text(
                     offre.description ?? 'Aucune description',
                     maxLines: 2,
@@ -95,6 +95,20 @@ class OffreCard extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+            gapW12,
+            InkWell(
+              onTap: () {},
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 150, 145, 250),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.delete, color: Colors.white, size: 20),
               ),
             ),
           ],

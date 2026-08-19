@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:local_share/common_widgets/offre_card.dart';
+import 'package:local_share/src/common_widgets/offre_card.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
@@ -20,8 +20,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(userProvider);
-    final isAdmin = currentUser?.isAdmin ?? false;
-
     final config = ref.watch(offreListNotifierProvider);
 
     return config.when(
@@ -64,7 +62,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.only(top: 12.0),
                     itemCount: listOfoffres.length,
                     itemBuilder: (context, index) {
-                      return OffreCard(offre: listOfoffres[index]);
+                      return OffreCard(
+                        offre: listOfoffres[index],
+                        isAdmin: currentUser?.isAdmin ?? false,
+                      );
                     },
                   ),
                 ),

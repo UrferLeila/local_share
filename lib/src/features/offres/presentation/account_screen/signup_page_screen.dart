@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:local_share/common_widgets/styled_forms.dart';
+import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:http/http.dart' as http;
 
