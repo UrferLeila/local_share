@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'package:local_share/common_widgets/styled_forms.dart';
+import 'package:local_share/src/common_widgets/styled_forms.dart';
 
 class CreateOffreScreen extends StatefulWidget {
   const CreateOffreScreen({super.key});

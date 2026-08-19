@@ -25,7 +25,6 @@ final goRouter = GoRouter(
         ),
       ],
     ),
-
     ShellRoute(
       builder: (context, state, child) {
         return ScaffoldWithNavBar(child: child);
