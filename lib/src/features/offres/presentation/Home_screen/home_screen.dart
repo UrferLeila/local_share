@@ -15,8 +15,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(userProvider);
@@ -78,35 +76,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
             backgroundColor: const Color.fromARGB(255, 0, 223, 212),
             child: const Icon(Icons.add, color: Color(0xFF121212)),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            backgroundColor: const Color(0xFF1E1E1E),
-            selectedItemColor: const Color(0xFF6C63FF),
-            unselectedItemColor: const Color(0xFFA4B0BE),
-            type: BottomNavigationBarType.fixed,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'Accueil',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.local_offer_outlined),
-                activeIcon: Icon(Icons.local_offer),
-                label: 'Mes offres',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: 'Profil',
-              ),
-            ],
           ),
         );
       },

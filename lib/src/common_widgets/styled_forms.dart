@@ -114,7 +114,7 @@ InputDecoration _inputDecoration({
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
       borderSide: BorderSide(
-        color: const Color(0xFF6C63FF).withOpacity(0.3),
+        color: const Color(0xFF6C63FF).withValues(alpha :0.3),
         width: 1,
       ),
     ),
@@ -132,7 +132,7 @@ InputDecoration _inputDecoration({
       borderSide: const BorderSide(color: Color(0xFFFF4757), width: 2),
     ),
     labelStyle: const TextStyle(color: Color(0xFFA4B0BE)),
-    hintStyle: TextStyle(color: const Color(0xFFA4B0BE).withOpacity(0.5)),
+    hintStyle: TextStyle(color: const Color(0xFFA4B0BE).withValues(alpha :0.5)),
     prefixIconColor: const Color(0xFF6C63FF),
   );
 }
