@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/offre_card.dart';
+import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
+import 'package:local_share/src/theme/theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -15,22 +19,54 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  Future<void> deleteOffre(String offreId) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('http://localhost:3000/offres/$offreId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Offer successfully removed!')),
+        );
+        context.pop();
+      } else {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['error'] ?? 'Error whilst deleting')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to contact the server : $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(userProvider);
     final config = ref.watch(offreListNotifierProvider);
 
     return config.when(
-      loading: () => const Scaffold(
+      loading: () => Scaffold(
         body: Center(
-          child: CircularProgressIndicator(color: Color(0xFF6C63FF)),
+          child: CircularProgressIndicator(color: AppColors.lightPurple),
         ),
       ),
       error: (error, _) => Scaffold(
         body: Center(
           child: Text(
             'Erreur : $error',
-            style: const TextStyle(color: Color(0xFFFF4757)),
+            style: TextStyle(color: AppColors.lightRed),
           ),
         ),
       ),
@@ -41,8 +77,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.hub, color: Color(0xFF6C63FF), size: 22),
-                const SizedBox(width: 8),
+                Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
+                gapW8,
                 Text("${listOfoffres.length} offres trouvées !"),
               ],
             ),
@@ -57,12 +93,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     maxWidth: isDesktopOrTablet ? 700 : double.infinity,
                   ),
                   child: ListView.builder(
-                    padding: const EdgeInsets.only(top: 12.0),
+                    padding: const EdgeInsets.only(top: Sizes.p12),
                     itemCount: listOfoffres.length,
                     itemBuilder: (context, index) {
                       return OffreCard(
                         offre: listOfoffres[index],
                         isAdmin: currentUser?.isAdmin ?? false,
+                        onDelete: deleteOffre,
                       );
                     },
                   ),
@@ -74,8 +111,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onPressed: () {
               context.goNamed(AppRoute.creatOffer.name);
             },
-            backgroundColor: const Color.fromARGB(255, 0, 223, 212),
-            child: const Icon(Icons.add, color: Color(0xFF121212)),
+            backgroundColor: AppColors.cyan,
+            child: Icon(Icons.add, color: AppColors.black),
           ),
         );
       },

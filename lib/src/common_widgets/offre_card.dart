@@ -4,18 +4,29 @@ import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class OffreCard extends StatelessWidget {
-  const OffreCard({super.key, required this.offre, required this.isAdmin});
+  const OffreCard({
+    super.key,
+    required this.offre,
+    required this.isAdmin,
+    required this.onDelete,
+  });
 
   final Offre offre;
   final bool isAdmin;
+  final Future<void> Function(String) onDelete;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.symmetric(
+        horizontal: Sizes.p16,
+        vertical: Sizes.p8,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Sizes.p12),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(Sizes.p16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -25,15 +36,15 @@ class OffreCard extends StatelessWidget {
                 border: Border.all(color: AppColors.lightPurple, width: 1.5),
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(6.5),
+                borderRadius: BorderRadius.circular(Sizes.p8),
                 child: Container(
-                  width: 70,
-                  height: 70,
+                  width: Sizes.p72,
+                  height: Sizes.p72,
                   color: AppColors.lightBrown,
                   child: Icon(
                     Icons.image_outlined,
                     color: AppColors.lightPurple,
-                    size: 30,
+                    size: Sizes.p32,
                   ),
                 ),
               ),
@@ -53,18 +64,18 @@ class OffreCard extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: AppColors.white,
-                            fontSize: 16,
+                            fontSize: Sizes.p16,
                           ),
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
+                          horizontal: Sizes.p8,
+                          vertical: Sizes.p4,
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.cyan.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.circular(Sizes.p8),
                         ),
                         child: Text(
                           'Dispo',
@@ -82,25 +93,33 @@ class OffreCard extends StatelessWidget {
                     offre.description ?? 'Aucune description',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: AppColors.white, fontSize: 14),
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: Sizes.p14,
+                    ),
                   ),
                 ],
               ),
             ),
             gapW12,
-            InkWell(
-              onTap: () {},
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: AppColors.lightPurple,
-                  borderRadius: BorderRadius.circular(8),
+            if (isAdmin)
+              InkWell(
+                onTap: () => onDelete(offre.id),
+                borderRadius: BorderRadius.circular(Sizes.p8),
+                child: Container(
+                  width: Sizes.p40,
+                  height: Sizes.p40,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightPurple,
+                    borderRadius: BorderRadius.circular(Sizes.p8),
+                  ),
+                  child: Icon(
+                    Icons.delete,
+                    color: AppColors.white,
+                    size: Sizes.p20,
+                  ),
                 ),
-                child: Icon(Icons.delete, color: AppColors.white, size: 20),
               ),
-            ),
           ],
         ),
       ),

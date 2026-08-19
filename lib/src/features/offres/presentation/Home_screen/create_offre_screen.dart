@@ -51,7 +51,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
           const SnackBar(content: Text('Offre créée avec succès !')),
         );
 
-        // Retour à la page précédente ou redirection selon ton router
         context.pop();
       } else {
         if (!mounted) return;

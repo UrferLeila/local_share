@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
+import 'package:local_share/src/common_widgets/styled_forms_password.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:http/http.dart' as http;
