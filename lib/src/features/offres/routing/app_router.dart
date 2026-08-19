@@ -3,7 +3,7 @@ import 'package:local_share/src/features/offres/presentation/home_screen/home_sc
 import 'package:local_share/src/features/offres/presentation/offre_account/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offre_account/signup_page_screen.dart';
 
-enum AppRoute { home, login, signup }
+enum AppRoute { home, creatOffer, login, signup }
 
 final goRouter = GoRouter(
   initialLocation: '/login',
@@ -12,10 +12,14 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/home',
       name: AppRoute.home.name,
-      builder: (context, state) {
-        final isAdmin = state.extra as bool;
-        return HomeScreen(isAdmin: isAdmin);
-      },
+      builder: (context, state) => const HomeScreen(),
+      routes: [
+        GoRoute(
+          path: '/create',
+          name: AppRoute.creatOffer.name,
+          builder: (context, state) => const CreateOfferPageScreen(),
+        ),
+      ],
     ),
     GoRoute(
       path: '/login',
