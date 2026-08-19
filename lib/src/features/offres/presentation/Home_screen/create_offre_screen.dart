@@ -4,14 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:local_share/common_widgets/styled_forms.dart';
 import 'package:http/http.dart' as http;
 
-class CreateOfferScreen extends StatefulWidget {
-  const CreateOfferScreen({super.key});
+class CreateOffreScreen extends StatefulWidget {
+  const CreateOffreScreen({super.key});
 
   @override
-  State<CreateOfferScreen> createState() => _CreateOfferScreenState();
+  State<CreateOffreScreen> createState() => _CreateOffreScreenState();
 }
 
-class _CreateOfferScreenState extends State<CreateOfferScreen> {
+class _CreateOffreScreenState extends State<CreateOffreScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -35,7 +35,11 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
       final response = await http.post(
         Uri.parse('http://localhost:3000/offres'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'name': name, 'description': description}),
+        body: jsonEncode({
+          'name': name,
+          'description': description,
+          'user': '6a84554f1b1382e66b754fc2',
+        }),
       );
 
       final data = jsonDecode(response.body);
@@ -94,7 +98,9 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                           child: Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF6C63FF).withOpacity(0.15),
+                              color: const Color(
+                                0xFF6C63FF,
+                              ).withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: const Icon(
@@ -190,7 +196,9 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(
-                                color: const Color(0xFF6C63FF).withOpacity(0.3),
+                                color: const Color(
+                                  0xFF6C63FF,
+                                ).withValues(alpha: 0.3),
                                 width: 1,
                               ),
                             ),
@@ -219,7 +227,9 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                               color: Color(0xFFA4B0BE),
                             ),
                             hintStyle: TextStyle(
-                              color: const Color(0xFFA4B0BE).withOpacity(0.5),
+                              color: const Color(
+                                0xFFA4B0BE,
+                              ).withValues(alpha: 0.5),
                             ),
                             prefixIconColor: const Color(0xFF6C63FF),
                           ),

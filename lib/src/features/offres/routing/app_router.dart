@@ -1,27 +1,18 @@
 import 'package:go_router/go_router.dart';
-import 'package:local_share/src/features/offres/presentation/Home_screen/create_offer_screen.dart';
+import 'package:local_share/common_widgets/scaffold_with_nav_bar.dart';
 import 'package:local_share/src/features/offres/presentation/Home_screen/home_screen.dart';
+import 'package:local_share/src/features/offres/presentation/home_screen/create_offre_screen.dart';
+import 'package:local_share/src/features/offres/presentation/my_offers_screen/my_offers_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offre_account/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offre_account/signup_page_screen.dart';
+import 'package:local_share/src/features/offres/presentation/profile_screen/profile_screen.dart';
 
-enum AppRoute { home, creatOffer, login, signup }
+enum AppRoute { home, creatOffer, login, signup, profil, myOffers }
 
 final goRouter = GoRouter(
   initialLocation: '/login',
   debugLogDiagnostics: true,
   routes: [
-    GoRoute(
-      path: '/home',
-      name: AppRoute.home.name,
-      builder: (context, state) => const HomeScreen(),
-      routes: [
-        GoRoute(
-          path: '/create',
-          name: AppRoute.creatOffer.name,
-          builder: (context, state) => const CreateOfferScreen(),
-        ),
-      ],
-    ),
     GoRoute(
       path: '/login',
       name: AppRoute.login.name,
@@ -31,6 +22,36 @@ final goRouter = GoRouter(
           path: '/signup',
           name: AppRoute.signup.name,
           builder: (context, state) => const SignupPageScreen(),
+        ),
+      ],
+    ),
+
+    ShellRoute(
+      builder: (context, state, child) {
+        return ScaffoldWithNavBar(child: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/home',
+          name: AppRoute.home.name,
+          builder: (context, state) => const HomeScreen(),
+          routes: [
+            GoRoute(
+              path: '/create',
+              name: AppRoute.creatOffer.name,
+              builder: (context, state) => const CreateOffreScreen(),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: '/myOffers',
+          name: AppRoute.myOffers.name,
+          builder: (context, state) => const MyOffersScreen(),
+        ),
+        GoRoute(
+          path: '/profil',
+          name: AppRoute.profil.name,
+          builder: (context, state) => const ProfileScreen(),
         ),
       ],
     ),
