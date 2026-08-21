@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/offre_card.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
@@ -59,6 +60,7 @@ class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
 
     return config.when(
       loading: () => Scaffold(
+        appBar: AppBarWidget(title: "Vos offres"),
         body: Center(
           child: CircularProgressIndicator(color: AppColors.lightPurple),
         ),
@@ -127,6 +129,5 @@ class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
         );
       },
     );
-      appBar: AppBarWidget(title: "Vos offres"),
   }
 }
