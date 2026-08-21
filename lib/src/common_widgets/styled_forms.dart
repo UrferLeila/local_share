@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_share/src/theme/theme.dart';
 
 class StyledForms extends StatelessWidget {
   const StyledForms({
@@ -25,7 +26,7 @@ class StyledForms extends StatelessWidget {
       keyboardType: typeForm,
       validator: validator,
       textInputAction: TextInputAction.next,
-      style: const TextStyle(color: Color(0xFFF5F6FA)),
+      style: TextStyle(color: AppColors.lightwhite),
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,

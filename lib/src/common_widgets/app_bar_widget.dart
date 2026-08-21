@@ -8,11 +8,12 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(Sizes.p80);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      toolbarHeight: Sizes.p80,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

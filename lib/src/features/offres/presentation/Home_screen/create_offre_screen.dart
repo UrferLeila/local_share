@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
+import 'package:local_share/src/constant/app_size.dart';
+import 'package:local_share/src/theme/theme.dart';
 
 class CreateOffreScreen extends StatefulWidget {
   const CreateOffreScreen({super.key});
@@ -71,23 +74,23 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      appBar: AppBar(title: const Text('Créer une offre'), centerTitle: true),
+      backgroundColor: AppColors.black,
+      appBar: AppBarWidget(title: "Créer une offre"),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(Sizes.p52),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 500),
+              constraints: const BoxConstraints(maxWidth: Sizes.p500),
               child: Card(
-                elevation: 8,
-                shadowColor: Colors.black54,
-                color: const Color(0xFF1E1E1E),
+                elevation: Sizes.p8,
+                shadowColor: AppColors.black,
+                color: AppColors.darkBrown,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(Sizes.p20),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(Sizes.p32),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -95,49 +98,40 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                       children: [
                         Center(
                           child: Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(Sizes.p12),
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFF6C63FF,
-                              ).withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(16),
+                              color: AppColors.lightPurple.withValues(
+                                alpha: 0.15,
+                              ),
+                              borderRadius: BorderRadius.circular(Sizes.p16),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.local_offer_outlined,
-                              color: Color(0xFF6C63FF),
-                              size: 36,
+                              color: AppColors.lightPurple,
+                              size: Sizes.p36,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
+                        gapH20,
+                        Text(
                           'Nouvelle offre',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: Sizes.p24,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFF5F6FA),
+                            color: AppColors.lightwhite,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
+                        gapH8,
+                        Text(
                           'Partagez une ressource ou un service localement',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFFA4B0BE),
+                            fontSize: Sizes.p14,
+                            color: AppColors.grey,
                           ),
                         ),
-                        const SizedBox(height: 32),
-                        const Text(
-                          'Titre de l\'offre',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFF5F6FA),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
+                        gapH32,
                         StyledForms(
                           hintText: 'Ex : Perçeuse Bosch / Cours de guitare',
                           labelText: 'Titre de l\'offre',
@@ -151,22 +145,13 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          'Description',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFFF5F6FA),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
+                        gapH20,
                         TextFormField(
                           controller: descriptionController,
                           keyboardType: TextInputType.multiline,
                           maxLines: 4,
                           textInputAction: TextInputAction.done,
-                          style: const TextStyle(color: Color(0xFFF5F6FA)),
+                          style: TextStyle(color: AppColors.lightwhite),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Veuillez remplir ce champ';
@@ -179,77 +164,65 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                                 'Décrivez ce que vous proposez en quelques mots...',
                             alignLabelWithHint: true,
                             prefixIcon: const Padding(
-                              padding: EdgeInsets.only(bottom: 60),
+                              padding: EdgeInsets.only(bottom: Sizes.p60),
                               child: Icon(Icons.description_outlined),
                             ),
                             filled: true,
-                            fillColor: const Color(0xFF2C2C2C),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 18,
+                            fillColor: AppColors.lightBrown,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: Sizes.p18,
+                              vertical: Sizes.p18,
                             ),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(Sizes.p12),
                               borderSide: BorderSide.none,
                             ),
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(Sizes.p12),
                               borderSide: BorderSide(
-                                color: const Color(
-                                  0xFF6C63FF,
-                                ).withValues(alpha: 0.3),
-                                width: 1,
+                                color: AppColors.lightPurple.withValues(
+                                  alpha: 0.3,
+                                ),
                               ),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color(0xFF6C63FF),
-                                width: 2,
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              borderSide: BorderSide(
+                                color: AppColors.lightPurple,
                               ),
                             ),
                             errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFFF4757),
-                                width: 1,
-                              ),
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              borderSide: BorderSide(color: AppColors.lightRed),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFFF4757),
-                                width: 2,
-                              ),
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              borderSide: BorderSide(color: AppColors.lightRed),
                             ),
-                            labelStyle: const TextStyle(
-                              color: Color(0xFFA4B0BE),
-                            ),
+                            labelStyle: TextStyle(color: AppColors.grey),
                             hintStyle: TextStyle(
-                              color: const Color(
-                                0xFFA4B0BE,
-                              ).withValues(alpha: 0.5),
+                              color: AppColors.grey.withValues(alpha: 0.5),
                             ),
-                            prefixIconColor: const Color(0xFF6C63FF),
+                            prefixIconColor: AppColors.lightPurple,
                           ),
                         ),
-                        const SizedBox(height: 32),
+                        gapH32,
                         SizedBox(
-                          height: 52,
+                          height: Sizes.p52,
                           child: ElevatedButton(
                             onPressed: createOffer,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF6C63FF),
-                              foregroundColor: const Color(0xFFF5F6FA),
+                              backgroundColor: AppColors.lightPurple,
+                              foregroundColor: AppColors.lightwhite,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(Sizes.p12),
                               ),
                             ),
                             child: const Text(
                               'Publier l\'offre',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: Sizes.p16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

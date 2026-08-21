@@ -1,7 +1,7 @@
 [
     {
         "email": "admin@ceff.ch",
-        "name": "admin",
+        "username": "admin",
         "password": "$2b$10$kYWzRSCchmX2KBP4J3AHg.NNqx7cGuRJ3PuU2FCIdRkYPei7OQjOK",
         "role": "admin"
     }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/button_cyan.dart';
-import 'package:local_share/src/common_widgets/button_purple.dart';
+import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/common_widgets/styled_forms_password.dart';
 import 'package:local_share/src/constant/app_size.dart';
@@ -159,7 +159,11 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
                           },
                         ),
                         gapH32,
-                        ButtonPurple(onPressed: login, title: "Se connecter"),
+                        Button(
+                          onPressed: login,
+                          title: "Se connecter",
+                          color: AppColors.lightPurple,
+                        ),
                         gapH24,
                         Row(
                           children: [

@@ -32,7 +32,7 @@ class _StyledFormsPasswordState extends State<StyledFormsPassword> {
       obscureText: _obscureText,
       validator: widget.validator,
       textInputAction: TextInputAction.done,
-      style: const TextStyle(color: Color(0xFFF5F6FA)),
+      style: TextStyle(color: AppColors.lightwhite),
       decoration: InputDecoration(
         hintText: widget.hintText,
         labelText: widget.labelText,
