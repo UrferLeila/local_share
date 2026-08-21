@@ -9,7 +9,6 @@ import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
-import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -97,13 +96,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               );
             },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              context.goNamed(AppRoute.creatOffer.name);
-            },
-            backgroundColor: AppColors.cyan,
-            child: Icon(Icons.add, color: AppColors.black),
           ),
         );
       },

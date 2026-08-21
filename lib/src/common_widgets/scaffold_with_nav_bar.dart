@@ -9,7 +9,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   int _getSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
 
-    if (location.startsWith('/Myoffers')) return 1;
+    if (location.startsWith('/myOffers')) return 1;
     if (location.startsWith('/profil')) return 2;
     return 0;
   }
