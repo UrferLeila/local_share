@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/offre_card.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
@@ -73,17 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       data: (dataMap) {
         final listOfoffres = dataMap['offres'] as List<Offre>;
         return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
-                gapW8,
-                Text("${listOfoffres.length} offres trouvées !"),
-              ],
-            ),
-            centerTitle: true,
-          ),
+          appBar : AppBarWidget(title: "${listOfoffres.length} offres trouvées !"),
           body: LayoutBuilder(
             builder: (context, constraints) {
               bool isDesktopOrTablet = constraints.maxWidth > 768;

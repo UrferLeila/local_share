@@ -50,7 +50,7 @@ class _StyledFormsPasswordState extends State<StyledFormsPassword> {
             _obscureText
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
-            color: AppColors.white,
+            color: AppColors.lightwhite,
           ),
         ),
       ),
