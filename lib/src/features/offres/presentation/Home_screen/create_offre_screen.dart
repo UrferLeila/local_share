@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/styled_forms.dart';
+import 'package:local_share/src/features/offres/domain/user.dart';
 
 class CreateOffreScreen extends StatefulWidget {
-  const CreateOffreScreen({super.key});
+  const CreateOffreScreen({super.key, required this.currentUser});
+
+  final User currentUser;
 
   @override
   State<CreateOffreScreen> createState() => _CreateOffreScreenState();
@@ -38,7 +41,7 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
         body: jsonEncode({
           'name': name,
           'description': description,
-          'user': '6a84554f1b1382e66b754fc2',
+          'user': widget.currentUser.id,
         }),
       );
 
@@ -51,7 +54,8 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
           const SnackBar(content: Text('Offre créée avec succès !')),
         );
 
-        context.pop();
+        // Return 'true' to signal the parent/list screen to update
+        context.pop(true);
       } else {
         if (!mounted) return;
 
