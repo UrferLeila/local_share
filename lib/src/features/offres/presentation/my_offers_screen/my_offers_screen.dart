@@ -127,5 +127,6 @@ class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
         );
       },
     );
+      appBar: AppBarWidget(title: "Vos offres"),
   }
 }

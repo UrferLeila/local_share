@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:local_share/src/common_widgets/button_cyan.dart';
+import 'package:local_share/src/common_widgets/button_purple.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/common_widgets/styled_forms_password.dart';
+import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:local_share/src/theme/theme.dart';
 
 class SignupPageScreen extends StatefulWidget {
   const SignupPageScreen({super.key});
@@ -76,22 +80,22 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: AppColors.black,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(Sizes.p24),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 450),
               child: Card(
-                elevation: 8,
-                shadowColor: Colors.black54,
-                color: const Color(0xFF1E1E1E),
+                elevation: Sizes.p8,
+                shadowColor: AppColors.black,
+                color: AppColors.darkBrown,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(Sizes.p20),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(Sizes.p32),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -99,41 +103,40 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                       children: [
                         Center(
                           child: Container(
-                            padding: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(Sizes.p12),
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFF6C63FF,
-                              ).withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(16),
+                              color: AppColors.lightPurple.withValues(
+                                alpha: 0.15,
+                              ),
+                              borderRadius: BorderRadius.circular(Sizes.p16),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.person_add_outlined,
-                              color: Color(0xFF6C63FF),
-                              size: 36,
+                              color: AppColors.lightPurple,
+                              size: Sizes.p32,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
+                        gapH20,
+                        Text(
                           'Inscription',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: Sizes.p24,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFF5F6FA),
+                            color: AppColors.lightwhite,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
+                        gapH8,
+                        Text(
                           'Créez votre compte pour commencer',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFFA4B0BE),
+                            fontSize: Sizes.p14,
+                            color: AppColors.grey,
                           ),
                         ),
-                        const SizedBox(height: 32),
-
+                        gapH32,
                         StyledForms(
                           hintText: 'PaulBrunel23',
                           labelText: 'Nom d\'utilisateur',
@@ -147,8 +150,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
-
+                        gapH20,
                         StyledForms(
                           hintText: 'hugo.curty@bookly.ch',
                           labelText: 'Adresse mail',
@@ -162,7 +164,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
+                        gapH20,
                         StyledFormsPassword(
                           hintText: 'Votre mot de passe',
                           labelText: 'Mot de passe',
@@ -178,73 +180,37 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 32),
-                        SizedBox(
-                          height: 52,
-                          child: ElevatedButton(
-                            onPressed: signup,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF6C63FF),
-                              foregroundColor: const Color(0xFFF5F6FA),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: const Text(
-                              'Créer mon compte',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                        gapH32,
+                        ButtonPurple(
+                          onPressed: signup,
+                          title: "Créer mon compte",
                         ),
-                        const SizedBox(height: 24),
+                        gapH24,
                         Row(
                           children: [
-                            Expanded(
-                              child: Divider(color: Colors.grey.shade800),
-                            ),
+                            Expanded(child: Divider(color: AppColors.grey)),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
+                                horizontal: Sizes.p12,
                               ),
                               child: Text(
                                 'OU',
                                 style: TextStyle(
-                                  color: Colors.grey.shade500,
-                                  fontSize: 12,
+                                  color: AppColors.grey,
+                                  fontSize: Sizes.p12,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
-                            Expanded(
-                              child: Divider(color: Colors.grey.shade800),
-                            ),
+                            Expanded(child: Divider(color: AppColors.grey)),
                           ],
                         ),
-                        const SizedBox(height: 16),
-                        TextButton(
+                        gapH16,
+                        ButtonCyan(
                           onPressed: () {
                             context.goNamed(AppRoute.login.name);
                           },
-                          style: TextButton.styleFrom(
-                            foregroundColor: const Color.fromARGB(
-                              255,
-                              0,
-                              223,
-                              212,
-                            ),
-                          ),
-                          child: const Text(
-                            'Vous avez déjà un compte ? Connectez-vous',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          title: 'Vous avez déjà un compte ? Connectez-vous',
                         ),
                       ],
                     ),
