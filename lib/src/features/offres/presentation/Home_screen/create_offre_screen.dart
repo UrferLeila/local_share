@@ -1,7 +1,11 @@
 import 'dart:convert';
+// Import foundation to check if we are on web or mobile if needed,
+// and image_picker for selecting images.
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart'; // Make sure to add image_picker to pubspec.yaml
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/constant/app_size.dart';
@@ -22,11 +26,29 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
 
+  // Variables to hold the selected image data
+  XFile? _selectedImage;
+  Uint8List? _imageBytes;
+
   @override
   void dispose() {
     nameController.dispose();
     descriptionController.dispose();
     super.dispose();
+  }
+
+  // Method to pick an image from the gallery
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      setState(() {
+        _selectedImage = image;
+        _imageBytes = bytes;
+      });
+    }
   }
 
   Future<void> createOffer() async {
@@ -37,6 +59,12 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
     final name = nameController.text.trim();
     final description = descriptionController.text.trim();
 
+    // Optional: Convert image to base64 if your backend accepts a base64 string
+    String? base64Image;
+    if (_imageBytes != null) {
+      base64Image = base64Encode(_imageBytes!);
+    }
+
     try {
       final response = await http.post(
         Uri.parse('http://localhost:3000/offres'),
@@ -45,6 +73,7 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
           'name': name,
           'description': description,
           'user': widget.currentUser.id,
+          'image': base64Image, // Sending image payload to your backend
         }),
       );
 
@@ -57,7 +86,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
           const SnackBar(content: Text('Offre créée avec succès !')),
         );
 
-        // Return 'true' to signal the parent/list screen to update
         context.pop(true);
       } else {
         if (!mounted) return;
@@ -136,6 +164,64 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                           ),
                         ),
                         gapH32,
+
+                        // --- IMAGE PICKER & PREVIEW SECTION ---
+                        Text(
+                          'Image de l\'offre',
+                          style: TextStyle(
+                            fontSize: Sizes.p14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightwhite,
+                          ),
+                        ),
+                        gapH8,
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            height: 160,
+                            decoration: BoxDecoration(
+                              color: AppColors.lightBrown,
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              border: Border.all(
+                                color: AppColors.lightPurple.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
+                            child: _imageBytes != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      Sizes.p12,
+                                    ),
+                                    child: Image.memory(
+                                      _imageBytes!,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add_a_photo_outlined,
+                                        color: AppColors.lightPurple,
+                                        size: Sizes.p36,
+                                      ),
+                                      gapH8,
+                                      Text(
+                                        'Appuyez pour ajouter une image',
+                                        style: TextStyle(
+                                          color: AppColors.grey,
+                                          fontSize: Sizes.p14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                        gapH20,
+                        // --------------------------------------
+
                         StyledForms(
                           hintText: 'Ex : Perçeuse Bosch / Cours de guitare',
                           labelText: 'Titre de l\'offre',
@@ -149,6 +235,7 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                             return null;
                           },
                         ),
+
                         gapH20,
                         TextFormField(
                           controller: descriptionController,
