@@ -8,7 +8,6 @@ import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
-import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class EditOffreScreen extends ConsumerStatefulWidget {
@@ -20,97 +19,46 @@ class EditOffreScreen extends ConsumerStatefulWidget {
 
 class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController usernameController;
-  late final TextEditingController emailController;
+  late final TextEditingController nameController;
+  late final TextEditingController descriptionController;
 
   @override
   void initState() {
     super.initState();
 
-    usernameController = TextEditingController();
-    emailController = TextEditingController();
-
-    ref.listenManual(userProvider, (previous, next) {
-      if (next != null && usernameController.text.isEmpty) {
-        usernameController.text = next.username;
-        emailController.text = next.email;
-      }
-    });
-
-    final user = ref.read(userProvider);
-
-    if (user != null) {
-      usernameController.text = user.username;
-      emailController.text = user.email;
-    }
+    nameController = TextEditingController();
+    descriptionController = TextEditingController();
   }
 
   @override
   void dispose() {
-    usernameController.dispose();
-    emailController.dispose();
+    nameController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
-  Future<void> updateUser() async {
+  Future<void> updateOffre() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    final user = ref.read(userProvider);
-
-    if (user == null) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Utilisateur non trouvé')));
-      return;
-    }
-
-    final username = usernameController.text.trim();
-    final email = emailController.text.trim();
+    final name = nameController.text.trim();
+    final description = descriptionController.text.trim();
 
     try {
-      final response = await http.put(
-        Uri.parse('http://localhost:3000/users/${user.id}'),
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/offres'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'email': email}),
+        body: jsonEncode({'name': name, 'description': description}),
       );
-
-      // Vérifie si le serveur a bien renvoyé du JSON (et non une page d'erreur HTML)
-      final contentType = response.headers['content-type'] ?? '';
-      if (!contentType.contains('application/json')) {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Erreur serveur (Code ${response.statusCode}) : Le serveur n\'a pas renvoyé du JSON.',
-            ),
-          ),
-        );
-        return;
-      }
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
-        if (data is Map<String, dynamic> && data['user'] != null) {
-          await ref
-              .read(userProvider.notifier)
-              .setUser(Map<String, dynamic>.from(data['user']));
-        } else {
-          await ref.read(userProvider.notifier).setUser({
-            'id': user.id,
-            'username': username,
-            'email': email,
-            'role': user.role,
-          });
-        }
-
+      if (response.statusCode == 201) {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account successfully updated!')),
+          const SnackBar(content: Text('Offre créée avec succès !')),
         );
 
         context.pop(true);
@@ -118,14 +66,14 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+          SnackBar(content: Text(data['error'] ?? 'Une erreur est survenue')),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server: $e')),
+        SnackBar(content: Text('Impossible de contacter le serveur : $e')),
       );
     }
   }
@@ -134,11 +82,11 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.black,
-      appBar: AppBarWidget(title: 'Modifier'),
+      appBar: AppBarWidget(title: "Modifier"),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(Sizes.p64),
+            padding: const EdgeInsets.all(Sizes.p52),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: Sizes.p500),
               child: Card(
@@ -165,25 +113,59 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                               borderRadius: BorderRadius.circular(Sizes.p16),
                             ),
                             child: Icon(
-                              Icons.edit,
+                              Icons.local_offer_outlined,
                               color: AppColors.lightPurple,
                               size: Sizes.p36,
                             ),
                           ),
                         ),
                         gapH20,
-                        StyledTitle("Modifier votre compte"),
+                        StyledTitle("Modifier l'offre"),
                         gapH8,
                         StyledText(
-                          "Modifier votre nom d'utilisateur ou votre email",
+                          "Modifier l'image, le titre, ou encore la description",
                         ),
                         gapH32,
+                        StyledBase(
+                          "Image de l'offre",
+                          textAlign: TextAlign.left,
+                        ),
+                        gapH8,
+                        GestureDetector(
+                          child: Container(
+                            height: 160,
+                            decoration: BoxDecoration(
+                              color: AppColors.lightBrown,
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              border: Border.all(
+                                color: AppColors.lightPurple.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add_a_photo_outlined,
+                                  color: AppColors.lightPurple,
+                                  size: Sizes.p36,
+                                ),
+                                gapH8,
+                                StyledText("Appuyez pour ajouter une image"),
+                              ],
+                            ),
+                          ),
+                        ),
+                        gapH20,
                         StyledForms(
+                          hintText: 'Perçeuse Bosch / Cours de guitare',
+                          labelText: 'Titre de l\'offre',
                           typeForm: TextInputType.text,
-                          textController: usernameController,
-                          prefixIcon: Icons.person_rounded,
+                          textController: nameController,
+                          prefixIcon: Icons.title_rounded,
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
+                            if (value == null || value.isEmpty) {
                               return 'Veuillez remplir ce champ';
                             }
                             return null;
@@ -191,11 +173,12 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                         ),
                         gapH20,
                         StyledForms(
+                          labelText: "Description",
                           typeForm: TextInputType.text,
-                          textController: emailController,
-                          prefixIcon: Icons.email,
+                          textController: descriptionController,
+                          prefixIcon: Icons.description_outlined,
                           validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
+                            if (value == null || value.isEmpty) {
                               return 'Veuillez remplir ce champ';
                             }
                             return null;
@@ -203,8 +186,8 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                         ),
                         gapH32,
                         Button(
-                          onPressed: updateUser,
-                          title: "Modifier mon compte",
+                          onPressed: updateOffre,
+                          title: "Modifier l'offre",
                           color: AppColors.lightPurple,
                         ),
                       ],
