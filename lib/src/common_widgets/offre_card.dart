@@ -76,7 +76,6 @@ class OffreCardState extends State<OffreCard> {
                                 height: Sizes.p72,
                               );
                             } catch (e) {
-                              // Fallback if base64 decoding fails
                               return Icon(
                                 Icons.broken_image_outlined,
                                 color: AppColors.lightPurple,
@@ -159,7 +158,7 @@ class OffreCardState extends State<OffreCard> {
                     ),
                     gapH8,
                     InkWell(
-                      onTap: () => context.pushNamed(AppRoute.editOffre.name),
+                      onTap: () => context.pushNamed(AppRoute.editOffre.name, extra: widget.offre),
                       borderRadius: BorderRadius.circular(Sizes.p8),
                       child: Container(
                         width: Sizes.p40,

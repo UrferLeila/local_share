@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/scaffold_with_nav_bar.dart';
+import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/domain/user.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/edit_offre_screen.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/home_screen.dart';
@@ -69,7 +70,8 @@ final goRouter = GoRouter(
       path: '/editOffre',
       name: AppRoute.editOffre.name,
       builder: (context, state) {
-        return EditOffreScreen();
+        final currentOffre = state.extra as Offre;
+        return EditOffreScreen(currentOffre: currentOffre);
       },
     ),
   ],

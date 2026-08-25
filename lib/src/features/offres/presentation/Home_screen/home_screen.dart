@@ -30,14 +30,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (response.statusCode == 200) {
         if (!mounted) return;
 
-        // 1. Tell Riverpod to invalidate/refresh the provider cache
         ref.invalidate(offreListNotifierProvider);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Offer successfully removed!')),
         );
 
-        // REMOVED context.pop() so it doesn't close the HomeScreen!
       } else {
         if (!mounted) return;
 
