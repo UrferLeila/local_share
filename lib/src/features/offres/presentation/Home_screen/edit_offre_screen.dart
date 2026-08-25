@@ -8,10 +8,13 @@ import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
+import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class EditOffreScreen extends ConsumerStatefulWidget {
-  const EditOffreScreen({super.key});
+  const EditOffreScreen({super.key, required this.currentOffre});
+
+  final Offre currentOffre;
 
   @override
   ConsumerState<EditOffreScreen> createState() => _EditOffreScreenState();
@@ -25,9 +28,10 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
   @override
   void initState() {
     super.initState();
-
-    nameController = TextEditingController();
-    descriptionController = TextEditingController();
+    nameController = TextEditingController(text: widget.currentOffre.name);
+    descriptionController = TextEditingController(
+      text: widget.currentOffre.description ?? '',
+    );
   }
 
   @override
@@ -46,19 +50,37 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
     final description = descriptionController.text.trim();
 
     try {
-      final response = await http.post(
-        Uri.parse('http://localhost:3000/offres'),
+      final response = await http.put(
+        Uri.parse('http://localhost:3000/offres/${widget.currentOffre.id}'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'name': name, 'description': description}),
+        body: jsonEncode({
+          'name': name,
+          'description': description,
+          'user': widget.currentOffre.user,
+        }),
       );
+
+      final contentType = response.headers['content-type'] ?? '';
+      if (!contentType.contains('application/json')) {
+
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erreur ${response.statusCode} : Regardez la console Flutter',
+            ),
+          ),
+        );
+        return;
+      }
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Offre créée avec succès !')),
+          const SnackBar(content: Text('Offer successfully amended!')),
         );
 
         context.pop(true);
@@ -66,14 +88,14 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'Une erreur est survenue')),
+          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Impossible de contacter le serveur : $e')),
+        SnackBar(content: Text('Unable to contact the server: $e')),
       );
     }
   }
@@ -159,7 +181,6 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                         ),
                         gapH20,
                         StyledForms(
-                          hintText: 'Perçeuse Bosch / Cours de guitare',
                           labelText: 'Titre de l\'offre',
                           typeForm: TextInputType.text,
                           textController: nameController,
