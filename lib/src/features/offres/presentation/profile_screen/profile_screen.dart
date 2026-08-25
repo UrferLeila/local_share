@@ -84,7 +84,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       BoxShadow(
                         color: AppColors.black.withValues(alpha: 0.05),
                         blurRadius: Sizes.p12,
-                        offset: const Offset(0, 4),
+                        offset: const Offset(0, Sizes.p4),
                       ),
                     ],
                   ),
@@ -148,7 +148,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
                 gapH12,
                 Button(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pushNamed(AppRoute.edit.name);
+                  },
                   icon: Icons.edit,
                   title: "Modifier",
                   color: AppColors.lightPurple,
@@ -160,7 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     if (user == null) return;
                     await deleteUser(user.id);
                     ref.read(userProvider.notifier).logout();
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     context.goNamed(AppRoute.login.name);
                   },
                   icon: Icons.delete,

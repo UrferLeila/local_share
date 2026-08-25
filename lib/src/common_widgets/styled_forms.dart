@@ -3,8 +3,8 @@ import 'package:local_share/src/theme/theme.dart';
 
 class StyledForms extends StatelessWidget {
   const StyledForms({
-    required this.hintText,
-    required this.labelText,
+    this.hintText,
+    this.labelText,
     required this.typeForm,
     required this.textController,
     required this.validator,
@@ -12,8 +12,8 @@ class StyledForms extends StatelessWidget {
     super.key,
   });
 
-  final String hintText;
-  final String labelText;
+  final String? hintText;
+  final String? labelText;
   final TextInputType typeForm;
   final TextEditingController textController;
   final String? Function(String?)? validator;

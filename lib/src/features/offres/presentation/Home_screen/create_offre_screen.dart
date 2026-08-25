@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
+import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/theme/theme.dart';
@@ -57,7 +58,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
           const SnackBar(content: Text('Offre créée avec succès !')),
         );
 
-        // Return 'true' to signal the parent/list screen to update
         context.pop(true);
       } else {
         if (!mounted) return;
@@ -211,26 +211,10 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                           ),
                         ),
                         gapH32,
-                        SizedBox(
-                          height: Sizes.p52,
-                          child: ElevatedButton(
-                            onPressed: createOffer,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.lightPurple,
-                              foregroundColor: AppColors.lightwhite,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(Sizes.p12),
-                              ),
-                            ),
-                            child: const Text(
-                              'Publier l\'offre',
-                              style: TextStyle(
-                                fontSize: Sizes.p16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                        Button(
+                          onPressed: createOffer,
+                          title: "Publier l'offre",
+                          color: AppColors.lightPurple,
                         ),
                       ],
                     ),

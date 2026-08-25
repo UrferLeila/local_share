@@ -13,14 +13,14 @@ import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class MyOffersScreen extends ConsumerStatefulWidget {
-  const MyOffersScreen({super.key});
+class OffresScreen extends ConsumerStatefulWidget {
+  const OffresScreen({super.key});
 
   @override
-  ConsumerState<MyOffersScreen> createState() => _MyOffersScreenState();
+  ConsumerState<OffresScreen> createState() => _OffresScreenState();
 }
 
-class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
+class _OffresScreenState extends ConsumerState<OffresScreen> {
   Future<void> deleteOffre(String offreId) async {
     try {
       final response = await http.delete(
@@ -115,10 +115,9 @@ class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
               final bool? shouldRefresh = await context.pushNamed<bool>(
-                AppRoute.creatOffer.name,
+                AppRoute.create.name,
                 extra: currentUser,
               );
-
               if (shouldRefresh == true) {
                 ref.invalidate(offreListNotifierProvider);
               }
