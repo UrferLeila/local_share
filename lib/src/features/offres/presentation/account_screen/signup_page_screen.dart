@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:local_share/src/common_widgets/button_cyan.dart';
 import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
-import 'package:local_share/src/common_widgets/styled_forms_password.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:http/http.dart' as http;
@@ -118,24 +117,9 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                           ),
                         ),
                         gapH20,
-                        Text(
-                          'Inscription',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.lightwhite,
-                          ),
-                        ),
+                        StyledTitle("Inscription"),
                         gapH8,
-                        Text(
-                          'Créez votre compte pour commencer',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p14,
-                            color: AppColors.grey,
-                          ),
-                        ),
+                        StyledText("Créez votre compte pour commencer"),
                         gapH32,
                         StyledForms(
                           hintText: 'PaulBrunel23',
@@ -165,20 +149,15 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                           },
                         ),
                         gapH20,
-                        StyledFormsPassword(
+                        StyledForms(
                           hintText: 'Votre mot de passe',
                           labelText: 'Mot de passe',
                           typeForm: TextInputType.visiblePassword,
                           textController: passwordController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Veuillez remplir ce champ';
-                            }
-                            if (value.length < 8) {
-                              return 'Le mot de passe doit contenir au moins 8 caractères';
-                            }
-                            return null;
-                          },
+                          validator: (value) => value!.length < 6
+                              ? 'Mot de passe trop court'
+                              : null,
+                          isPassword: true,
                         ),
                         gapH32,
                         Button(
@@ -207,11 +186,17 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                           ],
                         ),
                         gapH16,
-                        ButtonCyan(
-                          onPressed: () {
-                            context.goNamed(AppRoute.login.name);
+                        InkWell(
+                          borderRadius: BorderRadius.circular(Sizes.p8),
+                          onTap: () {
+                            context.pushNamed(AppRoute.signup.name);
                           },
-                          title: 'Vous avez déjà un compte ? Connectez-vous',
+                          child: Padding(
+                            padding: const EdgeInsets.all(Sizes.p8),
+                            child: StyledLink(
+                              "Vous avez déjà un compte ? Connectez-vous",
+                            ),
+                          ),
                         ),
                       ],
                     ),

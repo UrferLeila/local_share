@@ -1,13 +1,13 @@
 import 'dart:convert';
-// Import foundation to check if we are on web or mobile if needed,
-// and image_picker for selecting images.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart'; // Make sure to add image_picker to pubspec.yaml
+import 'package:image_picker/image_picker.dart';
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
+import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/theme/theme.dart';
 import 'package:local_share/src/features/offres/domain/user.dart';
@@ -140,34 +140,15 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                           ),
                         ),
                         gapH20,
-                        Text(
-                          'Nouvelle offre',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.lightwhite,
-                          ),
-                        ),
+                        StyledTitle("Nouvelle offre"),
                         gapH8,
-                        Text(
-                          'Partagez une ressource ou un service localement',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p14,
-                            color: AppColors.grey,
-                          ),
+                        StyledText(
+                          "Partagez une ressource ou un service localement",
                         ),
                         gapH32,
-
-                        // --- IMAGE PICKER & PREVIEW SECTION ---
-                        Text(
-                          'Image de l\'offre',
-                          style: TextStyle(
-                            fontSize: Sizes.p14,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.lightwhite,
-                          ),
+                        StyledBase(
+                          "Image de l'offre",
+                          textAlign: TextAlign.left,
                         ),
                         gapH8,
                         GestureDetector(
@@ -203,22 +184,16 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                                         size: Sizes.p36,
                                       ),
                                       gapH8,
-                                      Text(
-                                        'Appuyez pour ajouter une image',
-                                        style: TextStyle(
-                                          color: AppColors.grey,
-                                          fontSize: Sizes.p14,
-                                        ),
+                                      StyledText(
+                                        "Appuyez pour ajouter une image",
                                       ),
                                     ],
                                   ),
                           ),
                         ),
                         gapH20,
-                        // --------------------------------------
-
                         StyledForms(
-                          hintText: 'Ex : Perçeuse Bosch / Cours de guitare',
+                          hintText: 'Perçeuse Bosch / Cours de guitare',
                           labelText: 'Titre de l\'offre',
                           typeForm: TextInputType.text,
                           textController: nameController,
@@ -230,89 +205,24 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                             return null;
                           },
                         ),
-
                         gapH20,
-                        TextFormField(
-                          controller: descriptionController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 4,
-                          textInputAction: TextInputAction.done,
-                          style: TextStyle(color: AppColors.lightwhite),
+                        StyledForms(
+                          labelText: "Description",
+                          typeForm: TextInputType.text,
+                          textController: descriptionController,
+                          prefixIcon: Icons.description_outlined,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Veuillez remplir ce champ';
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
-                            labelText: 'Description',
-                            hintText:
-                                'Décrivez ce que vous proposez en quelques mots...',
-                            alignLabelWithHint: true,
-                            prefixIcon: const Padding(
-                              padding: EdgeInsets.only(bottom: Sizes.p60),
-                              child: Icon(Icons.description_outlined),
-                            ),
-                            filled: true,
-                            fillColor: AppColors.lightBrown,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: Sizes.p18,
-                              vertical: Sizes.p18,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Sizes.p12),
-                              borderSide: BorderSide.none,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Sizes.p12),
-                              borderSide: BorderSide(
-                                color: AppColors.lightPurple.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Sizes.p12),
-                              borderSide: BorderSide(
-                                color: AppColors.lightPurple,
-                              ),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Sizes.p12),
-                              borderSide: BorderSide(color: AppColors.lightRed),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(Sizes.p12),
-                              borderSide: BorderSide(color: AppColors.lightRed),
-                            ),
-                            labelStyle: TextStyle(color: AppColors.grey),
-                            hintStyle: TextStyle(
-                              color: AppColors.grey.withValues(alpha: 0.5),
-                            ),
-                            prefixIconColor: AppColors.lightPurple,
-                          ),
                         ),
                         gapH32,
-                        SizedBox(
-                          height: Sizes.p52,
-                          child: ElevatedButton(
-                            onPressed: createOffer,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.lightPurple,
-                              foregroundColor: AppColors.lightwhite,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(Sizes.p12),
-                              ),
-                            ),
-                            child: const Text(
-                              'Publier l\'offre',
-                              style: TextStyle(
-                                fontSize: Sizes.p16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                        Button(
+                          onPressed: createOffer,
+                          title: "Publier l'offre",
+                          color: AppColors.lightPurple,
                         ),
                       ],
                     ),

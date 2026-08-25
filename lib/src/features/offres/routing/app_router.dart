@@ -5,10 +5,11 @@ import 'package:local_share/src/features/offres/presentation/home_screen/home_sc
 import 'package:local_share/src/features/offres/presentation/account_screen/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/signup_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/create_offre_screen.dart';
-import 'package:local_share/src/features/offres/presentation/my_offers_screen/my_offers_screen.dart';
+import 'package:local_share/src/features/offres/presentation/offres_screen/offres_screen.dart';
+import 'package:local_share/src/features/offres/presentation/profile_screen/edit_offre_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/profile_screen.dart';
 
-enum AppRoute { home, creatOffer, login, signup, profil, myOffers }
+enum AppRoute { home, create, login, signup, profil, offres, edit }
 
 final goRouter = GoRouter(
   initialLocation: '/login',
@@ -20,7 +21,7 @@ final goRouter = GoRouter(
       builder: (context, state) => const LoginPageScreen(),
       routes: [
         GoRoute(
-          path: '/signup',
+          path: 'signup',
           name: AppRoute.signup.name,
           builder: (context, state) => const SignupPageScreen(),
         ),
@@ -35,21 +36,11 @@ final goRouter = GoRouter(
           path: '/home',
           name: AppRoute.home.name,
           builder: (context, state) => const HomeScreen(),
-          routes: [
-            GoRoute(
-              path: '/create',
-              name: AppRoute.creatOffer.name,
-              builder: (context, state) {
-                final currentUser = state.extra as User;
-                return CreateOffreScreen(currentUser: currentUser);
-              },
-            ),
-          ],
         ),
         GoRoute(
-          path: '/myOffers',
-          name: AppRoute.myOffers.name,
-          builder: (context, state) => const MyOffersScreen(),
+          path: '/offres',
+          name: AppRoute.offres.name,
+          builder: (context, state) => const OffresScreen(),
         ),
         GoRoute(
           path: '/profil',
@@ -57,6 +48,21 @@ final goRouter = GoRouter(
           builder: (context, state) => const ProfileScreen(),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/create',
+      name: AppRoute.create.name,
+      builder: (context, state) {
+        final currentUser = state.extra as User;
+        return CreateOffreScreen(currentUser: currentUser);
+      },
+    ),
+    GoRoute(
+      path: '/edit',
+      name: AppRoute.edit.name,
+      builder: (context, state) {
+        return EditOffreScreen();
+      },
     ),
   ],
 );

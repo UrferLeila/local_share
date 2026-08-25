@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/theme/theme.dart';
 
@@ -19,7 +20,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
           gapW8,
-          Text(title),
+          StyledAppBar(title),
         ],
       ),
       centerTitle: true,
