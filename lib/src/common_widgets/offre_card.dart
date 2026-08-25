@@ -1,9 +1,11 @@
 import 'dart:convert'; // Added for base64Decode
 import 'package:flutter/foundation.dart'; // Added for Uint8List
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
+import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class OffreCard extends StatefulWidget {
@@ -156,7 +158,25 @@ class OffreCardState extends State<OffreCard> {
                       ),
                     ),
                     gapH8,
+                    InkWell(
+                      onTap: () => context.pushNamed(AppRoute.editOffre.name),
+                      borderRadius: BorderRadius.circular(Sizes.p8),
+                      child: Container(
+                        width: Sizes.p40,
+                        height: Sizes.p40,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightPurple,
+                          borderRadius: BorderRadius.circular(Sizes.p8),
+                        ),
+                        child: Icon(
+                          Icons.edit,
+                          color: AppColors.lightwhite,
+                          size: Sizes.p20,
+                        ),
+                      ),
+                    ),
                   ],
+                  gapH8,
                   Icon(
                     isExpanded
                         ? Icons.keyboard_arrow_up

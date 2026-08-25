@@ -1,15 +1,16 @@
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/scaffold_with_nav_bar.dart';
 import 'package:local_share/src/features/offres/domain/user.dart';
+import 'package:local_share/src/features/offres/presentation/home_screen/edit_offre_screen.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/home_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/signup_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/create_offre_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offres_screen/offres_screen.dart';
-import 'package:local_share/src/features/offres/presentation/profile_screen/edit_offre_screen.dart';
+import 'package:local_share/src/features/offres/presentation/profile_screen/edit_user_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/profile_screen.dart';
 
-enum AppRoute { home, create, login, signup, profil, offres, edit }
+enum AppRoute { home, create, login, signup, profil, offres, edit, editOffre }
 
 final goRouter = GoRouter(
   initialLocation: '/login',
@@ -60,6 +61,13 @@ final goRouter = GoRouter(
     GoRoute(
       path: '/edit',
       name: AppRoute.edit.name,
+      builder: (context, state) {
+        return EditUserScreen();
+      },
+    ),
+    GoRoute(
+      path: '/editOffre',
+      name: AppRoute.editOffre.name,
       builder: (context, state) {
         return EditOffreScreen();
       },
