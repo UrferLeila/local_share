@@ -4,12 +4,14 @@ class Offre {
   final OffreID id;
   final String name;
   final String? description;
+  final String? image;
   final OffreID user;
-  
+
   Offre({
     required this.id,
     required this.name,
     this.description,
+    this.image,
     required this.user,
   });
 
@@ -17,6 +19,7 @@ class Offre {
     id: json['_id'] ?? '',
     name: json['name'] ?? '',
     description: json['description'],
+    image: json['image'],
     user: json['user'] ?? '',
   );
 
@@ -24,6 +27,7 @@ class Offre {
     '_id': id,
     'name': name,
     'description': description,
+    'image': image,
     'user': user,
   };
 }

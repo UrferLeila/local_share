@@ -26,8 +26,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
 
-  // Variables to hold the selected image data
-  XFile? _selectedImage;
   Uint8List? _imageBytes;
 
   @override
@@ -37,7 +35,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
     super.dispose();
   }
 
-  // Method to pick an image from the gallery
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
@@ -45,7 +42,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
     if (image != null) {
       final bytes = await image.readAsBytes();
       setState(() {
-        _selectedImage = image;
         _imageBytes = bytes;
       });
     }
@@ -59,7 +55,6 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
     final name = nameController.text.trim();
     final description = descriptionController.text.trim();
 
-    // Optional: Convert image to base64 if your backend accepts a base64 string
     String? base64Image;
     if (_imageBytes != null) {
       base64Image = base64Encode(_imageBytes!);
@@ -73,7 +68,7 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
           'name': name,
           'description': description,
           'user': widget.currentUser.id,
-          'image': base64Image, // Sending image payload to your backend
+          'image': base64Image,
         }),
       );
 

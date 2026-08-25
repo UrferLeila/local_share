@@ -33,10 +33,13 @@ class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
       if (response.statusCode == 200) {
         if (!mounted) return;
 
+        // 1. Invalidate Riverpod provider so the list refreshes automatically
+        ref.invalidate(offreListNotifierProvider);
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Offer successfully removed!')),
         );
-        context.pop();
+        // REMOVED context.pop() so it doesn't close the screen!
       } else {
         if (!mounted) return;
 

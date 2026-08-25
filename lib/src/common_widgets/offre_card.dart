@@ -1,3 +1,5 @@
+import 'dart:convert'; // Added for base64Decode
+import 'package:flutter/foundation.dart'; // Added for Uint8List
 import 'package:flutter/material.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
@@ -24,6 +26,9 @@ class OffreCardState extends State<OffreCard> {
 
   @override
   Widget build(BuildContext context) {
+    final hasImage =
+        widget.offre.image != null && widget.offre.image!.isNotEmpty;
+
     return Card(
       margin: const EdgeInsets.symmetric(
         horizontal: Sizes.p16,
@@ -55,11 +60,32 @@ class OffreCardState extends State<OffreCard> {
                     width: Sizes.p72,
                     height: Sizes.p72,
                     color: AppColors.lightBrown,
-                    child: Icon(
-                      Icons.image_outlined,
-                      color: AppColors.lightPurple,
-                      size: Sizes.p32,
-                    ),
+                    child: hasImage
+                        ? (() {
+                            try {
+                              Uint8List decodedBytes = base64Decode(
+                                widget.offre.image!,
+                              );
+                              return Image.memory(
+                                decodedBytes,
+                                fit: BoxFit.cover,
+                                width: Sizes.p72,
+                                height: Sizes.p72,
+                              );
+                            } catch (e) {
+                              // Fallback if base64 decoding fails
+                              return Icon(
+                                Icons.broken_image_outlined,
+                                color: AppColors.lightPurple,
+                                size: Sizes.p32,
+                              );
+                            }
+                          })()
+                        : Icon(
+                            Icons.image_outlined,
+                            color: AppColors.lightPurple,
+                            size: Sizes.p32,
+                          ),
                   ),
                 ),
               ),

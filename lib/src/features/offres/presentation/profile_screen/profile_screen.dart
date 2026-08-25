@@ -160,7 +160,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     if (user == null) return;
                     await deleteUser(user.id);
                     ref.read(userProvider.notifier).logout();
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     context.goNamed(AppRoute.login.name);
                   },
                   icon: Icons.delete,
