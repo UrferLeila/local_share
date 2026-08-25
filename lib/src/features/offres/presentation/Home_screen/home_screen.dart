@@ -73,7 +73,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       data: (dataMap) {
         final listOfoffres = dataMap['offres'] as List<Offre>;
         return Scaffold(
-          appBar : AppBarWidget(title: "${listOfoffres.length} offres trouvées !"),
+          appBar: AppBarWidget(
+            title: "${listOfoffres.length} offres trouvées !",
+          ),
           body: LayoutBuilder(
             builder: (context, constraints) {
               bool isDesktopOrTablet = constraints.maxWidth > 768;

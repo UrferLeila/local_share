@@ -78,16 +78,8 @@ class _OffresScreenState extends ConsumerState<OffresScreen> {
             .where((offre) => offre.user == currentUser!.id)
             .toList();
         return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
-                gapW8,
-                Text("${listOfoffres.length} offres trouvées !"),
-              ],
-            ),
-            centerTitle: true,
+          appBar: AppBarWidget(
+            title: "${listOfoffres.length} offres trouvées !",
           ),
           body: LayoutBuilder(
             builder: (context, constraints) {

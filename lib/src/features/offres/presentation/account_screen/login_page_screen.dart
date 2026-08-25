@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:local_share/src/common_widgets/button_cyan.dart';
 import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
-import 'package:local_share/src/common_widgets/styled_forms_password.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
@@ -81,7 +80,7 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(Sizes.p24),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 450),
+              constraints: BoxConstraints(maxWidth: Sizes.p448),
               child: Card(
                 elevation: Sizes.p8,
                 shadowColor: AppColors.black,
@@ -113,28 +112,13 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
                           ),
                         ),
                         gapH20,
-                        Text(
-                          'Connexion',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.lightwhite,
-                          ),
-                        ),
+                        StyledTitle("Connexion"),
                         gapH8,
-                        Text(
-                          'Connectez-vous à votre compte',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p14,
-                            color: AppColors.grey,
-                          ),
-                        ),
+                        StyledText("Connectez-vous à votre compte"),
                         gapH32,
                         StyledForms(
-                          hintText: 'hugo.curty@bookly.ch',
-                          labelText: 'Adresse mail',
+                          hintText: 'hugo.curty@ceff.ch',
+                          labelText: "Adresse email",
                           typeForm: TextInputType.emailAddress,
                           textController: nameUserController,
                           prefixIcon: Icons.email_outlined,
@@ -146,17 +130,14 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
                           },
                         ),
                         gapH20,
-                        StyledFormsPassword(
-                          hintText: 'Votre mot de passe',
+                        StyledForms(
                           labelText: 'Mot de passe',
                           typeForm: TextInputType.visiblePassword,
                           textController: passwordController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Veuillez remplir ce champ';
-                            }
-                            return null;
-                          },
+                          validator: (value) => value!.length < 6
+                              ? 'Mot de passe trop court'
+                              : null,
+                          isPassword: true,
                         ),
                         gapH32,
                         Button(
@@ -185,11 +166,17 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
                           ],
                         ),
                         gapH16,
-                        ButtonCyan(
-                          onPressed: () {
-                            context.goNamed(AppRoute.signup.name);
+                        InkWell(
+                          borderRadius: BorderRadius.circular(Sizes.p8),
+                          onTap: () {
+                            context.pushNamed(AppRoute.signup.name);
                           },
-                          title: 'Pas encore de compte ? Inscrivez-vous',
+                          child: Padding(
+                            padding: const EdgeInsets.all(Sizes.p8),
+                            child: StyledLink(
+                              "Pas encore de compte ? Inscrivez-vous !",
+                            ),
+                          ),
                         ),
                       ],
                     ),

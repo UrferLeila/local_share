@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/theme/theme.dart';
@@ -137,7 +138,7 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(Sizes.p52),
+            padding: const EdgeInsets.all(Sizes.p64),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: Sizes.p500),
               child: Card(
@@ -171,14 +172,10 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                           ),
                         ),
                         gapH20,
-                        Text(
-                          'Modifier votre compte',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: Sizes.p24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.lightwhite,
-                          ),
+                        StyledTitle("Modifier votre compte"),
+                        gapH8,
+                        StyledText(
+                          "Modifier votre nom d'utilisateur ou votre email",
                         ),
                         gapH32,
                         StyledForms(

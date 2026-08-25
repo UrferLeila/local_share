@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/button.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
@@ -99,13 +100,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             color: AppColors.grey,
                           ),
                           gapW12,
-                          Text(
-                            user?.username ?? "Nom d'utilisateur",
-                            style: const TextStyle(
-                              fontSize: Sizes.p16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          StyledBase(user?.username ?? ""),
                         ],
                       ),
                       const Divider(height: Sizes.p24),
@@ -117,13 +112,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             color: AppColors.grey,
                           ),
                           gapW12,
-                          Text(
-                            user?.email ?? "email@exemple.com",
-                            style: TextStyle(
-                              fontSize: Sizes.p14,
-                              color: AppColors.grey,
-                            ),
-                          ),
+                          StyledBase(user?.email ?? ""),
                         ],
                       ),
                     ],

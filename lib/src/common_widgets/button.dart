@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/theme/theme.dart';
 
@@ -35,15 +36,7 @@ class Button extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icon != null) ...[Icon(icon), gapW8],
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: Sizes.p16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.lightwhite,
-              ),
-            ),
+            StyledBase(title),
           ],
         ),
       ),
