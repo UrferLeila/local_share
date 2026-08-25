@@ -13,14 +13,14 @@ import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class OffresScreen extends ConsumerStatefulWidget {
-  const OffresScreen({super.key});
+class MyOffersScreen extends ConsumerStatefulWidget {
+  const MyOffersScreen({super.key});
 
   @override
-  ConsumerState<OffresScreen> createState() => _MyOffersScreenState();
+  ConsumerState<MyOffersScreen> createState() => _MyOffersScreenState();
 }
 
-class _MyOffersScreenState extends ConsumerState<OffresScreen> {
+class _MyOffersScreenState extends ConsumerState<MyOffersScreen> {
   Future<void> deleteOffre(String offreId) async {
     try {
       final response = await http.delete(

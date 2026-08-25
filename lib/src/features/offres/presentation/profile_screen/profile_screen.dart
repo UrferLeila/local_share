@@ -52,117 +52,250 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
+  Future<void> _showDeleteConfirmation(
+    BuildContext context,
+    String userId,
+  ) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Sizes.p16),
+          ),
+          title: const StyledBase('Supprimer le compte'),
+          content: const Text(
+            'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Annuler', style: TextStyle(color: AppColors.grey)),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: Text(
+                'Supprimer',
+                style: TextStyle(color: AppColors.lightRed),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await deleteUser(userId);
+                ref.read(userProvider.notifier).logout();
+                if (!context.mounted) return;
+                context.goNamed(AppRoute.login.name);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
 
     return Scaffold(
       appBar: AppBarWidget(title: "Mon profil"),
-      body: Column(
-        children: [
-          gapH16,
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: Sizes.p36,
-                  backgroundColor: AppColors.lightPurple.withValues(alpha: 0.2),
-                  child: Icon(
-                    Icons.person,
-                    size: Sizes.p36,
-                    color: AppColors.lightPurple,
-                  ),
-                ),
-                gapH24,
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(Sizes.p16),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.p24,
+            vertical: Sizes.p32,
+          ),
+          child: Column(
+            children: [
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(Sizes.p12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.black.withValues(alpha: 0.05),
-                        blurRadius: Sizes.p12,
-                        offset: const Offset(0, Sizes.p4),
-                      ),
-                    ],
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppColors.lightPurple.withValues(alpha: 0.5),
+                      width: 2,
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person_outline,
-                            size: Sizes.p20,
-                            color: AppColors.grey,
-                          ),
-                          gapW12,
-                          StyledBase(user?.username ?? ""),
-                        ],
-                      ),
-                      const Divider(height: Sizes.p24),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.email_outlined,
-                            size: Sizes.p20,
-                            color: AppColors.grey,
-                          ),
-                          gapW12,
-                          StyledBase(user?.email ?? ""),
-                        ],
-                      ),
-                    ],
+                  child: CircleAvatar(
+                    radius: Sizes.p48,
+                    backgroundColor: AppColors.lightPurple.withValues(
+                      alpha: 0.2,
+                    ),
+                    child: Icon(
+                      Icons.person,
+                      size: Sizes.p48,
+                      color: AppColors.lightPurple,
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              gapH20,
+              StyledBase(user?.username ?? "Utilisateur"),
+              gapH8,
+              Text(
+                user?.email ?? "",
+                style: TextStyle(color: AppColors.grey, fontSize: 14),
+              ),
+              gapH32,
+
+              // User Info Card with expanded padding
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(Sizes.p20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(Sizes.p16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.black.withValues(alpha: 0.1),
+                      blurRadius: Sizes.p12,
+                      offset: const Offset(0, Sizes.p4),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Informations personnelles",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const Divider(height: Sizes.p32),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.person_outline,
+                          size: Sizes.p20,
+                          color: AppColors.lightPurple,
+                        ),
+                        gapW16,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Nom d'utilisateur",
+                              style: TextStyle(
+                                color: AppColors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            gapH4,
+                            StyledBase(user?.username ?? "-"),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Divider(height: Sizes.p32),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.email_outlined,
+                          size: Sizes.p20,
+                          color: AppColors.lightPurple,
+                        ),
+                        gapW16,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Adresse email",
+                              style: TextStyle(
+                                color: AppColors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            gapH4,
+                            StyledBase(user?.email ?? "-"),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const Divider(height: Sizes.p32),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.badge_outlined,
+                          size: Sizes.p20,
+                          color: AppColors.cyan,
+                        ),
+                        gapW16,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Rôle",
+                              style: TextStyle(
+                                color: AppColors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            gapH4,
+                            StyledBase(user?.role ?? "Membre"),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              gapH64,
+
+              // Action Buttons with generous spacing
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Button(
+                        onPressed: () {
+                          context.pushNamed(AppRoute.edit.name);
+                        },
+                        icon: Icons.edit,
+                        title: "Modifier le profil",
+                        color: AppColors.lightPurple,
+                      ),
+                    ),
+                    gapH16,
+                    SizedBox(
+                      width: double.infinity,
+                      child: Button(
+                        onPressed: () {
+                          ref.read(userProvider.notifier).logout();
+                          context.goNamed(AppRoute.login.name);
+                        },
+                        icon: Icons.logout,
+                        title: "Se déconnecter",
+                        color: AppColors.darkBrown,
+                      ),
+                    ),
+                    gapH16,
+                    SizedBox(
+                      width: double.infinity,
+                      child: Button(
+                        onPressed: () async {
+                          final currentUser = ref.read(userProvider);
+                          if (currentUser == null) return;
+                          await _showDeleteConfirmation(
+                            context,
+                            currentUser.id,
+                          );
+                        },
+                        icon: Icons.delete_outline,
+                        title: "Supprimer le compte",
+                        color: AppColors.lightRed,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              gapH32,
+            ],
           ),
-          const Spacer(),
-          Center(
-            child: Column(
-              children: [
-                gapH12,
-                Button(
-                  onPressed: () {
-                    ref.read(userProvider.notifier).logout();
-                    context.goNamed(AppRoute.login.name);
-                  },
-                  icon: Icons.logout,
-                  title: "Se déconnecter",
-                  color: AppColors.lightPurple,
-                ),
-                gapH12,
-                Button(
-                  onPressed: () {
-                    context.pushNamed(AppRoute.edit.name);
-                  },
-                  icon: Icons.edit,
-                  title: "Modifier",
-                  color: AppColors.lightPurple,
-                ),
-                gapH12,
-                Button(
-                  onPressed: () async {
-                    final user = ref.read(userProvider);
-                    if (user == null) return;
-                    await deleteUser(user.id);
-                    ref.read(userProvider.notifier).logout();
-                    if (!context.mounted) return;
-                    context.goNamed(AppRoute.login.name);
-                  },
-                  icon: Icons.delete,
-                  title: "Supprimer",
-                  color: AppColors.lightRed,
-                ),
-              ],
-            ),
-          ),
-          gapH24,
-        ],
+        ),
       ),
     );
   }
