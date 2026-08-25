@@ -22,18 +22,22 @@ class Sizes {
   static const p80 = 80.0;
   static const p140 = 140.0;
   static const p160 = 160.0;
+  static const p200 = 200.0; 
   static const p240 = 240.0;
   static const p300 = 300.0;
   static const p448 = 448.0;
   static const p500 = 500.0;
 }
 
+//Gap Width (Espacements horizontaux)
 const gapW4 = SizedBox(width: Sizes.p4);
 const gapW8 = SizedBox(width: Sizes.p8);
 const gapW12 = SizedBox(width: Sizes.p12);
 const gapW16 = SizedBox(width: Sizes.p16);
 const gapW20 = SizedBox(width: Sizes.p20);
 const gapW32 = SizedBox(width: Sizes.p32);
+
+//Gap Height (Espacements verticaux)
 const gapH4 = SizedBox(height: Sizes.p4);
 const gapH8 = SizedBox(height: Sizes.p8);
 const gapH12 = SizedBox(height: Sizes.p12);

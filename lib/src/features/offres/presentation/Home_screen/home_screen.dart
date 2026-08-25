@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
-import 'package:local_share/src/common_widgets/offre_card.dart';
+import 'package:local_share/src/common_widgets/offer_card.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
@@ -30,7 +30,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (response.statusCode == 200) {
         if (!mounted) return;
 
-        ref.invalidate(offreListNotifierProvider);
+        ref.invalidate(offerListNotifierProvider);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Offer successfully removed!')),
@@ -55,7 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(userProvider);
-    final config = ref.watch(offreListNotifierProvider);
+    final config = ref.watch(offerListNotifierProvider);
 
     return config.when(
       loading: () => Scaffold(
@@ -89,8 +89,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     padding: const EdgeInsets.only(top: Sizes.p12),
                     itemCount: listOfoffres.length,
                     itemBuilder: (context, index) {
-                      return OffreCard(
-                        offre: listOfoffres[index],
+                      return OfferCard(
+                        offer: listOfoffres[index],
                         isAdmin: currentUser?.isAdmin ?? false,
                         onDelete: deleteOffre,
                       );

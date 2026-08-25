@@ -8,29 +8,29 @@ import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class OffreCard extends StatefulWidget {
-  const OffreCard({
+class OfferCard extends StatefulWidget {
+  const OfferCard({
     super.key,
-    required this.offre,
+    required this.offer,
     required this.isAdmin,
     required this.onDelete,
   });
 
-  final Offre offre;
+  final Offre offer;
   final bool isAdmin;
   final Future<void> Function(String) onDelete;
 
   @override
-  State<OffreCard> createState() => OffreCardState();
+  State<OfferCard> createState() => OffreCardState();
 }
 
-class OffreCardState extends State<OffreCard> {
+class OffreCardState extends State<OfferCard> {
   bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     final hasImage =
-        widget.offre.image != null && widget.offre.image!.isNotEmpty;
+        widget.offer.image != null && widget.offer.image!.isNotEmpty;
 
     return Card(
       margin: const EdgeInsets.symmetric(
@@ -67,7 +67,7 @@ class OffreCardState extends State<OffreCard> {
                         ? (() {
                             try {
                               Uint8List decodedBytes = base64Decode(
-                                widget.offre.image!,
+                                widget.offer.image!,
                               );
                               return Image.memory(
                                 decodedBytes,
@@ -100,7 +100,7 @@ class OffreCardState extends State<OffreCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: StyledSmallTitle(widget.offre.name)),
+                        Expanded(child: StyledSmallTitle(widget.offer.name)),
                         gapW12,
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -118,13 +118,13 @@ class OffreCardState extends State<OffreCard> {
                     gapH4,
                     AnimatedCrossFade(
                       firstChild: StyledBase(
-                        widget.offre.description ?? "Aucune description",
+                        widget.offer.description ?? "",
                         maxLines: 1,
                         textAlign: TextAlign.left,
                         overflow: TextOverflow.ellipsis,
                       ),
                       secondChild: StyledBase(
-                        widget.offre.description ?? "Aucune description",
+                        widget.offer.description ?? "",
                         textAlign: TextAlign.left,
                       ),
                       crossFadeState: isExpanded
@@ -140,7 +140,7 @@ class OffreCardState extends State<OffreCard> {
                 children: [
                   if (widget.isAdmin) ...[
                     InkWell(
-                      onTap: () => widget.onDelete(widget.offre.id),
+                      onTap: () => widget.onDelete(widget.offer.id),
                       borderRadius: BorderRadius.circular(Sizes.p8),
                       child: Container(
                         width: Sizes.p40,
@@ -158,7 +158,10 @@ class OffreCardState extends State<OffreCard> {
                     ),
                     gapH8,
                     InkWell(
-                      onTap: () => context.pushNamed(AppRoute.editOffre.name, extra: widget.offre),
+                      onTap: () => context.pushNamed(
+                        AppRoute.editOffre.name,
+                        extra: widget.offer,
+                      ),
                       borderRadius: BorderRadius.circular(Sizes.p8),
                       child: Container(
                         width: Sizes.p40,
@@ -174,8 +177,8 @@ class OffreCardState extends State<OffreCard> {
                         ),
                       ),
                     ),
+                    gapH8,
                   ],
-                  gapH8,
                   Icon(
                     isExpanded
                         ? Icons.keyboard_arrow_up

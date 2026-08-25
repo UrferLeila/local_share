@@ -20,15 +20,12 @@ class ScaffoldWithNavBar extends StatelessWidget {
       case 0:
         context.go('/home');
         break;
-
       case 1:
         context.go('/offres');
         break;
-
       case 2:
         context.go('/profil');
         break;
-
       case 3:
         break;
     }
@@ -51,17 +48,17 @@ class ScaffoldWithNavBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
-            label: 'Accueil',
+            label: "Accueil",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer_outlined),
             activeIcon: Icon(Icons.local_offer),
-            label: 'Mes offres',
+            label: "Mes offres",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
-            label: 'Profil',
+            label: "Profil",
           ),
         ],
       ),

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
-import 'package:local_share/src/common_widgets/offre_card.dart';
+import 'package:local_share/src/common_widgets/offer_card.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
@@ -33,13 +33,11 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
       if (response.statusCode == 200) {
         if (!mounted) return;
 
-        // 1. Invalidate Riverpod provider so the list refreshes automatically
-        ref.invalidate(offreListNotifierProvider);
+        ref.invalidate(offerListNotifierProvider);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Offer successfully removed!')),
         );
-        // REMOVED context.pop() so it doesn't close the screen!
       } else {
         if (!mounted) return;
 
@@ -59,7 +57,7 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUser = ref.watch(userProvider);
-    final config = ref.watch(offreListNotifierProvider);
+    final config = ref.watch(offerListNotifierProvider);
 
     return config.when(
       loading: () => Scaffold(
@@ -104,8 +102,8 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
                     padding: const EdgeInsets.only(top: Sizes.p12),
                     itemCount: listOfoffres.length,
                     itemBuilder: (context, index) {
-                      return OffreCard(
-                        offre: listOfoffres[index],
+                      return OfferCard(
+                        offer: listOfoffres[index],
                         isAdmin: true,
                         onDelete: deleteOffre,
                       );
@@ -123,7 +121,7 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
               );
 
               if (shouldRefresh == true) {
-                ref.invalidate(offreListNotifierProvider);
+                ref.invalidate(offerListNotifierProvider);
               }
             },
             backgroundColor: AppColors.cyan,

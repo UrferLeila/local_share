@@ -1,12 +1,6 @@
 typedef OffreID = String;
 
 class Offre {
-  final OffreID id;
-  final String name;
-  final String? description;
-  final String? image;
-  final OffreID user;
-
   Offre({
     required this.id,
     required this.name,
@@ -14,6 +8,12 @@ class Offre {
     this.image,
     required this.user,
   });
+
+  final OffreID id;
+  final String name;
+  final String? description;
+  final String? image;
+  final OffreID user;
 
   factory Offre.fromJson(Map<String, dynamic> json) => Offre(
     id: json['_id'] ?? '',

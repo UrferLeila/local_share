@@ -20,12 +20,12 @@ class LoginPageScreen extends ConsumerStatefulWidget {
 
 class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
   final _formKey = GlobalKey<FormState>();
-  final nameUserController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    nameUserController.dispose();
+    usernameController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -33,7 +33,7 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
   Future<void> login() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final email = nameUserController.text.trim();
+    final email = usernameController.text.trim();
     final password = passwordController.text;
 
     try {
@@ -45,28 +45,28 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == Sizes.p200) {
         if (!mounted) return;
 
         ref.read(userProvider.notifier).setUser(data['user']);
 
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Login successful!')));
+        ).showSnackBar(const SnackBar(content: Text("Login successful!")));
 
         context.goNamed(AppRoute.home.name);
       } else {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+          SnackBar(content: Text(data["error"] ?? "An error has occurred")),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server : $e')),
+        SnackBar(content: Text("Unable to contact the server : $e")),
       );
     }
   }
@@ -117,25 +117,25 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
                         StyledText("Connectez-vous à votre compte"),
                         gapH32,
                         StyledForms(
-                          hintText: 'hugo.curty@ceff.ch',
+                          hintText: "hugo.curty@ceff.ch",
                           labelText: "Adresse email",
                           typeForm: TextInputType.emailAddress,
-                          textController: nameUserController,
+                          textController: usernameController,
                           prefixIcon: Icons.email_outlined,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez remplir ce champ';
+                              return "Veuillez remplir ce champ";
                             }
                             return null;
                           },
                         ),
                         gapH20,
                         StyledForms(
-                          labelText: 'Mot de passe',
+                          labelText: "Mot de passe",
                           typeForm: TextInputType.visiblePassword,
                           textController: passwordController,
-                          validator: (value) => value!.length < 6
-                              ? 'Mot de passe trop court'
+                          validator: (value) => value!.length < Sizes.p4
+                              ? "Mot de passe trop court"
                               : null,
                           isPassword: true,
                         ),
@@ -153,14 +153,7 @@ class _LoginPageScreenState extends ConsumerState<LoginPageScreen> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: Sizes.p12,
                               ),
-                              child: Text(
-                                'OU',
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: Sizes.p12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                              child: StyledText("OU"),
                             ),
                             Expanded(child: Divider(color: AppColors.grey)),
                           ],
