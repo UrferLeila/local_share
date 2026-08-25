@@ -12,16 +12,16 @@ import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/theme/theme.dart';
 import 'package:local_share/src/features/offres/domain/user.dart';
 
-class CreateOffreScreen extends StatefulWidget {
-  const CreateOffreScreen({super.key, required this.currentUser});
+class CreateOfferScreen extends StatefulWidget {
+  const CreateOfferScreen({super.key, required this.user});
 
-  final User currentUser;
+  final User user;
 
   @override
-  State<CreateOffreScreen> createState() => _CreateOffreScreenState();
+  State<CreateOfferScreen> createState() => _CreateOfferScreenState();
 }
 
-class _CreateOffreScreenState extends State<CreateOffreScreen> {
+class _CreateOfferScreenState extends State<CreateOfferScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -62,13 +62,13 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/offres'),
+        Uri.parse("http://localhost:3000/offres"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'name': name,
-          'description': description,
-          'user': widget.currentUser.id,
-          'image': base64Image,
+          "name": name,
+          "description": description,
+          "user": widget.user.id,
+          "image": base64Image,
         }),
       );
 
@@ -78,7 +78,7 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Offre créée avec succès !')),
+          const SnackBar(content: Text("Offer created successfully!")),
         );
 
         context.pop(true);
@@ -86,14 +86,14 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'Une erreur est survenue')),
+          SnackBar(content: Text(data["error"] ?? "An error has occurred")),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Impossible de contacter le serveur : $e')),
+        SnackBar(content: Text("Unable to contact the server: $e")),
       );
     }
   }
@@ -154,7 +154,7 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                         GestureDetector(
                           onTap: _pickImage,
                           child: Container(
-                            height: 160,
+                            height: Sizes.p160,
                             decoration: BoxDecoration(
                               color: AppColors.lightBrown,
                               borderRadius: BorderRadius.circular(Sizes.p12),
@@ -193,8 +193,8 @@ class _CreateOffreScreenState extends State<CreateOffreScreen> {
                         ),
                         gapH20,
                         StyledForms(
-                          hintText: 'Perçeuse Bosch / Cours de guitare',
-                          labelText: 'Titre de l\'offre',
+                          hintText: "Perçeuse Bosch / Cours de guitare",
+                          labelText: "Titre de l'offre",
                           typeForm: TextInputType.text,
                           textController: nameController,
                           prefixIcon: Icons.title_rounded,

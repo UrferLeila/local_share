@@ -11,16 +11,16 @@ import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class EditOffreScreen extends ConsumerStatefulWidget {
-  const EditOffreScreen({super.key, required this.currentOffre});
+class EditOfferScreen extends ConsumerStatefulWidget {
+  const EditOfferScreen({super.key, required this.offer});
 
-  final Offre currentOffre;
+  final Offre offer;
 
   @override
-  ConsumerState<EditOffreScreen> createState() => _EditOffreScreenState();
+  ConsumerState<EditOfferScreen> createState() => _EditOfferScreenState();
 }
 
-class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
+class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController nameController;
   late final TextEditingController descriptionController;
@@ -28,9 +28,9 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.currentOffre.name);
+    nameController = TextEditingController(text: widget.offer.name);
     descriptionController = TextEditingController(
-      text: widget.currentOffre.description ?? '',
+      text: widget.offer.description ?? '',
     );
   }
 
@@ -41,7 +41,7 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
     super.dispose();
   }
 
-  Future<void> updateOffre() async {
+  Future<void> updateOffer() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -51,23 +51,23 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:3000/offres/${widget.currentOffre.id}'),
+        Uri.parse("http://localhost:3000/offres/${widget.offer.id}"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'name': name,
-          'description': description,
-          'user': widget.currentOffre.user,
+          "name": name,
+          "description": description,
+          "user": widget.offer.user,
         }),
       );
 
-      final contentType = response.headers['content-type'] ?? '';
-      if (!contentType.contains('application/json')) {
+      final contentType = response.headers["content-type"] ?? "";
+      if (!contentType.contains("application/json")) {
 
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Erreur ${response.statusCode} : Regardez la console Flutter',
+              "Error ${response.statusCode} : Take a look at the Flutter console",
             ),
           ),
         );
@@ -76,7 +76,7 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == Sizes.p200) {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -155,7 +155,7 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                         gapH8,
                         GestureDetector(
                           child: Container(
-                            height: 160,
+                            height: Sizes.p160,
                             decoration: BoxDecoration(
                               color: AppColors.lightBrown,
                               borderRadius: BorderRadius.circular(Sizes.p12),
@@ -181,7 +181,7 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                         ),
                         gapH20,
                         StyledForms(
-                          labelText: 'Titre de l\'offre',
+                          labelText: "Titre de l'offre",
                           typeForm: TextInputType.text,
                           textController: nameController,
                           prefixIcon: Icons.title_rounded,
@@ -207,7 +207,7 @@ class _EditOffreScreenState extends ConsumerState<EditOffreScreen> {
                         ),
                         gapH32,
                         Button(
-                          onPressed: updateOffre,
+                          onPressed: updateOffer,
                           title: "Modifier l'offre",
                           color: AppColors.lightPurple,
                         ),

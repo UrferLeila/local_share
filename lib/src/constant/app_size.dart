@@ -27,6 +27,8 @@ class Sizes {
   static const p300 = 300.0;
   static const p448 = 448.0;
   static const p500 = 500.0;
+  static const p700 = 700.0; 
+  static const p768 = 768.0; 
 }
 
 //Gap Width (Espacements horizontaux)
