@@ -1,14 +1,16 @@
-import 'dart:convert'; // Added for base64Decode
-import 'package:flutter/foundation.dart'; // Added for Uint8List
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
+import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class OfferCard extends StatefulWidget {
+class OfferCard extends ConsumerStatefulWidget {
   const OfferCard({
     super.key,
     required this.offer,
@@ -21,10 +23,10 @@ class OfferCard extends StatefulWidget {
   final Future<void> Function(String) onDelete;
 
   @override
-  State<OfferCard> createState() => OffreCardState();
+  ConsumerState<OfferCard> createState() => OffreCardState();
 }
 
-class OffreCardState extends State<OfferCard> {
+class OffreCardState extends ConsumerState<OfferCard> {
   bool isExpanded = false;
 
   @override
@@ -158,10 +160,16 @@ class OffreCardState extends State<OfferCard> {
                     ),
                     gapH8,
                     InkWell(
-                      onTap: () => context.pushNamed(
-                        AppRoute.editOffre.name,
-                        extra: widget.offer,
-                      ),
+                      onTap: () async {
+                        final result = await context.pushNamed<bool>(
+                          AppRoute.editOffre.name,
+                          extra: widget.offer,
+                        );
+
+                        if (result == true && mounted) {
+                          ref.invalidate(offerListNotifierProvider);
+                        }
+                      },
                       borderRadius: BorderRadius.circular(Sizes.p8),
                       child: Container(
                         width: Sizes.p40,
