@@ -138,7 +138,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               gapH32,
 
-              // User Info Card with expanded padding
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(Sizes.p20),
@@ -243,7 +242,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               gapH64,
 
-              // Action Buttons with generous spacing
               SizedBox(
                 width: double.infinity,
                 child: Column(
