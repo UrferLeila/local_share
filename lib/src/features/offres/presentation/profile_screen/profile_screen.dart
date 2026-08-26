@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,7 +22,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<void> deleteUser(String userId) async {
     try {
       final response = await http.delete(
-        Uri.parse('http://localhost:3000/users/$userId'),
+        Uri.parse("http://localhost:3000/users/$userId"),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -33,21 +32,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('User successfully removed!')),
+          const SnackBar(content: Text("User successfully removed!")),
         );
         context.pop();
       } else {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'Error whilst deleting')),
+          SnackBar(content: Text(data["error"] ?? "Error whilst deleting")),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server : $e')),
+        SnackBar(content: Text("Unable to contact the server : $e")),
       );
     }
   }
@@ -64,18 +63,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Sizes.p16),
           ),
-          title: const StyledBase('Supprimer le compte'),
+          title: const StyledBase("Supprimer le compte"),
           content: const Text(
-            'Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.',
+            "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Annuler', style: TextStyle(color: AppColors.grey)),
+              child: Text("Annuler", style: TextStyle(color: AppColors.grey)),
               onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
               child: Text(
-                'Supprimer',
+                "Supprimer",
                 style: TextStyle(color: AppColors.lightRed),
               ),
               onPressed: () async {
@@ -108,7 +107,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             children: [
               Center(
                 child: Container(
-                  padding: const EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(Sizes.p8),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
@@ -134,11 +133,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               gapH8,
               Text(
                 user?.email ?? "",
-                style: TextStyle(color: AppColors.grey, fontSize: 14),
+                style: TextStyle(color: AppColors.grey, fontSize: Sizes.p14),
               ),
               gapH32,
 
-              // User Info Card with expanded padding
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(Sizes.p20),
@@ -175,13 +173,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Nom d'utilisateur",
-                              style: TextStyle(
-                                color: AppColors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
+                            StyledText("Nom d'utilisateur"),
                             gapH4,
                             StyledBase(user?.username ?? "-"),
                           ],
@@ -200,13 +192,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Adresse email",
-                              style: TextStyle(
-                                color: AppColors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
+                            StyledText("Adresse email"),
                             gapH4,
                             StyledBase(user?.email ?? "-"),
                           ],
@@ -225,13 +211,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Rôle",
-                              style: TextStyle(
-                                color: AppColors.grey,
-                                fontSize: 12,
-                              ),
-                            ),
+                            StyledText("Rôle"),
                             gapH4,
                             StyledBase(user?.role ?? "Membre"),
                           ],
@@ -242,8 +222,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               gapH64,
-
-              // Action Buttons with generous spacing
               SizedBox(
                 width: double.infinity,
                 child: Column(
