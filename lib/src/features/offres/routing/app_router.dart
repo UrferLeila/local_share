@@ -6,8 +6,8 @@ import 'package:local_share/src/features/offres/presentation/home_screen/edit_of
 import 'package:local_share/src/features/offres/presentation/home_screen/home_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/signup_page_screen.dart';
-import 'package:local_share/src/features/offres/presentation/home_screen/create_offre_screen.dart';
-import 'package:local_share/src/features/offres/presentation/offres_screen/offres_screen.dart';
+import 'package:local_share/src/features/offres/presentation/home_screen/create_offer_screen.dart';
+import 'package:local_share/src/features/offres/presentation/offers_screen/offrers_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/edit_user_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/profile_screen.dart';
 
@@ -42,7 +42,7 @@ final goRouter = GoRouter(
         GoRoute(
           path: '/offres',
           name: AppRoute.offres.name,
-          builder: (context, state) => const OffresScreen(),
+          builder: (context, state) => const OffersScreen(),
         ),
         GoRoute(
           path: '/profil',
@@ -55,8 +55,8 @@ final goRouter = GoRouter(
       path: '/create',
       name: AppRoute.create.name,
       builder: (context, state) {
-        final currentUser = state.extra as User;
-        return CreateOffreScreen(currentUser: currentUser);
+        final user = state.extra as User;
+        return CreateOfferScreen(user: user);
       },
     ),
     GoRoute(
@@ -70,8 +70,8 @@ final goRouter = GoRouter(
       path: '/editOffre',
       name: AppRoute.editOffre.name,
       builder: (context, state) {
-        final currentOffre = state.extra as Offre;
-        return EditOffreScreen(currentOffre: currentOffre);
+        final offer = state.extra as Offre;
+        return EditOfferScreen(offer: offer);
       },
     ),
   ],

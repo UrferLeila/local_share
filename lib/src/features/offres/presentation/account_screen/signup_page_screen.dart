@@ -18,14 +18,14 @@ class SignupPageScreen extends StatefulWidget {
 
 class _SignupPageScreenState extends State<SignupPageScreen> {
   final _formKey = GlobalKey<FormState>();
-  final nameUserController = TextEditingController();
-  final adressEmailController = TextEditingController();
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    nameUserController.dispose();
-    adressEmailController.dispose();
+    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -35,18 +35,18 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
       return;
     }
 
-    final username = nameUserController.text.trim();
-    final email = adressEmailController.text.trim();
+    final username = usernameController.text.trim();
+    final email = emailController.text.trim();
     final password = passwordController.text;
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/signup'),
+        Uri.parse("http://localhost:3000/signup"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'username': username,
-          'email': email,
-          'password': password,
+          "username": username,
+          "email": email,
+          "password": password,
         }),
       );
 
@@ -56,7 +56,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account created successfully!')),
+          const SnackBar(content: Text("Account created successfully!")),
         );
 
         context.goNamed(AppRoute.login.name);
@@ -64,14 +64,14 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+          SnackBar(content: Text(data["error"] ?? "An error has occurred")),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server : $e')),
+        SnackBar(content: Text("Unable to contact the server : $e")),
       );
     }
   }
@@ -85,7 +85,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(Sizes.p24),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 450),
+              constraints: const BoxConstraints(maxWidth: Sizes.p448),
               child: Card(
                 elevation: Sizes.p8,
                 shadowColor: AppColors.black,
@@ -122,10 +122,10 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                         StyledText("Créez votre compte pour commencer"),
                         gapH32,
                         StyledForms(
-                          hintText: 'PaulBrunel23',
-                          labelText: 'Nom d\'utilisateur',
+                          hintText: "PaulBrunel23",
+                          labelText: "Nom d'utilisateur",
                           typeForm: TextInputType.text,
-                          textController: nameUserController,
+                          textController: usernameController,
                           prefixIcon: Icons.person_outline_rounded,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -136,10 +136,10 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                         ),
                         gapH20,
                         StyledForms(
-                          hintText: 'hugo.curty@bookly.ch',
-                          labelText: 'Adresse mail',
+                          hintText: "hugo.curty@bookly.ch",
+                          labelText: "Adresse mail",
                           typeForm: TextInputType.emailAddress,
-                          textController: adressEmailController,
+                          textController: emailController,
                           prefixIcon: Icons.email_outlined,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -150,12 +150,12 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                         ),
                         gapH20,
                         StyledForms(
-                          hintText: 'Votre mot de passe',
-                          labelText: 'Mot de passe',
+                          hintText: "Votre mot de passe",
+                          labelText: "Mot de passe",
                           typeForm: TextInputType.visiblePassword,
                           textController: passwordController,
-                          validator: (value) => value!.length < 6
-                              ? 'Mot de passe trop court'
+                          validator: (value) => value!.length < Sizes.p4
+                              ? "Mot de passe trop court"
                               : null,
                           isPassword: true,
                         ),
@@ -173,14 +173,7 @@ class _SignupPageScreenState extends State<SignupPageScreen> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: Sizes.p12,
                               ),
-                              child: Text(
-                                'OU',
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: Sizes.p12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                              child: StyledText("OU"),
                             ),
                             Expanded(child: Divider(color: AppColors.grey)),
                           ],

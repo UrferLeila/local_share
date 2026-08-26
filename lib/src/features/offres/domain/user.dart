@@ -1,15 +1,15 @@
 class User {
-  final String id;
-  final String username;
-  final String email;
-  final String role;
-
   User({
     required this.id,
     required this.username,
     required this.email,
     required this.role,
   });
+
+  final String id;
+  final String username;
+  final String email;
+  final String role;
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -19,5 +19,10 @@ class User {
       role: json['role'] ?? 'user',
     );
   }
+
   bool get isAdmin => role == 'admin';
+
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'username': username, 'email': email, 'role': role};
+  }
 }

@@ -15,10 +15,10 @@ class EditUserScreen extends ConsumerStatefulWidget {
   const EditUserScreen({super.key});
 
   @override
-  ConsumerState<EditUserScreen> createState() => _EditOffreScreenState();
+  ConsumerState<EditUserScreen> createState() => _EditUserScreenState();
 }
 
-class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
+class _EditUserScreenState extends ConsumerState<EditUserScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController usernameController;
   late final TextEditingController emailController;
@@ -63,7 +63,7 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('User not found')));
+      ).showSnackBar(const SnackBar(content: Text("User not found")));
       return;
     }
 
@@ -72,18 +72,18 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:3000/users/${user.id}'),
+        Uri.parse("http://localhost:3000/users/${user.id}"),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'username': username, 'email': email}),
+        body: jsonEncode({"username": username, "email": email}),
       );
 
-      final contentType = response.headers['content-type'] ?? '';
-      if (!contentType.contains('application/json')) {
+      final contentType = response.headers["content-type"] ?? "";
+      if (!contentType.contains("application/json")) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Erreur serveur (Code ${response.statusCode}) : Le serveur n\'a pas renvoyé du JSON.',
+              "Erreur serveur (Code ${response.statusCode}) : Le serveur n'a pas renvoyé du JSON.",
             ),
           ),
         );
@@ -92,24 +92,24 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == Sizes.p200) {
         if (data is Map<String, dynamic> && data['user'] != null) {
           await ref
               .read(userProvider.notifier)
-              .setUser(Map<String, dynamic>.from(data['user']));
+              .setUser(Map<String, dynamic>.from(data["user"]));
         } else {
           await ref.read(userProvider.notifier).setUser({
-            'id': user.id,
-            'username': username,
-            'email': email,
-            'role': user.role,
+            "id": user.id,
+            "username": username,
+            "email": email,
+            "role": user.role,
           });
         }
 
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account successfully updated!')),
+          const SnackBar(content: Text("Account successfully updated!")),
         );
 
         context.pop(true);
@@ -117,14 +117,14 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+          SnackBar(content: Text(data["error"] ?? "An error has occurred")),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server: $e')),
+        SnackBar(content: Text("Unable to contact the server: $e")),
       );
     }
   }
@@ -133,7 +133,7 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.black,
-      appBar: AppBarWidget(title: 'Modifier'),
+      appBar: AppBarWidget(title: "Modifier"),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -183,7 +183,7 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
                           prefixIcon: Icons.person_rounded,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Veuillez remplir ce champ';
+                              return "Veuillez remplir ce champ";
                             }
                             return null;
                           },
@@ -195,7 +195,7 @@ class _EditOffreScreenState extends ConsumerState<EditUserScreen> {
                           prefixIcon: Icons.email,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Veuillez remplir ce champ';
+                              return "Veuillez remplir ce champ";
                             }
                             return null;
                           },

@@ -62,10 +62,10 @@ class StyledText extends StatelessWidget {
 class StyledBase extends StatelessWidget {
   const StyledBase(
     this.text, {
+    super.key,
     this.maxLines,
     this.overflow,
     this.textAlign = TextAlign.center,
-    super.key,
   });
 
   final String text;

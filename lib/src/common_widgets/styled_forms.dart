@@ -3,6 +3,7 @@ import 'package:local_share/src/theme/theme.dart';
 
 class StyledForms extends StatefulWidget {
   const StyledForms({
+    super.key,
     this.hintText,
     this.labelText,
     required this.typeForm,
@@ -10,7 +11,6 @@ class StyledForms extends StatefulWidget {
     required this.validator,
     this.prefixIcon,
     this.isPassword = false,
-    super.key,
   });
 
   final String? hintText;
@@ -56,8 +56,8 @@ class _StyledFormsState extends State<StyledForms> {
         suffixIcon: widget.isPassword
             ? IconButton(
                 tooltip: _obscureText
-                    ? 'Afficher le mot de passe'
-                    : 'Masquer le mot de passe',
+                    ? "Afficher le mot de passe"
+                    : "Masquer le mot de passe",
                 onPressed: () {
                   setState(() {
                     _obscureText = !_obscureText;

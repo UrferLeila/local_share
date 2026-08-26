@@ -15,6 +15,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: Sizes.p80,
+      centerTitle: true,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -23,7 +24,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           StyledAppBar(title),
         ],
       ),
-      centerTitle: true,
     );
   }
 }
