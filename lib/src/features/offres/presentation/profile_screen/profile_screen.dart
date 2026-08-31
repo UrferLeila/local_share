@@ -1,8 +1,8 @@
-import 'dart:convert';
+import 'package:aad_oauth/aad_oauth.dart';
+import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
@@ -10,6 +10,9 @@ import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
+
+// Optional: import your auth cubit / package if you want to trigger oauth.logout() here directly,
+// or let your userProvider logout handle state cleanup.
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -19,81 +22,38 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  Future<void> deleteUser(String userId) async {
+  Future<void> _handleLogout() async {
     try {
-      final response = await http.delete(
-        Uri.parse("http://localhost:3000/users/$userId"),
-        headers: {'Content-Type': 'application/json'},
+      // 1. Clear Microsoft OAuth session and cookies
+      final Config config = Config(
+        tenant: "0bd66e42-d830-4cdc-b580-f835a405d038",
+        clientId: "9a75030d-e141-4531-abb6-4110fe10b364",
+        scope: "openid profile offline_access User.Read ",
+        navigatorKey: navigatorKey,
+        webUseRedirect: false,
       );
+      final oauth = AadOAuth(config);
+      await oauth.logout(); // <-- This clears the Microsoft session/cookies!
 
-      final data = jsonDecode(response.body);
+      // 2. Clear local user state & shared preferences via Riverpod
+      await ref.read(userProvider.notifier).logout();
 
-      if (response.statusCode == 200) {
-        if (!mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("User successfully removed!")),
-        );
-        context.pop();
-      } else {
-        if (!mounted) return;
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data["error"] ?? "Error whilst deleting")),
-        );
-      }
-    } catch (e) {
       if (!mounted) return;
 
+      // 3. Redirect to Login screen
+      context.goNamed(AppRoute.login.name);
+    } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Unable to contact the server : $e")),
+        SnackBar(content: Text("Erreur lors de la déconnexion : $e")),
       );
     }
-  }
-
-  Future<void> _showDeleteConfirmation(
-    BuildContext context,
-    String userId,
-  ) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Theme.of(context).cardColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Sizes.p16),
-          ),
-          title: const StyledBase("Supprimer le compte"),
-          content: const Text(
-            "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Annuler", style: TextStyle(color: AppColors.grey)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: Text(
-                "Supprimer",
-                style: TextStyle(color: AppColors.lightRed),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await deleteUser(userId);
-                ref.read(userProvider.notifier).logout();
-                if (!context.mounted) return;
-                context.goNamed(AppRoute.login.name);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
+    final userPhoto = user?.photo;
 
     return Scaffold(
       appBar: AppBarWidget(title: "Mon profil"),
@@ -120,11 +80,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     backgroundColor: AppColors.lightPurple.withValues(
                       alpha: 0.2,
                     ),
-                    child: Icon(
-                      Icons.person,
-                      size: Sizes.p48,
-                      color: AppColors.lightPurple,
-                    ),
+                    backgroundImage: userPhoto != null
+                        ? MemoryImage(userPhoto)
+                        : null,
+                    child: userPhoto == null
+                        ? Icon(
+                            Icons.person,
+                            size: Sizes.p48,
+                            color: AppColors.lightPurple,
+                          )
+                        : null,
                   ),
                 ),
               ),
@@ -222,55 +187,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               gapH64,
+
+              // Logout Button
               SizedBox(
                 width: double.infinity,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Button(
-                        onPressed: () {
-                          context.pushNamed(AppRoute.edit.name);
-                        },
-                        icon: Icons.edit,
-                        title: "Modifier le profil",
-                        color: AppColors.lightPurple,
-                      ),
-                    ),
-                    gapH16,
-                    SizedBox(
-                      width: double.infinity,
-                      child: Button(
-                        onPressed: () {
-                          ref.read(userProvider.notifier).logout();
-                          context.goNamed(AppRoute.login.name);
-                        },
-                        icon: Icons.logout,
-                        title: "Se déconnecter",
-                        color: AppColors.darkBrown,
-                      ),
-                    ),
-                    gapH16,
-                    SizedBox(
-                      width: double.infinity,
-                      child: Button(
-                        onPressed: () async {
-                          final currentUser = ref.read(userProvider);
-                          if (currentUser == null) return;
-                          await _showDeleteConfirmation(
-                            context,
-                            currentUser.id,
-                          );
-                        },
-                        icon: Icons.delete_outline,
-                        title: "Supprimer le compte",
-                        color: AppColors.lightRed,
-                      ),
-                    ),
-                  ],
+                child: Button(
+                  onPressed: _handleLogout,
+                  icon: Icons.logout,
+                  title: "Se déconnecter",
+                  color: AppColors.darkBrown,
                 ),
               ),
-              gapH32,
             ],
           ),
         ),

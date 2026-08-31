@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/scaffold_with_nav_bar.dart';
 import 'package:local_share/src/features/offres/domain/offre.dart';
@@ -5,15 +6,17 @@ import 'package:local_share/src/features/offres/domain/user.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/edit_offre_screen.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/home_screen.dart';
 import 'package:local_share/src/features/offres/presentation/account_screen/login_page_screen.dart';
-import 'package:local_share/src/features/offres/presentation/account_screen/signup_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/home_screen/create_offer_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offers_screen/offrers_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/edit_user_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/profile_screen.dart';
 
-enum AppRoute { home, create, login, signup, profil, offres, edit, editOffre }
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+enum AppRoute { home, create, login, profil, offres, edit, editOffre }
 
 final goRouter = GoRouter(
+  navigatorKey: navigatorKey,
   initialLocation: '/login',
   debugLogDiagnostics: true,
   routes: [
@@ -21,13 +24,6 @@ final goRouter = GoRouter(
       path: '/login',
       name: AppRoute.login.name,
       builder: (context, state) => const LoginPageScreen(),
-      routes: [
-        GoRoute(
-          path: 'signup',
-          name: AppRoute.signup.name,
-          builder: (context, state) => const SignupPageScreen(),
-        ),
-      ],
     ),
     ShellRoute(
       builder: (context, state, child) {

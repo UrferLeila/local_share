@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:riverpod/legacy.dart';
+import 'dart:typed_data';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_share/src/features/offres/domain/user.dart';
 
@@ -12,7 +13,27 @@ class UserNotifier extends StateNotifier<User?> {
     final user = User.fromJson(userData);
     state = user;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user', jsonEncode(userData));
+    await prefs.setString('user', jsonEncode(user.toJson()));
+  }
+
+  // UPDATED: Now accepts optional profile photo bytes
+  Future<void> setMicrosoftUser({
+    required String id,
+    required String username,
+    required String email,
+    String role = 'user',
+    Uint8List? photo,
+  }) async {
+    final user = User(
+      id: id,
+      username: username,
+      email: email,
+      role: role,
+      photo: photo,
+    );
+    state = user;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user', jsonEncode(user.toJson()));
   }
 
   Future<void> loadUser() async {
