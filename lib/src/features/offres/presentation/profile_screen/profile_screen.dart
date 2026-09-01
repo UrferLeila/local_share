@@ -11,9 +11,6 @@ import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-// Optional: import your auth cubit / package if you want to trigger oauth.logout() here directly,
-// or let your userProvider logout handle state cleanup.
-
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
@@ -24,7 +21,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<void> _handleLogout() async {
     try {
-      // 1. Clear Microsoft OAuth session and cookies
       final Config config = Config(
         tenant: "0bd66e42-d830-4cdc-b580-f835a405d038",
         clientId: "9a75030d-e141-4531-abb6-4110fe10b364",
@@ -33,14 +29,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         webUseRedirect: false,
       );
       final oauth = AadOAuth(config);
-      await oauth.logout(); // <-- This clears the Microsoft session/cookies!
+      await oauth.logout();
 
-      // 2. Clear local user state & shared preferences via Riverpod
       await ref.read(userProvider.notifier).logout();
 
       if (!mounted) return;
 
-      // 3. Redirect to Login screen
       context.goNamed(AppRoute.login.name);
     } catch (e) {
       if (!mounted) return;
@@ -101,7 +95,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 style: TextStyle(color: AppColors.grey, fontSize: Sizes.p14),
               ),
               gapH32,
-
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(Sizes.p20),
@@ -123,7 +116,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       "Informations personnelles",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: Sizes.p16,
                       ),
                     ),
                     const Divider(height: Sizes.p32),
@@ -145,7 +138,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const Divider(height: Sizes.p32),
+                    gapH32,
                     Row(
                       children: [
                         Icon(
@@ -164,7 +157,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const Divider(height: Sizes.p32),
+                    gapH32,
                     Row(
                       children: [
                         Icon(
@@ -187,8 +180,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               gapH64,
-
-              // Logout Button
               SizedBox(
                 width: double.infinity,
                 child: Button(
