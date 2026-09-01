@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Sizes {
   static const p0 = 0.0;
+  static const p2 = 2.0;
   static const p4 = 4.0;
   static const p8 = 8.0;
   static const p12 = 12.0;
@@ -26,8 +27,8 @@ class Sizes {
   static const p200 = 200.0;
   static const p240 = 240.0;
   static const p300 = 300.0;
-  static const p304 = 304.0; 
-  static const p312 = 312.0; 
+  static const p304 = 304.0;
+  static const p312 = 312.0;
   static const p448 = 448.0;
   static const p500 = 500.0;
   static const p700 = 700.0;

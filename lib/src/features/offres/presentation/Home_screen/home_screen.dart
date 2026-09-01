@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
+import 'package:local_share/src/common_widgets/inline_filter.dart';
 import 'package:local_share/src/common_widgets/offer_card.dart';
 import 'package:local_share/src/common_widgets/search_bar_offer.dart';
 import 'package:local_share/src/constant/app_size.dart';
@@ -21,10 +22,18 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   String _currentSearchQuery = '';
   int selectedPageNumber = 1;
+  List<OfferType> _selectedFilters = [];
 
   void _onSearch(String query) {
     setState(() {
       _currentSearchQuery = query.toLowerCase();
+      selectedPageNumber = 1;
+    });
+  }
+
+  void _onFilterChanged(List<OfferType> filters) {
+    setState(() {
+      _selectedFilters = filters;
       selectedPageNumber = 1;
     });
   }
@@ -72,7 +81,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           (offer.description ?? "").toLowerCase().contains(query) ||
           offer.type.toShortString().toLowerCase().contains(query);
 
-      return matchSearch;
+      final matchFilter =
+          _selectedFilters.isEmpty || _selectedFilters.contains(offer.type);
+
+      return matchSearch && matchFilter;
     }).toList();
   }
 
@@ -114,9 +126,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsetsGeometry.all(Sizes.p12),
-                        child: SearchBarOffer(
-                          hintText: "Rechercher une offre...",
-                          onSearch: _onSearch,
+                        child: Column(
+                          children: [
+                            SearchBarOffer(
+                              hintText: "Rechercher une offre...",
+                              onSearch: _onSearch,
+                            ),
+                            gapH12,
+                            InlineFilter(
+                              onFilterChanged: _onFilterChanged,
+                              typeOffers: {
+                                OfferType.achat: "Achat",
+                                OfferType.service: "Service",
+                                OfferType.pret: "Prêt",
+                              },
+                              selectedColor: AppColors.lightPurple,
+                              selectedTextColor: AppColors.lightwhite,
+                              unselectedColor: AppColors.lightBrown,
+                              unselectedTextColor: AppColors.lightwhite,
+                              borderColor: AppColors.lightwhite,
+                              borderWidth: Sizes.p2,
+                            ),
+                          ],
                         ),
                       ),
                       Expanded(
