@@ -52,11 +52,11 @@ class OffreCardState extends ConsumerState<OfferCard> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'userId': currentUser.id,
-          'username': currentUser.username, // Passed to backend
+          'username': currentUser.username,
           'userPhoto': currentUser.photo != null
               ? base64Encode(currentUser.photo!)
-              : null, // Passed to backend
-          'name': text, // Stored as 'name' in DB schema
+              : null,
+          'name': text,
           'Date': DateTime.now().toIso8601String(),
         }),
       );
@@ -196,67 +196,42 @@ class OffreCardState extends ConsumerState<OfferCard> {
                         ),
                       ],
                     ),
-                    gapH4,
-                    AnimatedCrossFade(
-                      firstChild: StyledBase(
-                        widget.offer.description ?? "",
-                        maxLines: 1,
-                        textAlign: TextAlign.left,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      secondChild: StyledBase(
-                        widget.offer.description ?? "",
-                        textAlign: TextAlign.left,
-                      ),
-                      crossFadeState: isExpanded
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
-                      duration: const Duration(milliseconds: 200),
-                    ),
-                  ],
-                ),
-              ),
-              gapW12,
-              Column(
-                children: [
-                  if (widget.isAdmin) ...[
-                    InkWell(
-                      onTap: () async {
-                        final bool? confirm = await showDialog<bool>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: StyledSmallTitle(
-                                "Confirmer la suppression",
-                              ),
-                              content: StyledBase(
-                                "Voulez-vous vraiment supprimer cet offres ?",
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: StyledText("Annuler"),
-                                ),
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: StyledText("Supprimer"),
-                                ),
-                              ],
+                  ),
+                  gapW12,
+                  Column(
+                    children: [
+                      if (widget.isAdmin) ...[
+                        InkWell(
+                          onTap: () async {
+                            final bool? confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const StyledSmallTitle(
+                                    "Confirmer la suppression",
+                                  ),
+                                  content: const StyledBase(
+                                    "Voulez-vous vraiment supprimer cet offres ?",
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const StyledText("Annuler"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const StyledText("Supprimer"),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
+                            if (confirm == true) {
+                              widget.onDelete(widget.offer.id);
+                            }
                           },
-                        );
-                        if (confirm == true) {
-                          widget.onDelete(widget.offer.id);
-                        }
-                      },
-                      borderRadius: BorderRadius.circular(Sizes.p8),
-                      child: Container(
-                        width: Sizes.p40,
-                        height: Sizes.p40,
-                        decoration: BoxDecoration(
-                          color: AppColors.lightPurple,
                           borderRadius: BorderRadius.circular(Sizes.p8),
                           child: Container(
                             width: Sizes.p40,
@@ -328,6 +303,9 @@ class OffreCardState extends ConsumerState<OfferCard> {
                     itemCount: widget.offer.propositions.length,
                     itemBuilder: (context, index) {
                       final prop = widget.offer.propositions[index];
+
+                      final bool isOwner = prop.userId == widget.offer.user;
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: Sizes.p4),
                         child: Row(
@@ -335,7 +313,10 @@ class OffreCardState extends ConsumerState<OfferCard> {
                           children: [
                             CircleAvatar(
                               radius: Sizes.p16,
-                              backgroundColor: AppColors.lightBrown,
+                              backgroundColor: isOwner
+                                  ? AppColors.cyan
+                                  : AppColors
+                                        .lightBrown, // Distinct color for owner avatar
                               backgroundImage:
                                   prop.userPhoto != null &&
                                       prop.userPhoto!.isNotEmpty
@@ -356,10 +337,21 @@ class OffreCardState extends ConsumerState<OfferCard> {
                               child: Container(
                                 padding: const EdgeInsets.all(Sizes.p8),
                                 decoration: BoxDecoration(
-                                  color: AppColors.lightPurple.withValues(
-                                    alpha: 0.1,
-                                  ),
+                                  // Give the owner a different background tint (e.g., cyan/purple variation)
+                                  color: isOwner
+                                      ? AppColors.cyan.withValues(alpha: 0.15)
+                                      : AppColors.lightPurple.withValues(
+                                          alpha: 0.1,
+                                        ),
                                   borderRadius: BorderRadius.circular(Sizes.p8),
+                                  border: isOwner
+                                      ? Border.all(
+                                          color: AppColors.cyan.withValues(
+                                            alpha: 0.4,
+                                          ),
+                                          width: 1,
+                                        )
+                                      : null, // Optional border highlight for owner
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -368,7 +360,34 @@ class OffreCardState extends ConsumerState<OfferCard> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        StyledLink(prop.username),
+                                        Row(
+                                          children: [
+                                            StyledLink(prop.username),
+                                            if (isOwner) ...[
+                                              const SizedBox(width: 6),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 6,
+                                                      vertical: 2,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.cyan,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                child: const Text(
+                                                  "Auteur", // Or "Owner"
+                                                  style: TextStyle(
+                                                    fontSize: 9,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
                                         Text(
                                           "${prop.date.hour.toString().padLeft(2, '0')}:${prop.date.minute.toString().padLeft(2, '0')}",
                                           style: TextStyle(
