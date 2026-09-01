@@ -142,7 +142,36 @@ class OffreCardState extends ConsumerState<OfferCard> {
                 children: [
                   if (widget.isAdmin) ...[
                     InkWell(
-                      onTap: () => widget.onDelete(widget.offer.id),
+                      onTap: () async {
+                        final bool? confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: StyledSmallTitle(
+                                "Confirmer la suppression",
+                              ),
+                              content: StyledBase(
+                                "Voulez-vous vraiment supprimer cet offres ?",
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: StyledText("Annuler"),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: StyledText("Supprimer"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        if (confirm == true) {
+                          widget.onDelete(widget.offer.id);
+                        }
+                      },
                       borderRadius: BorderRadius.circular(Sizes.p8),
                       child: Container(
                         width: Sizes.p40,
