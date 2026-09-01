@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
+import 'package:local_share/src/common_widgets/inline_filter.dart';
 import 'package:local_share/src/common_widgets/offer_card.dart';
+import 'package:local_share/src/common_widgets/search_bar_offer.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
@@ -20,6 +22,24 @@ class OffersScreen extends ConsumerStatefulWidget {
 }
 
 class _OffersScreenState extends ConsumerState<OffersScreen> {
+  String currentSearchQuery = "";
+  int selectedPageNumber = 1;
+  List<OfferType> selectedFilters = [];
+
+  void onSearch(String query) {
+    setState(() {
+      currentSearchQuery = query.toLowerCase();
+      selectedPageNumber = 1;
+    });
+  }
+
+  void onFilterChanged(List<OfferType> filters) {
+    setState(() {
+      selectedFilters = filters;
+      selectedPageNumber = 1;
+    });
+  }
+
   Future<void> deleteOffre(String offerId) async {
     try {
       final response = await http.delete(
@@ -53,6 +73,22 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
     }
   }
 
+  List<Offre> filterOffers(List<Offre> offers) {
+    return offers.where((offer) {
+      final query = currentSearchQuery.toLowerCase();
+
+      final matchSearch =
+          query.isEmpty ||
+          offer.name.toLowerCase().contains(query) ||
+          (offer.description ?? "").toLowerCase().contains(query);
+
+      final matchFilter =
+          selectedFilters.isEmpty || selectedFilters.contains(offer.type);
+
+      return matchSearch && matchFilter;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
@@ -77,6 +113,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
         final listOfoffers = (dataMap['offres'] as List<Offre>)
             .where((offre) => offre.user == user!.id)
             .toList();
+        final filteredOffers = filterOffers(listOfoffers);
         return Scaffold(
           appBar: AppBar(
             title: Row(
@@ -84,7 +121,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
               children: [
                 Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
                 gapW8,
-                Text("${listOfoffers.length} offres trouvées !"),
+                Text("${filteredOffers.length} offres trouvées !"),
               ],
             ),
             centerTitle: true,
@@ -97,16 +134,53 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                   constraints: BoxConstraints(
                     maxWidth: isDesktopOrTablet ? Sizes.p700 : double.infinity,
                   ),
-                  child: ListView.builder(
-                    padding: const EdgeInsets.only(top: Sizes.p12),
-                    itemCount: listOfoffers.length,
-                    itemBuilder: (context, index) {
-                      return OfferCard(
-                        offer: listOfoffers[index],
-                        isAdmin: true,
-                        onDelete: deleteOffre,
-                      );
-                    },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(Sizes.p12),
+                        child: Column(
+                          children: [
+                            Center(
+                              child: SearchBarOffer(
+                                hintText: "Rechercher une offre...",
+                                onSearch: onSearch,
+                              ),
+                            ),
+                            gapH12,
+                            Center(
+                              child: InlineFilter(
+                                onFilterChanged: onFilterChanged,
+                                typeOffers: {
+                                  OfferType.achat: "Achat",
+                                  OfferType.service: "Service",
+                                  OfferType.pret: "Prêt",
+                                },
+                                selectedColor: AppColors.lightPurple,
+                                selectedTextColor: AppColors.lightwhite,
+                                unselectedColor: AppColors.lightBrown,
+                                unselectedTextColor: AppColors.lightwhite,
+                                borderColor: AppColors.lightwhite,
+                                borderWidth: Sizes.p2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.only(top: Sizes.p12),
+                          itemCount: filteredOffers.length,
+                          itemBuilder: (context, index) {
+                            return OfferCard(
+                              offer: filteredOffers[index],
+                              isAdmin: true,
+                              onDelete: deleteOffre,
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );

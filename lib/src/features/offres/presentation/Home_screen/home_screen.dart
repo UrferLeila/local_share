@@ -20,20 +20,20 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  String _currentSearchQuery = '';
+  String currentSearchQuery = "";
   int selectedPageNumber = 1;
-  List<OfferType> _selectedFilters = [];
+  List<OfferType> selectedFilters = [];
 
-  void _onSearch(String query) {
+  void onSearch(String query) {
     setState(() {
-      _currentSearchQuery = query.toLowerCase();
+      currentSearchQuery = query.toLowerCase();
       selectedPageNumber = 1;
     });
   }
 
-  void _onFilterChanged(List<OfferType> filters) {
+  void onFilterChanged(List<OfferType> filters) {
     setState(() {
-      _selectedFilters = filters;
+      selectedFilters = filters;
       selectedPageNumber = 1;
     });
   }
@@ -71,18 +71,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  List<Offre> _filterOffers(List<Offre> offers) {
+  List<Offre> filterOffers(List<Offre> offers) {
     return offers.where((offer) {
-      final query = _currentSearchQuery.toLowerCase();
+      final query = currentSearchQuery.toLowerCase();
 
       final matchSearch =
           query.isEmpty ||
           offer.name.toLowerCase().contains(query) ||
-          (offer.description ?? "").toLowerCase().contains(query) ||
-          offer.type.toShortString().toLowerCase().contains(query);
+          (offer.description ?? "").toLowerCase().contains(query);
 
       final matchFilter =
-          _selectedFilters.isEmpty || _selectedFilters.contains(offer.type);
+          selectedFilters.isEmpty || selectedFilters.contains(offer.type);
 
       return matchSearch && matchFilter;
     }).toList();
@@ -109,7 +108,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       data: (dataMap) {
         final listOfoffers = (dataMap["offres"] as List<Offre>);
-        final filteredOffers = _filterOffers(listOfoffers);
+        final filteredOffers = filterOffers(listOfoffers);
         return Scaffold(
           appBar: AppBarWidget(
             title: "${filteredOffers.length} offres trouvées !",
@@ -130,11 +129,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           children: [
                             SearchBarOffer(
                               hintText: "Rechercher une offre...",
-                              onSearch: _onSearch,
+                              onSearch: onSearch,
                             ),
                             gapH12,
                             InlineFilter(
-                              onFilterChanged: _onFilterChanged,
+                              onFilterChanged: onFilterChanged,
                               typeOffers: {
                                 OfferType.achat: "Achat",
                                 OfferType.service: "Service",
