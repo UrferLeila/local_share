@@ -1,18 +1,15 @@
-import 'package:aad_oauth/aad_oauth.dart';
-import 'package:aad_oauth/model/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
+import 'package:local_share/src/controller/microsoft_login_cubit.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
-
-// Optional: import your auth cubit / package if you want to trigger oauth.logout() here directly,
-// or let your userProvider logout handle state cleanup.
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -24,18 +21,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Future<void> _handleLogout() async {
     try {
-      // 1. Clear Microsoft OAuth session and cookies
-      final Config config = Config(
-        tenant: "0bd66e42-d830-4cdc-b580-f835a405d038",
-        clientId: "9a75030d-e141-4531-abb6-4110fe10b364",
-        scope: "openid profile offline_access User.Read ",
-        navigatorKey: navigatorKey,
-        webUseRedirect: false,
-      );
-      final oauth = AadOAuth(config);
-      await oauth.logout(); // <-- This clears the Microsoft session/cookies!
+      context.read<AuthCubit>().logout();
 
-      // 2. Clear local user state & shared preferences via Riverpod
       await ref.read(userProvider.notifier).logout();
 
       if (!mounted) return;

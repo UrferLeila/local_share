@@ -37,7 +37,6 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthInitial());
       }
     } catch (e) {
-      print("Silent session check skipped/failed: $e");
       emit(AuthInitial());
     }
   }
@@ -48,7 +47,6 @@ class AuthCubit extends Cubit<AuthState> {
       await oauth.login();
       await _fetchUserDataAndEmitSuccess();
     } catch (e) {
-      print("Login Error: $e");
       emit(AuthError("Login failed. Please try again."));
     }
   }
@@ -101,7 +99,6 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
     } catch (e) {
-      print("Token acquisition failed or timed out, resetting state: $e");
       try {
         await oauth.logout();
       } catch (_) {}
@@ -110,11 +107,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> logout() async {
-    try {
-      await oauth.logout();
-      emit(AuthInitial());
-    } catch (e) {
-      emit(AuthError("Logout failed. Please try again."));
-    }
+  emit(AuthLoading());
+  try {
+    await oauth.logout();
+    emit(AuthInitial());
+  } catch (e) {
+    emit(AuthInitial());
   }
+}
 }
