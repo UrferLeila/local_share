@@ -16,7 +16,6 @@ class UserNotifier extends StateNotifier<User?> {
     await prefs.setString('user', jsonEncode(user.toJson()));
   }
 
-  // UPDATED: Now accepts optional profile photo bytes
   Future<void> setMicrosoftUser({
     required String id,
     required String username,

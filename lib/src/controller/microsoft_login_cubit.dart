@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:typed_data';
-
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:dio/dio.dart';
@@ -23,8 +22,6 @@ class AuthCubit extends Cubit<AuthState> {
       postLogoutRedirectUri: "http://localhost:8080/",
     );
     oauth = AadOAuth(config);
-
-    // RESTORED: Check if user was already logged in when the app starts up
     checkExistingSession();
   }
 

@@ -27,7 +27,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
       if (!mounted) return;
 
-      // 3. Redirect to Login screen
       context.goNamed(AppRoute.login.name);
     } catch (e) {
       if (!mounted) return;
@@ -88,7 +87,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 style: TextStyle(color: AppColors.grey, fontSize: Sizes.p14),
               ),
               gapH32,
-
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(Sizes.p20),
@@ -110,7 +108,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       "Informations personnelles",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: Sizes.p16,
                       ),
                     ),
                     const Divider(height: Sizes.p32),
@@ -132,7 +130,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const Divider(height: Sizes.p32),
+                    gapH32,
                     Row(
                       children: [
                         Icon(
@@ -151,7 +149,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const Divider(height: Sizes.p32),
+                    gapH32,
                     Row(
                       children: [
                         Icon(
@@ -174,8 +172,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               gapH64,
-
-              // Logout Button
               SizedBox(
                 width: double.infinity,
                 child: Button(

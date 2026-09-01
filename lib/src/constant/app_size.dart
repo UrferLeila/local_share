@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Sizes {
   static const p0 = 0.0;
+  static const p2 = 2.0;
   static const p4 = 4.0;
   static const p8 = 8.0;
   static const p12 = 12.0;
@@ -20,15 +21,18 @@ class Sizes {
   static const p64 = 64.0;
   static const p72 = 72.0;
   static const p80 = 80.0;
+  static const p100 = 100.0;
   static const p140 = 140.0;
   static const p160 = 160.0;
-  static const p200 = 200.0; 
+  static const p200 = 200.0;
   static const p240 = 240.0;
   static const p300 = 300.0;
+  static const p304 = 304.0;
+  static const p312 = 312.0;
   static const p448 = 448.0;
   static const p500 = 500.0;
-  static const p700 = 700.0; 
-  static const p768 = 768.0; 
+  static const p700 = 700.0;
+  static const p768 = 768.0;
 }
 
 //Gap Width (Espacements horizontaux)

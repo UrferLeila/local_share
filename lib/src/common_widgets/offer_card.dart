@@ -113,7 +113,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                             color: AppColors.cyan.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(Sizes.p8),
                           ),
-                          child: StyledLink("Disponible"),
+                          child: StyledLink(widget.offer.type.toShortString()),
                         ),
                       ],
                     ),

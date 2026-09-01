@@ -26,6 +26,10 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
 
+  String _selectedType = "achat";
+
+  final List<String> _offerTypes = ["achat", "service", "pret"];
+
   Uint8List? _imageBytes;
 
   @override
@@ -63,12 +67,13 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
     try {
       final response = await http.post(
         Uri.parse("http://localhost:3000/offres"),
-        headers: {'Content-Type': 'application/json'},
+        headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "name": name,
           "description": description,
           "user": widget.user.id,
           "image": base64Image,
+          "type": _selectedType,
         }),
       );
 
@@ -216,6 +221,47 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                               return 'Veuillez remplir ce champ';
                             }
                             return null;
+                          },
+                        ),
+                        gapH20,
+                        DropdownButtonFormField<String>(
+                          initialValue: _selectedType,
+                          dropdownColor: AppColors.darkBrown,
+                          style: TextStyle(
+                            color: AppColors.lightwhite,
+                            fontSize: Sizes.p16,
+                          ),
+                          decoration: InputDecoration(
+                            labelStyle: TextStyle(color: AppColors.lightPurple),
+                            prefixIcon: Icon(
+                              Icons.category_outlined,
+                              color: AppColors.lightPurple,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              borderSide: BorderSide(
+                                color: AppColors.lightPurple.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(Sizes.p12),
+                              borderSide: BorderSide(
+                                color: AppColors.lightPurple,
+                              ),
+                            ),
+                          ),
+                          items: _offerTypes.map((String type) {
+                            return DropdownMenuItem<String>(
+                              value: type,
+                              child: Text(type),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedType = newValue!;
+                            });
                           },
                         ),
                         gapH32,
