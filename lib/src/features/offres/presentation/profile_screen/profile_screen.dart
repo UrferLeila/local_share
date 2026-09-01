@@ -92,10 +92,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 padding: const EdgeInsets.all(Sizes.p20),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(Sizes.p16),
+                  borderRadius: BorderRadius.circular(Sizes.p14),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.black.withValues(alpha: 0.1),
+                      color: AppColors.darkBrown,
                       blurRadius: Sizes.p12,
                       offset: const Offset(0, Sizes.p4),
                     ),
@@ -104,13 +104,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Informations personnelles",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: Sizes.p16,
-                      ),
-                    ),
+                    StyledSmallTitle("Informations personnelles"),
                     const Divider(height: Sizes.p32),
                     Row(
                       children: [

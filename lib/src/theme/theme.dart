@@ -33,8 +33,8 @@ ThemeData primaryTheme = ThemeData(
     filled: true,
     fillColor: AppColors.lightBrown,
     contentPadding: EdgeInsets.symmetric(
-      horizontal: Sizes.p16,
-      vertical: Sizes.p16,
+      horizontal: Sizes.p14,
+      vertical: Sizes.p14,
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(Sizes.p12),

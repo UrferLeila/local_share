@@ -47,7 +47,7 @@ class _InlineFilterState extends State<InlineFilter> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.p14),
       child: Row(
         children: widget.typeOffers.entries.map((entry) {
           final type = entry.key;
@@ -64,7 +64,7 @@ class _InlineFilterState extends State<InlineFilter> {
                       ? widget.selectedTextColor
                       : widget.unselectedTextColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 13,
+                  fontSize: Sizes.p14,
                 ),
               ),
               selected: isSelected,
@@ -77,7 +77,7 @@ class _InlineFilterState extends State<InlineFilter> {
               showCheckmark: false,
               onSelected: (_) => _toggleFilter(type),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Sizes.p16),
+                borderRadius: BorderRadius.circular(Sizes.p14),
               ),
               padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.p12,

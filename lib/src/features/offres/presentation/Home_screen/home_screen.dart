@@ -144,7 +144,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               unselectedColor: AppColors.lightBrown,
                               unselectedTextColor: AppColors.lightwhite,
                               borderColor: AppColors.lightwhite,
-                              borderWidth: Sizes.p2,
+                              borderWidth: Sizes.p0,
                             ),
                           ],
                         ),

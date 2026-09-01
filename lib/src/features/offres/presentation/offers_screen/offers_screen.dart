@@ -110,7 +110,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
         ),
       ),
       data: (dataMap) {
-        final listOfoffers = (dataMap['offres'] as List<Offre>)
+        final listOfoffers = (dataMap["offres"] as List<Offre>)
             .where((offre) => offre.user == user!.id)
             .toList();
         final filteredOffers = filterOffers(listOfoffers);
@@ -161,7 +161,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                                 unselectedColor: AppColors.lightBrown,
                                 unselectedTextColor: AppColors.lightwhite,
                                 borderColor: AppColors.lightwhite,
-                                borderWidth: Sizes.p2,
+                                borderWidth: Sizes.p0,
                               ),
                             ),
                           ],

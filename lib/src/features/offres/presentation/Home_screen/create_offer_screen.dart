@@ -43,7 +43,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 70,
+      imageQuality: Sizes.p70.toInt(),
       maxWidth: 1200,
       maxHeight: 1200,
     );
@@ -140,7 +140,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                               color: AppColors.lightPurple.withValues(
                                 alpha: 0.15,
                               ),
-                              borderRadius: BorderRadius.circular(Sizes.p16),
+                              borderRadius: BorderRadius.circular(Sizes.p14),
                             ),
                             child: Icon(
                               Icons.local_offer_outlined,
@@ -234,7 +234,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                           dropdownColor: AppColors.darkBrown,
                           style: TextStyle(
                             color: AppColors.lightwhite,
-                            fontSize: Sizes.p16,
+                            fontSize: Sizes.p14,
                           ),
                           decoration: InputDecoration(
                             labelStyle: TextStyle(color: AppColors.lightPurple),

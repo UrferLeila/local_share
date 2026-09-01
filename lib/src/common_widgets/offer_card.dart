@@ -36,7 +36,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
 
     return Card(
       margin: const EdgeInsets.symmetric(
-        horizontal: Sizes.p16,
+        horizontal: Sizes.p14,
         vertical: Sizes.p8,
       ),
       shape: RoundedRectangleBorder(
@@ -50,7 +50,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
           });
         },
         child: Padding(
-          padding: const EdgeInsets.all(Sizes.p16),
+          padding: const EdgeInsets.all(Sizes.p14),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -62,8 +62,8 @@ class OffreCardState extends ConsumerState<OfferCard> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(Sizes.p8),
                   child: Container(
-                    width: Sizes.p72,
-                    height: Sizes.p72,
+                    width: Sizes.p70,
+                    height: Sizes.p70,
                     color: AppColors.lightBrown,
                     child: hasImage
                         ? (() {
@@ -74,8 +74,8 @@ class OffreCardState extends ConsumerState<OfferCard> {
                               return Image.memory(
                                 decodedBytes,
                                 fit: BoxFit.cover,
-                                width: Sizes.p72,
-                                height: Sizes.p72,
+                                width: Sizes.p70,
+                                height: Sizes.p70,
                               );
                             } catch (e) {
                               return Icon(

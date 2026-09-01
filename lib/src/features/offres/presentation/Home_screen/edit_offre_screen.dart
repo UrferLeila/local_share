@@ -52,7 +52,7 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
     try {
       final response = await http.put(
         Uri.parse("http://localhost:3000/offres/${widget.offer.id}"),
-        headers: {'Content-Type': 'application/json'},
+        headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "name": name,
           "description": description,
@@ -78,24 +78,21 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
 
       if (response.statusCode == Sizes.p200) {
         if (!mounted) return;
-
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Offer successfully amended!')),
+          const SnackBar(content: Text("Offer successfully amended!")),
         );
 
         context.pop(true);
       } else {
         if (!mounted) return;
-
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'An error has occurred')),
+          SnackBar(content: Text(data["error"] ?? "An error has occurred")),
         );
       }
     } catch (e) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server: $e')),
+        SnackBar(content: Text("Unable to contact the server: $e")),
       );
     }
   }
@@ -132,7 +129,7 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
                               color: AppColors.lightPurple.withValues(
                                 alpha: 0.15,
                               ),
-                              borderRadius: BorderRadius.circular(Sizes.p16),
+                              borderRadius: BorderRadius.circular(Sizes.p14),
                             ),
                             child: Icon(
                               Icons.local_offer_outlined,
