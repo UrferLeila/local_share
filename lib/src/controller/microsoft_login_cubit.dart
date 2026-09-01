@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:typed_data';
-
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:dio/dio.dart';
@@ -23,8 +22,6 @@ class AuthCubit extends Cubit<AuthState> {
       postLogoutRedirectUri: "http://localhost:8080/",
     );
     oauth = AadOAuth(config);
-
-    // RESTORED: Check if user was already logged in when the app starts up
     checkExistingSession();
   }
 
@@ -37,7 +34,6 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthInitial());
       }
     } catch (e) {
-      print("Silent session check skipped/failed: $e");
       emit(AuthInitial());
     }
   }
@@ -48,7 +44,6 @@ class AuthCubit extends Cubit<AuthState> {
       await oauth.login();
       await _fetchUserDataAndEmitSuccess();
     } catch (e) {
-      print("Login Error: $e");
       emit(AuthError("Login failed. Please try again."));
     }
   }
@@ -101,7 +96,6 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
     } catch (e) {
-      print("Token acquisition failed or timed out, resetting state: $e");
       try {
         await oauth.logout();
       } catch (_) {}

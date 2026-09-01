@@ -7,7 +7,7 @@ import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/controller/microsoft_login_cubit.dart';
 import 'package:local_share/src/controller/microsoft_login_state.dart';
-import 'package:local_share/src/features/offres/data/user_provider.dart'; // Make sure this path points to your user_provider file
+import 'package:local_share/src/features/offres/data/user_provider.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
@@ -81,8 +81,6 @@ class LoginPageScreen extends ConsumerWidget {
                             "Connectez-vous à votre compte Microsoft",
                           ),
                           gapH32,
-
-                          // Microsoft Login Button
                           Button(
                             onPressed: isLoading
                                 ? () {}
@@ -92,7 +90,6 @@ class LoginPageScreen extends ConsumerWidget {
                                 : "Se connecter avec Microsoft",
                             color: AppColors.lightPurple,
                           ),
-
                           if (isLoading) ...[
                             gapH20,
                             Center(

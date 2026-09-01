@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,50 +12,50 @@ import 'package:local_share/src/features/offres/domain/offre.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class OffresScreen extends ConsumerStatefulWidget {
-  const OffresScreen({super.key});
+class OffersScreen extends ConsumerStatefulWidget {
+  const OffersScreen({super.key});
 
   @override
-  ConsumerState<OffresScreen> createState() => _MyOffersScreenState();
+  ConsumerState<OffersScreen> createState() => _OffersScreenState();
 }
 
-class _MyOffersScreenState extends ConsumerState<OffresScreen> {
-  Future<void> deleteOffre(String offreId) async {
+class _OffersScreenState extends ConsumerState<OffersScreen> {
+  Future<void> deleteOffre(String offerId) async {
     try {
       final response = await http.delete(
-        Uri.parse('http://localhost:3000/offres/$offreId'),
+        Uri.parse("http://localhost:3000/offres/$offerId"),
         headers: {'Content-Type': 'application/json'},
       );
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == Sizes.p200) {
         if (!mounted) return;
 
         ref.invalidate(offerListNotifierProvider);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Offer successfully removed!')),
+          const SnackBar(content: Text("Offer successfully removed!")),
         );
       } else {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['error'] ?? 'Error whilst deleting')),
+          SnackBar(content: Text(data["error"] ?? "Error whilst deleting")),
         );
       }
     } catch (e) {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Unable to contact the server : $e')),
+        SnackBar(content: Text("Unable to contact the server : $e")),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = ref.watch(userProvider);
+    final user = ref.watch(userProvider);
     final config = ref.watch(offerListNotifierProvider);
 
     return config.when(
@@ -69,14 +68,14 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
       error: (error, _) => Scaffold(
         body: Center(
           child: Text(
-            'Erreur : $error',
+            "Erreur : $error",
             style: TextStyle(color: AppColors.lightRed),
           ),
         ),
       ),
       data: (dataMap) {
-        final listOfoffres = (dataMap['offres'] as List<Offre>)
-            .where((offre) => offre.user == currentUser!.id)
+        final listOfoffers = (dataMap['offres'] as List<Offre>)
+            .where((offre) => offre.user == user!.id)
             .toList();
         return Scaffold(
           appBar: AppBar(
@@ -85,25 +84,25 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
               children: [
                 Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
                 gapW8,
-                Text("${listOfoffres.length} offres trouvées !"),
+                Text("${listOfoffers.length} offres trouvées !"),
               ],
             ),
             centerTitle: true,
           ),
           body: LayoutBuilder(
             builder: (context, constraints) {
-              bool isDesktopOrTablet = constraints.maxWidth > 768;
+              bool isDesktopOrTablet = constraints.maxWidth > Sizes.p768;
               return Center(
                 child: Container(
                   constraints: BoxConstraints(
-                    maxWidth: isDesktopOrTablet ? 700 : double.infinity,
+                    maxWidth: isDesktopOrTablet ? Sizes.p700 : double.infinity,
                   ),
                   child: ListView.builder(
                     padding: const EdgeInsets.only(top: Sizes.p12),
-                    itemCount: listOfoffres.length,
+                    itemCount: listOfoffers.length,
                     itemBuilder: (context, index) {
                       return OfferCard(
-                        offer: listOfoffres[index],
+                        offer: listOfoffers[index],
                         isAdmin: true,
                         onDelete: deleteOffre,
                       );
@@ -117,7 +116,7 @@ class _MyOffersScreenState extends ConsumerState<OffresScreen> {
             onPressed: () async {
               final bool? shouldRefresh = await context.pushNamed<bool>(
                 AppRoute.create.name,
-                extra: currentUser,
+                extra: user,
               );
 
               if (shouldRefresh == true) {
