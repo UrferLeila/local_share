@@ -196,13 +196,67 @@ class OffreCardState extends ConsumerState<OfferCard> {
                         ),
                       ],
                     ),
-                  ),
-                  gapW12,
-                  Column(
-                    children: [
-                      if (widget.isAdmin) ...[
-                        InkWell(
-                          onTap: () => widget.onDelete(widget.offer.id),
+                    gapH4,
+                    AnimatedCrossFade(
+                      firstChild: StyledBase(
+                        widget.offer.description ?? "",
+                        maxLines: 1,
+                        textAlign: TextAlign.left,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      secondChild: StyledBase(
+                        widget.offer.description ?? "",
+                        textAlign: TextAlign.left,
+                      ),
+                      crossFadeState: isExpanded
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      duration: const Duration(milliseconds: 200),
+                    ),
+                  ],
+                ),
+              ),
+              gapW12,
+              Column(
+                children: [
+                  if (widget.isAdmin) ...[
+                    InkWell(
+                      onTap: () async {
+                        final bool? confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: StyledSmallTitle(
+                                "Confirmer la suppression",
+                              ),
+                              content: StyledBase(
+                                "Voulez-vous vraiment supprimer cet offres ?",
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: StyledText("Annuler"),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: StyledText("Supprimer"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                        if (confirm == true) {
+                          widget.onDelete(widget.offer.id);
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(Sizes.p8),
+                      child: Container(
+                        width: Sizes.p40,
+                        height: Sizes.p40,
+                        decoration: BoxDecoration(
+                          color: AppColors.lightPurple,
                           borderRadius: BorderRadius.circular(Sizes.p8),
                           child: Container(
                             width: Sizes.p40,

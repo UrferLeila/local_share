@@ -41,7 +41,12 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+      maxWidth: 1200,
+      maxHeight: 1200,
+    );
 
     if (image != null) {
       final bytes = await image.readAsBytes();
