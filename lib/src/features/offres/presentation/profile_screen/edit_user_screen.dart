@@ -72,7 +72,7 @@ class _EditUserScreenState extends ConsumerState<EditUserScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse("http://localhost:3000/users/${user.id}"),
+        Uri.parse("http://157.26.120.161:3000/users/${user.id}"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({"username": username, "email": email}),
       );

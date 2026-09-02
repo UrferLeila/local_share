@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/services/api.dart';
@@ -16,10 +16,15 @@ class AuthCubit extends Cubit<AuthState> {
     final Config config = Config(
       tenant: "0bd66e42-d830-4cdc-b580-f835a405d038",
       clientId: "9a75030d-e141-4531-abb6-4110fe10b364",
-      scope: "openid profile offline_access User.Read ",
+      scope: "openid profile offline_access User.Read",
       navigatorKey: navigatorKey,
       webUseRedirect: false,
-      postLogoutRedirectUri: "http://localhost:8080/",
+      redirectUri: kIsWeb
+          ? "http://localhost:8080/"
+          : "https://login.live.com/oauth20_desktop.srf",
+      postLogoutRedirectUri: kIsWeb
+          ? "http://localhost:8080/"
+          : "https://login.live.com/oauth20_desktop.srf",
     );
     oauth = AadOAuth(config);
     checkExistingSession();
@@ -104,12 +109,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> logout() async {
-  emit(AuthLoading());
-  try {
-    await oauth.logout();
-    emit(AuthInitial());
-  } catch (e) {
-    emit(AuthInitial());
+    emit(AuthLoading());
+    try {
+      await oauth.logout();
+      emit(AuthInitial());
+    } catch (e) {
+      emit(AuthInitial());
+    }
   }
-}
 }

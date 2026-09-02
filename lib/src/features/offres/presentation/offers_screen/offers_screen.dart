@@ -43,7 +43,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
   Future<void> deleteOffre(String offerId) async {
     try {
       final response = await http.delete(
-        Uri.parse("http://localhost:3000/offres/$offerId"),
+        Uri.parse("http://157.26.120.161:3000/offres/$offerId"),
         headers: {'Content-Type': 'application/json'},
       );
 

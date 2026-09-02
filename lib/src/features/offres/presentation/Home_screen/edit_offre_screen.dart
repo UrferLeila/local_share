@@ -51,7 +51,7 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
 
     try {
       final response = await http.put(
-        Uri.parse("http://localhost:3000/offres/${widget.offer.id}"),
+        Uri.parse("http://157.26.120.161:3000/offres/${widget.offer.id}"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "name": name,
@@ -62,7 +62,6 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
 
       final contentType = response.headers["content-type"] ?? "";
       if (!contentType.contains("application/json")) {
-
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -47,7 +47,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
     try {
       final response = await http.post(
         Uri.parse(
-          "http://localhost:3000/offres/${widget.offer.id}/propositions",
+          "http://157.26.120.161:3000/offres/${widget.offer.id}/propositions",
         ),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({

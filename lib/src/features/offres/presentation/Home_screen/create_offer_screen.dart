@@ -71,7 +71,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse("http://localhost:3000/offres"),
+        Uri.parse("http://157.26.120.161:3000/offres"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "name": name,

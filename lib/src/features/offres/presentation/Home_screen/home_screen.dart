@@ -41,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> deleteOffer(String offreId) async {
     try {
       final response = await http.delete(
-        Uri.parse("http://localhost:3000/offres/$offreId"),
+        Uri.parse("http://157.26.120.161:3000/offres/$offreId"),
         headers: {'Content-Type': 'application/json'},
       );
 
