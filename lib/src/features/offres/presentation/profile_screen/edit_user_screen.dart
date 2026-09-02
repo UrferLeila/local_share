@@ -161,7 +161,7 @@ class _EditUserScreenState extends ConsumerState<EditUserScreen> {
                               color: AppColors.lightPurple.withValues(
                                 alpha: 0.15,
                               ),
-                              borderRadius: BorderRadius.circular(Sizes.p14),
+                              borderRadius: BorderRadius.circular(Sizes.p16),
                             ),
                             child: Icon(
                               Icons.edit,

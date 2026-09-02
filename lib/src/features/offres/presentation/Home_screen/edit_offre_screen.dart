@@ -128,7 +128,7 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
                               color: AppColors.lightPurple.withValues(
                                 alpha: 0.15,
                               ),
-                              borderRadius: BorderRadius.circular(Sizes.p14),
+                              borderRadius: BorderRadius.circular(Sizes.p16),
                             ),
                             child: Icon(
                               Icons.local_offer_outlined,

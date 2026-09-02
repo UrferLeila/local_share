@@ -33,7 +33,7 @@ class _SearchBarOffer extends State<SearchBarOffer> {
           fillColor: AppColors.lightPurple,
           contentPadding: const EdgeInsets.symmetric(vertical: 1),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(Sizes.p14),
+            borderRadius: BorderRadius.circular(Sizes.p16),
             borderSide: BorderSide.none,
           ),
         ),

@@ -84,7 +84,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               gapH8,
               Text(
                 user?.email ?? "",
-                style: TextStyle(color: AppColors.grey, fontSize: Sizes.p14),
+                style: TextStyle(color: AppColors.grey, fontSize: Sizes.p16),
               ),
               gapH32,
               Container(
@@ -92,7 +92,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 padding: const EdgeInsets.all(Sizes.p20),
                 decoration: BoxDecoration(
                   color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(Sizes.p14),
+                  borderRadius: BorderRadius.circular(Sizes.p16),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.darkBrown,

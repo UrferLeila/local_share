@@ -140,7 +140,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                               color: AppColors.lightPurple.withValues(
                                 alpha: 0.15,
                               ),
-                              borderRadius: BorderRadius.circular(Sizes.p14),
+                              borderRadius: BorderRadius.circular(Sizes.p16),
                             ),
                             child: Icon(
                               Icons.local_offer_outlined,
@@ -234,7 +234,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                           dropdownColor: AppColors.darkBrown,
                           style: TextStyle(
                             color: AppColors.lightwhite,
-                            fontSize: Sizes.p14,
+                            fontSize: Sizes.p16,
                           ),
                           decoration: InputDecoration(
                             labelStyle: TextStyle(color: AppColors.lightPurple),
