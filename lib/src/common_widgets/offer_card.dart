@@ -86,7 +86,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
 
     return Card(
       margin: const EdgeInsets.symmetric(
-        horizontal: Sizes.p16,
+        horizontal: Sizes.p14,
         vertical: Sizes.p8,
       ),
       shape: RoundedRectangleBorder(

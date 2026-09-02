@@ -137,7 +137,7 @@ class _EditUserScreenState extends ConsumerState<EditUserScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(Sizes.p64),
+            padding: const EdgeInsets.all(Sizes.p62),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: Sizes.p500),
               child: Card(
@@ -161,7 +161,7 @@ class _EditUserScreenState extends ConsumerState<EditUserScreen> {
                               color: AppColors.lightPurple.withValues(
                                 alpha: 0.15,
                               ),
-                              borderRadius: BorderRadius.circular(Sizes.p16),
+                              borderRadius: BorderRadius.circular(Sizes.p14),
                             ),
                             child: Icon(
                               Icons.edit,

@@ -65,7 +65,7 @@ class LoginPageScreen extends ConsumerWidget {
                                 color: AppColors.lightPurple.withValues(
                                   alpha: 0.15,
                                 ),
-                                borderRadius: BorderRadius.circular(Sizes.p16),
+                                borderRadius: BorderRadius.circular(Sizes.p14),
                               ),
                               child: Icon(
                                 Icons.hub,
