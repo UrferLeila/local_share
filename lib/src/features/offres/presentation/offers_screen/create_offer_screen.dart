@@ -69,6 +69,9 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
       base64Image = base64Encode(_imageBytes!);
     }
 
+    // Safely parse user ID to an integer
+    final parsedUserId = int.tryParse(widget.user.id.toString()) ?? 1;
+
     try {
       String baseUrl = kIsWeb
           ? "https://localhost:7024"
@@ -80,13 +83,11 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
         body: jsonEncode({
           "name": name,
           "description": description,
-          "userId": int.tryParse(widget.user.id) ?? 1,
+          "userId": parsedUserId,
           "image": base64Image ?? "url_de_image",
           "type": _selectedType,
         }),
       );
-
-      final data = jsonDecode(response.body);
 
       if (response.statusCode == 201) {
         if (!mounted) return;
@@ -99,9 +100,22 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
       } else {
         if (!mounted) return;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data["error"] ?? "An error has occurred")),
-        );
+        // Safely handle decoding response whether it's JSON or plain text
+        String errorMessage = "An error has occurred (${response.statusCode})";
+        try {
+          final data = jsonDecode(response.body);
+          if (data is Map && data.containsKey("error")) {
+            errorMessage = data["error"];
+          }
+        } catch (_) {
+          errorMessage = response.body.isNotEmpty
+              ? response.body
+              : errorMessage;
+        }
+
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
       }
     } catch (e) {
       if (!mounted) return;
