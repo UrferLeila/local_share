@@ -101,7 +101,6 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
 
     return config.when(
       loading: () => Scaffold(
-        appBar: AppBarWidget(title: "Vos offres"),
         body: Center(
           child: CircularProgressIndicator(color: AppColors.lightPurple),
         ),
@@ -120,17 +119,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
             .toList();
         final filteredOffers = filterOffers(listOfoffers);
         return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.hub, color: AppColors.lightPurple, size: Sizes.p20),
-                gapW8,
-                Text("${filteredOffers.length} offres trouvées !"),
-              ],
-            ),
-            centerTitle: true,
-          ),
+          appBar: AppBarWidget(title: "Vos offres"),
           body: LayoutBuilder(
             builder: (context, constraints) {
               bool isDesktopOrTablet = constraints.maxWidth > Sizes.p768;
