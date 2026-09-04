@@ -70,14 +70,18 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
     }
 
     try {
+      String baseUrl = kIsWeb
+          ? "https://localhost:7024"
+          : "https://10.0.2.2:7024";
+
       final response = await http.post(
-        Uri.parse("http://157.26.120.161:3000/offres"),
+        Uri.parse("$baseUrl/api/offer"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "name": name,
           "description": description,
-          "user": widget.user.id,
-          "image": base64Image,
+          "userId": int.tryParse(widget.user.id) ?? 1,
+          "image": base64Image ?? "url_de_image",
           "type": _selectedType,
         }),
       );

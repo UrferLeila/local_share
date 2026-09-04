@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -71,8 +72,11 @@ class _EditUserScreenState extends ConsumerState<EditUserScreen> {
     final email = emailController.text.trim();
 
     try {
+      String baseUrl = kIsWeb
+          ? "https://localhost:7024"
+          : "https://10.0.2.2:7024";
       final response = await http.put(
-        Uri.parse("http://157.26.120.161:3000/users/${user.id}"),
+        Uri.parse("$baseUrl/api/users/${user.id}"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({"username": username, "email": email}),
       );

@@ -1,4 +1,5 @@
 import 'proposition.dart';
+
 typedef OffreID = String;
 
 enum OfferType {
@@ -51,12 +52,12 @@ class Offre {
   });
 
   factory Offre.fromJson(Map<String, dynamic> json) => Offre(
-    id: json['_id'] ?? '',
+    id: json['offerId']?.toString() ?? '',
     name: json['name'] ?? '',
     description: json['description'],
     image: json['image'],
-    user: json['user'] ?? '',
-    type: OfferType.fromString(json["type"] ?? ""),
+    user: json['userId']?.toString() ?? '',
+    type: parseOfferType(json["type"]),
     propositions: json['propositions'] != null
         ? (json['propositions'] as List)
               .map((p) => Proposition.fromJson(Map<String, dynamic>.from(p)))
@@ -64,13 +65,29 @@ class Offre {
         : [],
   );
 
+  static OfferType parseOfferType(dynamic typeValue) {
+    if (typeValue is int) {
+      switch (typeValue) {
+        case 0:
+          return OfferType.pret;
+        case 1:
+          return OfferType.achat;
+        case 2:
+          return OfferType.service;
+        default:
+          return OfferType.pret;
+      }
+    }
+    return OfferType.fromString(typeValue.toString());
+  }
+
   Map<String, dynamic> toJson() => {
-    '_id': id,
+    'offerId': id,
     'name': name,
     'description': description,
     'image': image,
-    'user': user,
-    'type': type.toShortString(),
+    'userId': user,
+    'type': type.index,
     'propositions': propositions.map((p) => p.toJson()).toList(),
   };
 }

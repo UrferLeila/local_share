@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_share/src/constant/app_size.dart';
-import 'package:local_share/src/features/offres/domain/offre.dart';
+import 'package:local_share/src/features/offres/domain/offer.dart';
 
 class InlineFilter extends StatefulWidget {
   final Function(List<OfferType>) onFilterChanged;

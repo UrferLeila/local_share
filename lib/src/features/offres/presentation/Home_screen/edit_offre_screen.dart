@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,7 +9,7 @@ import 'package:local_share/src/common_widgets/button.dart';
 import 'package:local_share/src/common_widgets/styled_forms.dart';
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
-import 'package:local_share/src/features/offres/domain/offre.dart';
+import 'package:local_share/src/features/offres/domain/offer.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class EditOfferScreen extends ConsumerStatefulWidget {
@@ -50,13 +51,19 @@ class _EditOfferScreenState extends ConsumerState<EditOfferScreen> {
     final description = descriptionController.text.trim();
 
     try {
+      String baseUrl = kIsWeb
+          ? "https://localhost:7024"
+          : "https://10.0.2.2:7024";
       final response = await http.put(
-        Uri.parse("http://157.26.120.161:3000/offres/${widget.offer.id}"),
+        Uri.parse("$baseUrl/api/offer/${widget.offer.id}"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
+          "offerId": int.parse(widget.offer.id),
           "name": name,
           "description": description,
-          "user": widget.offer.user,
+          "image": widget.offer.image ?? "url_de_image",
+          "type": widget.offer.type.index,
+          "userId": int.tryParse(widget.offer.user) ?? 1,
         }),
       );
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -7,9 +8,9 @@ import 'package:local_share/src/common_widgets/inline_filter.dart';
 import 'package:local_share/src/common_widgets/offer_card.dart';
 import 'package:local_share/src/common_widgets/search_bar_offer.dart';
 import 'package:local_share/src/constant/app_size.dart';
-import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
+import 'package:local_share/src/features/offres/data/offer_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
-import 'package:local_share/src/features/offres/domain/offre.dart';
+import 'package:local_share/src/features/offres/domain/offer.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -40,11 +41,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Future<void> deleteOffer(String offreId) async {
     try {
+      String baseUrl = kIsWeb
+          ? "https://localhost:7024"
+          : "https://10.0.2.2:7024";
       final response = await http.delete(
-        Uri.parse("http://157.26.120.161:3000/offres/$offreId"),
+        Uri.parse("$baseUrl/api/offer/$offreId"),
         headers: {'Content-Type': 'application/json'},
       );
-
       final data = jsonDecode(response.body);
 
       if (response.statusCode == Sizes.p200) {

@@ -7,9 +7,9 @@ import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
-import 'package:local_share/src/features/offres/data/offre_list_provider.dart';
+import 'package:local_share/src/features/offres/data/offer_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
-import 'package:local_share/src/features/offres/domain/offre.dart';
+import 'package:local_share/src/features/offres/domain/offer.dart';
 import 'package:local_share/src/features/offres/domain/user.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/theme/theme.dart';
@@ -45,10 +45,11 @@ class OffreCardState extends ConsumerState<OfferCard> {
     if (text.isEmpty || currentUser == null) return;
 
     try {
+      String baseUrl = kIsWeb
+          ? "https://localhost:7024"
+          : "https://10.0.2.2:7024";
       final response = await http.post(
-        Uri.parse(
-          "http://157.26.120.161:3000/offres/${widget.offer.id}/propositions",
-        ),
+        Uri.parse("$baseUrl/api/offer/${widget.offer.id}/propositions"),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'userId': currentUser.id,
@@ -210,7 +211,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                                   title: const StyledSmallTitle(
                                     "Confirmer la suppression",
                                   ),
-                                  content: const StyledBase(
+                                  content: StyledBase(
                                     "Voulez-vous vraiment supprimer cet offres ?",
                                   ),
                                   actions: <Widget>[
@@ -303,7 +304,6 @@ class OffreCardState extends ConsumerState<OfferCard> {
                     itemCount: widget.offer.propositions.length,
                     itemBuilder: (context, index) {
                       final prop = widget.offer.propositions[index];
-
                       final bool isOwner = prop.userId == widget.offer.user;
 
                       return Padding(
@@ -315,8 +315,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                               radius: Sizes.p16,
                               backgroundColor: isOwner
                                   ? AppColors.cyan
-                                  : AppColors
-                                        .lightBrown, // Distinct color for owner avatar
+                                  : AppColors.lightBrown,
                               backgroundImage:
                                   prop.userPhoto != null &&
                                       prop.userPhoto!.isNotEmpty
@@ -337,7 +336,6 @@ class OffreCardState extends ConsumerState<OfferCard> {
                               child: Container(
                                 padding: const EdgeInsets.all(Sizes.p8),
                                 decoration: BoxDecoration(
-                                  // Give the owner a different background tint (e.g., cyan/purple variation)
                                   color: isOwner
                                       ? AppColors.cyan.withValues(alpha: 0.15)
                                       : AppColors.lightPurple.withValues(
@@ -351,7 +349,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                                           ),
                                           width: 1,
                                         )
-                                      : null, // Optional border highlight for owner
+                                      : null,
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -376,25 +374,13 @@ class OffreCardState extends ConsumerState<OfferCard> {
                                                   borderRadius:
                                                       BorderRadius.circular(4),
                                                 ),
-                                                child: const Text(
-                                                  "Auteur", // Or "Owner"
-                                                  style: TextStyle(
-                                                    fontSize: 9,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
+                                                child: StyledBase("Auteur"),
                                               ),
                                             ],
                                           ],
                                         ),
-                                        Text(
+                                        StyledBase(
                                           "${prop.date.hour.toString().padLeft(2, '0')}:${prop.date.minute.toString().padLeft(2, '0')}",
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            color: AppColors.lightwhite
-                                                .withValues(alpha: 0.7),
-                                          ),
                                         ),
                                       ],
                                     ),
