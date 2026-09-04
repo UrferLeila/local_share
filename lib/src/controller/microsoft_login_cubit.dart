@@ -34,7 +34,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       bool isLogged = await oauth.hasCachedAccountInformation;
       if (isLogged) {
-        await _fetchUserDataAndEmitSuccess();
+        await fetchUserDataAndEmitSuccess();
       } else {
         emit(AuthInitial());
       }
@@ -47,13 +47,13 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await oauth.login();
-      await _fetchUserDataAndEmitSuccess();
+      await fetchUserDataAndEmitSuccess();
     } catch (e) {
       emit(AuthError("Login failed. Please try again."));
     }
   }
 
-  Future<void> _fetchUserDataAndEmitSuccess() async {
+  Future<void> fetchUserDataAndEmitSuccess() async {
     emit(AuthLoading());
     try {
       final accessToken = await oauth.getAccessToken().timeout(
@@ -69,13 +69,24 @@ class AuthCubit extends Cubit<AuthState> {
 
       Response jsonResponse = await API().getUserDetails(token: accessToken);
       final Map<String, dynamic> userData = jsonResponse.data;
-      final String name = userData['displayName'] ?? 'Not Available';
-      final String email = userData['mail'] ?? 'Not Available';
+
+      final String azureId = userData["id"];
+      final String name = userData["displayName"] ?? "Not Available";
+      final String email = userData["mail"] ?? "Not Available";
       final String mobilePhone = userData['mobilePhone'] ?? 'Not Available';
       final String jobTitle = userData['jobTitle'] ?? 'Not Available';
       final String officeLocation =
           userData['officeLocation'] ?? 'Not Available';
       final String department = userData['department'] ?? 'Not Available';
+
+      try {
+        await Dio().post(
+          "https://localhost:7024/api/User/sync",
+          data: {"azureId": azureId, "userName": name, "email": email},
+        );
+      } catch (e) {
+        print("Erreur lors de la synchronisation avec le backend : $e");
+      }
 
       Uint8List? photo;
       try {
