@@ -31,7 +31,7 @@ Map<String, dynamic> parseOfferResponse(String responseBody) {
   final List<dynamic> jsonList = jsonDecode(responseBody);
   return {
     "offres": jsonList
-        .map((json) => Offre.fromJson(Map<String, dynamic>.from(json)))
+        .map((json) => Offer.fromJson(Map<String, dynamic>.from(json)))
         .toList(),
   };
 }

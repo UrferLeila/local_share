@@ -24,6 +24,7 @@ class Sizes {
   static const p160 = 160.0;
   static const p200 = 200.0;
   static const p240 = 240.0;
+  static const p268 = 268.0;
   static const p300 = 300.0;
   static const p304 = 304.0;
   static const p312 = 312.0;

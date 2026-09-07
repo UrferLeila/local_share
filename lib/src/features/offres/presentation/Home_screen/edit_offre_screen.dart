@@ -15,7 +15,7 @@ import 'package:local_share/src/theme/theme.dart';
 class EditOfferScreen extends ConsumerStatefulWidget {
   const EditOfferScreen({super.key, required this.offer});
 
-  final Offre offer;
+  final Offer offer;
 
   @override
   ConsumerState<EditOfferScreen> createState() => _EditOfferScreenState();
