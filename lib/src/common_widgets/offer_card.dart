@@ -301,7 +301,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                   )
                 else
                   SizedBox(
-                    height: Sizes.p268,
+                    height: Sizes.p236,
                     child: ListView.builder(
                       shrinkWrap: false,
                       physics: const AlwaysScrollableScrollPhysics(),

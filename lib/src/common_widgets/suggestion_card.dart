@@ -87,10 +87,14 @@ class SuggestionCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       StyledBase(prop.description),
-                      Icon(
-                        Icons.delete,
-                        size: Sizes.p20,
-                        color: AppColors.lightRed,
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {},
+                        child: Icon(
+                          Icons.delete,
+                          size: Sizes.p20,
+                          color: AppColors.lightRed,
+                        ),
                       ),
                     ],
                   ),

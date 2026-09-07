@@ -69,7 +69,6 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
       base64Image = base64Encode(_imageBytes!);
     }
 
-    // Map your string type to the C# Enum integer index (Pret: 0, Achat: 1, Service: 2)
     int typeIndex;
     switch (_selectedType) {
       case 'achat':
@@ -84,7 +83,6 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
         break;
     }
 
-    // Use user.id directly as a String since SQL AzureId is a string
     final azureId = widget.user.id.toString();
 
     try {
@@ -255,7 +253,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                           prefixIcon: Icons.description_outlined,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Veuillez remplir ce champ';
+                              return "Veuillez remplir ce champ";
                             }
                             return null;
                           },

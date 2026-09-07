@@ -21,36 +21,36 @@ class User {
     if (json['photo'] != null) {
       try {
         if (json['photo'] is String) {
-          decodedPhoto = base64Decode(json['photo']);
+          decodedPhoto = base64Decode(json["photo"]);
         }
       } catch (_) {
         decodedPhoto = null;
       }
     }
-    final resolvedId = json['azureId'] ?? json['AzureId'] ?? '';
+    final resolvedId = json["azureId"] ?? json["AzureId"] ?? "";
 
     return User(
       id: resolvedId.isNotEmpty
           ? resolvedId
-          : (json['id']?.toString().contains('@') == false
-                ? json['id'] ?? ''
+          : (json["id"]?.toString().contains('@') == false
+                ? json["id"] ?? ""
                 : ''),
-      username: json['userName'] ?? json['UserName'] ?? json['username'] ?? '',
-      email: json['email'] ?? json['Email'] ?? '',
-      role: json['role'] ?? json['Role'] ?? 'user',
+      username: json["userName"] ?? json["UserName"] ?? json["username"] ?? "",
+      email: json["email"] ?? json["Email"] ?? "",
+      role: json["role"] ?? json["Role"] ?? "user",
       photo: decodedPhoto,
     );
   }
 
-  bool get isAdmin => role == 'admin';
+  bool get isAdmin => role == "admin";
 
   Map<String, dynamic> toJson() {
     return {
-      'azureId': id,
-      'userName': username,
-      'email': email,
-      'role': role,
-      'photo': photo != null ? base64Encode(photo!) : null,
+      "azureId": id,
+      "userName": username,
+      "email": email,
+      "role": role,
+      "photo": photo != null ? base64Encode(photo!) : null,
     };
   }
 }
