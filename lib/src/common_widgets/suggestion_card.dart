@@ -6,10 +6,16 @@ import 'package:local_share/src/features/offres/domain/offer.dart';
 import 'package:local_share/src/theme/theme.dart';
 
 class SuggestionCard extends StatelessWidget {
-  const SuggestionCard({super.key, required this.offer, required this.index});
+  const SuggestionCard({
+    super.key,
+    required this.offer,
+    required this.index,
+    required this.onDelete,
+  });
 
   final Offer offer;
   final int index;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +95,7 @@ class SuggestionCard extends StatelessWidget {
                       StyledBase(prop.description),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () {},
+                        onTap: onDelete,
                         child: Icon(
                           Icons.delete,
                           size: Sizes.p20,

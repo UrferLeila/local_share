@@ -42,6 +42,23 @@ class OffreCardState extends ConsumerState<OfferCard> {
     super.dispose();
   }
 
+  Future<void> deleteSuggestion(dynamic suggestionId) async {
+    String baseUrl = kIsWeb
+        ? "https://localhost:7024"
+        : "https://10.0.2.2:7024";
+
+    final response = await http.delete(
+      Uri.parse("$baseUrl/api/Suggestion/$suggestionId"),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 204 || response.statusCode == 200) {
+      ref.invalidate(offerListNotifierProvider);
+    } else {
+      throw Exception("Échec de la suppression de la suggestion");
+    }
+  }
+
   Future<void> sendSuggestion(User? currentUser) async {
     final text = suggestionController.text.trim();
     final azureId = widget.user.id.toString();
@@ -306,8 +323,14 @@ class OffreCardState extends ConsumerState<OfferCard> {
                       shrinkWrap: false,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: widget.offer.suggestions.length,
-                      itemBuilder: (context, index) =>
-                          SuggestionCard(offer: widget.offer, index: index),
+                      itemBuilder: (context, index) {
+                        final suggestion = widget.offer.suggestions[index];
+                        return SuggestionCard(
+                          offer: widget.offer,
+                          index: index,
+                          onDelete: () => deleteSuggestion(suggestion.id),
+                        );
+                      },
                     ),
                   ),
                 gapH12,

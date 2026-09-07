@@ -99,7 +99,6 @@ class AuthCubit extends Cubit<AuthState> {
           data: {"azureId": azureId, "userName": name, "email": email},
         );
 
-        // 2. Create the User object with the photo included
         final user = User(
           id: azureId,
           username: name,
@@ -108,7 +107,6 @@ class AuthCubit extends Cubit<AuthState> {
           photo: photo,
         );
 
-        // 3. Save it to SharedPreferences using user.toJson() (handles photo base64 encoding)
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user', jsonEncode(user.toJson()));
       } catch (e) {
