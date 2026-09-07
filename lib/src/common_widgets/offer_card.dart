@@ -19,11 +19,13 @@ class OfferCard extends ConsumerStatefulWidget {
     super.key,
     required this.offer,
     required this.isAdmin,
+    required this.user,
     required this.onDelete,
   });
 
   final Offer offer;
   final bool isAdmin;
+  final User user;
   final Future<void> Function(String) onDelete;
 
   @override
@@ -42,6 +44,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
 
   Future<void> sendSuggestion(User? currentUser) async {
     final text = suggestionController.text.trim();
+    final azureId = widget.user.id.toString();
     if (text.isEmpty || currentUser == null) return;
 
     try {
@@ -56,7 +59,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
           "name": text,
           "username": currentUser.username,
           "userPhoto": 0,
-          "userId": currentUser.id,
+          "userId": azureId,
           "room": "DefaultRoom",
           "date": DateTime.now().toIso8601String(),
         }),
@@ -255,7 +258,6 @@ class OffreCardState extends ConsumerState<OfferCard> {
                               AppRoute.editOffre.name,
                               extra: widget.offer,
                             );
-
                             if (result == true && mounted) {
                               ref.invalidate(offerListNotifierProvider);
                             }

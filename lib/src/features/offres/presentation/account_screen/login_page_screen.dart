@@ -16,6 +16,8 @@ class LoginPageScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider); 
+    
     return Scaffold(
       backgroundColor: AppColors.black,
       body: BlocConsumer<AuthCubit, AuthState>(
@@ -30,7 +32,7 @@ class LoginPageScreen extends ConsumerWidget {
                   role: 'user',
                   photo: state.photo,
                 );
-            context.goNamed(AppRoute.home.name);
+            context.goNamed(AppRoute.home.name, extra: user);
           } else if (state is AuthError) {
             ScaffoldMessenger.of(
               context,

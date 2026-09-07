@@ -32,12 +32,16 @@ final goRouter = GoRouter(
         GoRoute(
           path: '/home',
           name: AppRoute.home.name,
-          builder: (context, state) => const HomeScreen(),
+          builder: (context, state) {
+            return HomeScreen();
+          },
         ),
         GoRoute(
           path: '/offres',
           name: AppRoute.offres.name,
-          builder: (context, state) => const OffersScreen(),
+          builder: (context, state) {
+            return OffersScreen();
+          },
         ),
         GoRoute(
           path: '/profil',

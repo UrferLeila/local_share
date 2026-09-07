@@ -128,17 +128,12 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
             ),
           );
         }
-
-        // Safely extract offers and filter by matching the user's azureId
         final allOffers = dataMap["offres"] as List<Offer>;
         final listOfoffers = allOffers.where((offre) {
-          // Adjust based on your Offre model field names (e.g., azureId, userId, or user)
           final String offerUserId = offre.user;
           return offerUserId == user.id;
         }).toList();
-
         final filteredOffers = filterOffers(listOfoffers);
-
         return Scaffold(
           backgroundColor: AppColors.black,
           appBar: AppBarWidget(title: "Vos offres"),
@@ -203,6 +198,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                                     offer: filteredOffers[index],
                                     isAdmin: true,
                                     onDelete: deleteOffre,
+                                    user: user,
                                   );
                                 },
                               ),
