@@ -289,7 +289,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
               ),
               if (isExpanded) ...[
                 const Divider(height: Sizes.p24),
-                const StyledSmallTitle("Suggestion / Chat"),
+                const StyledSmallTitle("Suggestion"),
                 gapH8,
                 if (widget.offer.suggestions.isEmpty)
                   const Padding(
@@ -297,102 +297,111 @@ class OffreCardState extends ConsumerState<OfferCard> {
                     child: StyledBase("Aucune suggestion pour le moment."),
                   )
                 else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: widget.offer.suggestions.length,
-                    itemBuilder: (context, index) {
-                      final prop = widget.offer.suggestions[index];
-                      final bool isOwner = prop.userId == widget.offer.user;
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: Sizes.p4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: Sizes.p16,
-                              backgroundColor: isOwner
-                                  ? AppColors.cyan
-                                  : AppColors.lightBrown,
-                              backgroundImage:
-                                  prop.userPhoto != null &&
-                                      prop.userPhoto!.isNotEmpty
-                                  ? MemoryImage(base64Decode(prop.userPhoto!))
-                                  : null,
-                              child:
-                                  prop.userPhoto == null ||
-                                      prop.userPhoto!.isEmpty
-                                  ? Icon(
-                                      Icons.person,
-                                      size: Sizes.p16,
-                                      color: AppColors.lightwhite,
-                                    )
-                                  : null,
-                            ),
-                            gapW12,
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(Sizes.p8),
-                                decoration: BoxDecoration(
-                                  color: isOwner
-                                      ? AppColors.cyan.withValues(alpha: 0.15)
-                                      : AppColors.lightPurple.withValues(
-                                          alpha: 0.1,
-                                        ),
-                                  borderRadius: BorderRadius.circular(Sizes.p8),
-                                  border: isOwner
-                                      ? Border.all(
-                                          color: AppColors.cyan.withValues(
-                                            alpha: 0.4,
+                  SizedBox(
+                    height: Sizes.p268,
+                    child: ListView.builder(
+                      shrinkWrap: false,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: widget.offer.suggestions.length,
+                      itemBuilder: (context, index) {
+                        final prop = widget.offer.suggestions[index];
+                        final bool isOwner = prop.userId == widget.offer.user;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Sizes.p4,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: Sizes.p16,
+                                backgroundColor: isOwner
+                                    ? AppColors.cyan
+                                    : AppColors.lightBrown,
+                                backgroundImage:
+                                    prop.userPhoto != null &&
+                                        prop.userPhoto!.isNotEmpty
+                                    ? MemoryImage(base64Decode(prop.userPhoto!))
+                                    : null,
+                                child:
+                                    prop.userPhoto == null ||
+                                        prop.userPhoto!.isEmpty
+                                    ? Icon(
+                                        Icons.person,
+                                        size: Sizes.p16,
+                                        color: AppColors.lightwhite,
+                                      )
+                                    : null,
+                              ),
+                              gapW12,
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.all(Sizes.p8),
+                                  decoration: BoxDecoration(
+                                    color: isOwner
+                                        ? AppColors.cyan.withValues(alpha: 0.15)
+                                        : AppColors.lightPurple.withValues(
+                                            alpha: 0.1,
                                           ),
-                                          width: 1,
-                                        )
-                                      : null,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            StyledLink(prop.username),
-                                            if (isOwner) ...[
-                                              const SizedBox(width: 6),
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 6,
-                                                      vertical: 2,
-                                                    ),
-                                                decoration: BoxDecoration(
-                                                  color: AppColors.cyan,
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                ),
-                                                child: StyledBase("Auteur"),
-                                              ),
-                                            ],
-                                          ],
-                                        ),
-                                        StyledBase(
-                                          "${prop.date.hour.toString().padLeft(2, '0')}:${prop.date.minute.toString().padLeft(2, '0')}",
-                                        ),
-                                      ],
+                                    borderRadius: BorderRadius.circular(
+                                      Sizes.p8,
                                     ),
-                                    gapH4,
-                                    StyledBase(prop.description),
-                                  ],
+                                    border: isOwner
+                                        ? Border.all(
+                                            color: AppColors.cyan.withValues(
+                                              alpha: 0.4,
+                                            ),
+                                            width: 1,
+                                          )
+                                        : null,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              StyledLink(prop.username),
+                                              if (isOwner) ...[
+                                                const SizedBox(width: 6),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 6,
+                                                        vertical: 2,
+                                                      ),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColors.cyan,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          4,
+                                                        ),
+                                                  ),
+                                                  child: StyledBase("Auteur"),
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                          StyledBase(
+                                            "${prop.date.hour.toString().padLeft(2, '0')}:${prop.date.minute.toString().padLeft(2, '0')}",
+                                          ),
+                                        ],
+                                      ),
+                                      gapH4,
+                                      StyledBase(prop.description),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 gapH12,
                 Row(
