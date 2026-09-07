@@ -101,11 +101,13 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
 
     return config.when(
       loading: () => Scaffold(
+        backgroundColor: AppColors.black,
         body: Center(
           child: CircularProgressIndicator(color: AppColors.lightPurple),
         ),
       ),
       error: (error, _) => Scaffold(
+        backgroundColor: AppColors.black,
         body: Center(
           child: Text(
             "Erreur : $error",
@@ -114,11 +116,31 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
         ),
       ),
       data: (dataMap) {
-        final listOfoffers = (dataMap["offres"] as List<Offre>)
-            .where((offre) => offre.user == user!.id)
-            .toList();
+        if (user == null) {
+          return Scaffold(
+            backgroundColor: AppColors.black,
+            appBar: AppBarWidget(title: "Vos offres"),
+            body: Center(
+              child: Text(
+                "Utilisateur non connecté",
+                style: TextStyle(color: AppColors.lightwhite),
+              ),
+            ),
+          );
+        }
+
+        // Safely extract offers and filter by matching the user's azureId
+        final allOffers = dataMap["offres"] as List<Offre>;
+        final listOfoffers = allOffers.where((offre) {
+          // Adjust based on your Offre model field names (e.g., azureId, userId, or user)
+          final String offerUserId = offre.user;
+          return offerUserId == user.id;
+        }).toList();
+
         final filteredOffers = filterOffers(listOfoffers);
+
         return Scaffold(
+          backgroundColor: AppColors.black,
           appBar: AppBarWidget(title: "Vos offres"),
           body: LayoutBuilder(
             builder: (context, constraints) {
@@ -162,17 +184,28 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.only(top: Sizes.p12),
-                          itemCount: filteredOffers.length,
-                          itemBuilder: (context, index) {
-                            return OfferCard(
-                              offer: filteredOffers[index],
-                              isAdmin: true,
-                              onDelete: deleteOffre,
-                            );
-                          },
-                        ),
+                        child: filteredOffers.isEmpty
+                            ? Center(
+                                child: Text(
+                                  "Vous n'avez publié aucune offre.",
+                                  style: TextStyle(
+                                    color: AppColors.lightwhite.withValues(
+                                      alpha: 0.6,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.only(top: Sizes.p12),
+                                itemCount: filteredOffers.length,
+                                itemBuilder: (context, index) {
+                                  return OfferCard(
+                                    offer: filteredOffers[index],
+                                    isAdmin: true,
+                                    onDelete: deleteOffre,
+                                  );
+                                },
+                              ),
                       ),
                     ],
                   ),

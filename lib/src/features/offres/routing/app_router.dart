@@ -8,7 +8,6 @@ import 'package:local_share/src/features/offres/presentation/home_screen/home_sc
 import 'package:local_share/src/features/offres/presentation/account_screen/login_page_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offers_screen/create_offer_screen.dart';
 import 'package:local_share/src/features/offres/presentation/offers_screen/offers_screen.dart';
-import 'package:local_share/src/features/offres/presentation/profile_screen/edit_user_screen.dart';
 import 'package:local_share/src/features/offres/presentation/profile_screen/profile_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -55,13 +54,7 @@ final goRouter = GoRouter(
         return CreateOfferScreen(user: user);
       },
     ),
-    GoRoute(
-      path: '/edit',
-      name: AppRoute.edit.name,
-      builder: (context, state) {
-        return EditUserScreen();
-      },
-    ),
+
     GoRoute(
       path: '/editOffre',
       name: AppRoute.editOffre.name,

@@ -37,7 +37,7 @@ class Offre {
   final String name;
   final String? description;
   final String? image;
-  final OffreID user;
+  final String user; // This holds the azureId
   final OfferType type;
   final List<Suggestion> suggestions;
 
@@ -52,11 +52,16 @@ class Offre {
   });
 
   factory Offre.fromJson(Map<String, dynamic> json) => Offre(
-    id: json["offerId"]?.toString() ?? "",
-    name: json["name"] ?? "",
-    description: json["description"],
-    image: json["image"],
-    user: json["userId"]?.toString() ?? "",
+    id: json['offerId']?.toString() ?? '',
+    name: json['name'] ?? '',
+    description: json['description'],
+    image: json['image'],
+    // Fix: Look for azureId / AzureId first, then fallback to userId
+    user:
+        json['azureId']?.toString() ??
+        json['AzureId']?.toString() ??
+        json['userId']?.toString() ??
+        '',
     type: parseOfferType(json["type"]),
     suggestions: json["suggestions"] != null
         ? (json["suggestions"] as List)
@@ -82,12 +87,13 @@ class Offre {
   }
 
   Map<String, dynamic> toJson() => {
-    "offerId": id,
-    "name": name,
-    "description": description,
-    "image": image,
-    "userId": user,
-    "type": type.index,
-    "suggestions": suggestions.map((p) => p.toJson()).toList(),
+    'offerId': id,
+    'name': name,
+    'description': description,
+    'image': image,
+    // Send azureId to match the C# model property
+    'azureId': user,
+    'type': type.index,
+    'propositions': propositions.map((p) => p.toJson()).toList(),
   };
 }
