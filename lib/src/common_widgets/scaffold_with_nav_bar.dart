@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_share/src/theme/theme.dart';
 
-class ScaffoldWithNavBar extends StatelessWidget {
+class ScaffoldWithNavBar extends ConsumerStatefulWidget {
   const ScaffoldWithNavBar({super.key, required this.child});
 
   final Widget child;
 
+  @override
+  ConsumerState<ScaffoldWithNavBar> createState() => _ScaffoldWithNavBarState();
+}
+
+class _ScaffoldWithNavBarState extends ConsumerState<ScaffoldWithNavBar> {
   int _getSelectedIndex(BuildContext context) {
     final location = GoRouterState.of(context).uri.toString();
 
@@ -16,6 +22,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   }
 
   void _onItemTapped(BuildContext context, int index) {
+
     switch (index) {
       case 0:
         context.go('/home');
@@ -36,7 +43,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     final selectedIndex = _getSelectedIndex(context);
 
     return Scaffold(
-      body: child,
+      body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) => _onItemTapped(context, index),

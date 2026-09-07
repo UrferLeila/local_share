@@ -127,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsetsGeometry.all(Sizes.p12),
+                        padding: const EdgeInsets.all(Sizes.p12),
                         child: Column(
                           children: [
                             SearchBarOffer(
@@ -161,6 +161,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               offer: filteredOffers[index],
                               isAdmin: user?.isAdmin ?? false,
                               onDelete: deleteOffer,
+                              user:
+                                  user!,
                             );
                           },
                         ),

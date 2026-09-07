@@ -83,7 +83,17 @@ class SuggestionCard extends StatelessWidget {
                     ],
                   ),
                   gapH4,
-                  StyledBase(prop.description),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      StyledBase(prop.description),
+                      Icon(
+                        Icons.delete,
+                        size: Sizes.p20,
+                        color: AppColors.lightRed,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
