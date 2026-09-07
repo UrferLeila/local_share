@@ -31,16 +31,16 @@ class OfferCard extends ConsumerStatefulWidget {
 
 class OffreCardState extends ConsumerState<OfferCard> {
   bool isExpanded = false;
-  final TextEditingController _propositionController = TextEditingController();
+  final TextEditingController suggestionController = TextEditingController();
 
   @override
   void dispose() {
-    _propositionController.dispose();
+    suggestionController.dispose();
     super.dispose();
   }
 
-  Future<void> _sendProposition(User? currentUser) async {
-    final text = _propositionController.text.trim();
+  Future<void> sendSuggestion(User? currentUser) async {
+    final text = suggestionController.text.trim();
     if (text.isEmpty || currentUser == null) return;
 
     try {
@@ -48,26 +48,26 @@ class OffreCardState extends ConsumerState<OfferCard> {
           ? "https://localhost:7024"
           : "https://10.0.2.2:7024";
       final response = await http.post(
-        Uri.parse("$baseUrl/api/offer/${widget.offer.id}/propositions"),
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse("$baseUrl/api/suggestion"),
+        headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          'userId': currentUser.id,
-          'username': currentUser.username,
-          'userPhoto': currentUser.photo != null
-              ? base64Encode(currentUser.photo!)
-              : null,
-          'name': text,
-          'Date': DateTime.now().toIso8601String(),
+          "offerId": widget.offer.id,
+          "name": text,
+          "username": currentUser.username,
+          "userPhoto": 0,
+          "userId": currentUser.id,
+          "room": "DefaultRoom",
+          "date": DateTime.now().toIso8601String(),
         }),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        _propositionController.clear();
+        suggestionController.clear();
         ref.invalidate(offerListNotifierProvider);
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to send proposition")),
+          const SnackBar(content: Text("Failed to send suggestion")),
         );
       }
     } catch (e) {
@@ -289,20 +289,20 @@ class OffreCardState extends ConsumerState<OfferCard> {
               ),
               if (isExpanded) ...[
                 const Divider(height: Sizes.p24),
-                const StyledSmallTitle("Propositions / Chat"),
+                const StyledSmallTitle("Suggestion / Chat"),
                 gapH8,
-                if (widget.offer.propositions.isEmpty)
+                if (widget.offer.suggestions.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: Sizes.p8),
-                    child: StyledBase("Aucune proposition pour le moment."),
+                    child: StyledBase("Aucune suggestion pour le moment."),
                   )
                 else
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: widget.offer.propositions.length,
+                    itemCount: widget.offer.suggestions.length,
                     itemBuilder: (context, index) {
-                      final prop = widget.offer.propositions[index];
+                      final prop = widget.offer.suggestions[index];
                       final bool isOwner = prop.userId == widget.offer.user;
 
                       return Padding(
@@ -323,10 +323,10 @@ class OffreCardState extends ConsumerState<OfferCard> {
                               child:
                                   prop.userPhoto == null ||
                                       prop.userPhoto!.isEmpty
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.person,
                                       size: Sizes.p16,
-                                      color: Colors.white,
+                                      color: AppColors.lightwhite,
                                     )
                                   : null,
                             ),
@@ -399,16 +399,16 @@ class OffreCardState extends ConsumerState<OfferCard> {
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: _propositionController,
+                        controller: suggestionController,
                         decoration: const InputDecoration(
-                          hintText: "Écrire une proposition...",
+                          hintText: "Écrire une suggestion...",
                           isDense: true,
                         ),
                       ),
                     ),
                     IconButton(
                       icon: Icon(Icons.send, color: AppColors.lightPurple),
-                      onPressed: () => _sendProposition(currentUser),
+                      onPressed: () => sendSuggestion(currentUser),
                     ),
                   ],
                 ),

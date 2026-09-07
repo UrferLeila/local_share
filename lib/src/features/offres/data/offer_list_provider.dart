@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/domain/offer.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +19,7 @@ class OfferNotifier extends AsyncNotifier<Map<String, dynamic>> {
 
     final response = await http.get(Uri.parse(url));
 
-    if (response.statusCode == Sizes.p200) {
+    if (response.statusCode == 200) {
       return compute(parseOfferResponse, response.body);
     } else {
       throw Exception("Erreur ${response.statusCode}");

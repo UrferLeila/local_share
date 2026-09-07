@@ -1,4 +1,4 @@
-import 'proposition.dart';
+import 'suggestion.dart';
 
 typedef OffreID = String;
 
@@ -39,7 +39,7 @@ class Offre {
   final String? image;
   final String user; // This holds the azureId
   final OfferType type;
-  final List<Proposition> propositions;
+  final List<Suggestion> suggestions;
 
   Offre({
     required this.id,
@@ -48,7 +48,7 @@ class Offre {
     required this.type,
     this.description,
     this.image,
-    this.propositions = const [],
+    this.suggestions = const [],
   });
 
   factory Offre.fromJson(Map<String, dynamic> json) => Offre(
@@ -63,9 +63,9 @@ class Offre {
         json['userId']?.toString() ??
         '',
     type: parseOfferType(json["type"]),
-    propositions: json['propositions'] != null
-        ? (json['propositions'] as List)
-              .map((p) => Proposition.fromJson(Map<String, dynamic>.from(p)))
+    suggestions: json["suggestions"] != null
+        ? (json["suggestions"] as List)
+              .map((p) => Suggestion.fromJson(Map<String, dynamic>.from(p)))
               .toList()
         : [],
   );
