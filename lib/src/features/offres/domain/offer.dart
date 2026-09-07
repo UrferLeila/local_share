@@ -94,6 +94,6 @@ class Offre {
     // Send azureId to match the C# model property
     'azureId': user,
     'type': type.index,
-    'propositions': propositions.map((p) => p.toJson()).toList(),
+    'suggestions': suggestions.map((p) => p.toJson()).toList(),
   };
 }
