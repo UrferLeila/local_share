@@ -5,6 +5,7 @@ import 'package:aad_oauth/model/config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_share/src/features/offres/domain/user.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/services/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,7 +61,7 @@ class AuthCubit extends Cubit<AuthState> {
       final accessToken = await oauth.getAccessToken().timeout(
         const Duration(seconds: 4),
         onTimeout: () =>
-            throw TimeoutException("Token acquisition iframe timed out"),
+            throw TimeoutException('Token acquisition iframe timed out'),
       );
 
       if (accessToken == null) {
@@ -74,29 +75,11 @@ class AuthCubit extends Cubit<AuthState> {
       final String azureId = userData["id"];
       final String name = userData["displayName"] ?? "Not Available";
       final String email = userData["mail"] ?? "Not Available";
-      final String mobilePhone = userData["mobilePhone"] ?? "Not Available";
-      final String jobTitle = userData["jobTitle"] ?? "Not Available";
+      final String mobilePhone = userData['mobilePhone'] ?? 'Not Available';
+      final String jobTitle = userData['jobTitle'] ?? 'Not Available';
       final String officeLocation =
-          userData["officeLocation"] ?? "Not Available";
-      final String department = userData["department"] ?? "Not Available";
-
-      try {
-        await Dio().post(
-          "https://localhost:7024/api/User/sync",
-          data: {"azureId": azureId, "userName": name, "email": email},
-        );
-
-        final prefs = await SharedPreferences.getInstance();
-        final userJson = jsonEncode({
-          "azureId": azureId,
-          "userName": name,
-          "email": email,
-          "role": 'user',
-        });
-        await prefs.setString('user', userJson);
-      } catch (e) {
-        print("Erreur lors de la synchronisation avec le backend : $e");
-      }
+          userData['officeLocation'] ?? 'Not Available';
+      final String department = userData['department'] ?? 'Not Available';
 
       Uint8List? photo;
       try {
@@ -108,6 +91,28 @@ class AuthCubit extends Cubit<AuthState> {
         }
       } catch (_) {
         photo = null;
+      }
+
+      try {
+        await Dio().post(
+          "https://localhost:7024/api/User/sync",
+          data: {"azureId": azureId, "userName": name, "email": email},
+        );
+
+        // 2. Create the User object with the photo included
+        final user = User(
+          id: azureId,
+          username: name,
+          email: email,
+          role: 'user',
+          photo: photo,
+        );
+
+        // 3. Save it to SharedPreferences using user.toJson() (handles photo base64 encoding)
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user', jsonEncode(user.toJson()));
+      } catch (e) {
+        print("Erreur lors de la synchronisation avec le backend : $e");
       }
 
       emit(
