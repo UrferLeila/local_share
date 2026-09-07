@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/services/api.dart';
-
 import 'microsoft_login_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {

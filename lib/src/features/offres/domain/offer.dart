@@ -1,4 +1,4 @@
-import 'proposition.dart';
+import 'suggestion.dart';
 
 typedef OffreID = String;
 
@@ -39,7 +39,7 @@ class Offre {
   final String? image;
   final OffreID user;
   final OfferType type;
-  final List<Proposition> propositions;
+  final List<Suggestion> suggestions;
 
   Offre({
     required this.id,
@@ -48,19 +48,19 @@ class Offre {
     required this.type,
     this.description,
     this.image,
-    this.propositions = const [],
+    this.suggestions = const [],
   });
 
   factory Offre.fromJson(Map<String, dynamic> json) => Offre(
-    id: json['offerId']?.toString() ?? '',
-    name: json['name'] ?? '',
-    description: json['description'],
-    image: json['image'],
-    user: json['userId']?.toString() ?? '',
+    id: json["offerId"]?.toString() ?? "",
+    name: json["name"] ?? "",
+    description: json["description"],
+    image: json["image"],
+    user: json["userId"]?.toString() ?? "",
     type: parseOfferType(json["type"]),
-    propositions: json['propositions'] != null
-        ? (json['propositions'] as List)
-              .map((p) => Proposition.fromJson(Map<String, dynamic>.from(p)))
+    suggestions: json["suggestions"] != null
+        ? (json["suggestions"] as List)
+              .map((p) => Suggestion.fromJson(Map<String, dynamic>.from(p)))
               .toList()
         : [],
   );
@@ -82,12 +82,12 @@ class Offre {
   }
 
   Map<String, dynamic> toJson() => {
-    'offerId': id,
-    'name': name,
-    'description': description,
-    'image': image,
-    'userId': user,
-    'type': type.index,
-    'propositions': propositions.map((p) => p.toJson()).toList(),
+    "offerId": id,
+    "name": name,
+    "description": description,
+    "image": image,
+    "userId": user,
+    "type": type.index,
+    "suggestions": suggestions.map((p) => p.toJson()).toList(),
   };
 }
