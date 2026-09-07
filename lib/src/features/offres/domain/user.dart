@@ -27,12 +27,17 @@ class User {
         decodedPhoto = null;
       }
     }
+    final resolvedId = json['azureId'] ?? json['AzureId'] ?? '';
 
     return User(
-      id: json['id'] ?? '',
-      username: json['username'] ?? '',
-      email: json['email'] ?? '',
-      role: json['role'] ?? 'user',
+      id: resolvedId.isNotEmpty
+          ? resolvedId
+          : (json['id']?.toString().contains('@') == false
+                ? json['id'] ?? ''
+                : ''),
+      username: json['userName'] ?? json['UserName'] ?? json['username'] ?? '',
+      email: json['email'] ?? json['Email'] ?? '',
+      role: json['role'] ?? json['Role'] ?? 'user',
       photo: decodedPhoto,
     );
   }
@@ -41,8 +46,8 @@ class User {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'username': username,
+      'azureId': id,
+      'userName': username,
       'email': email,
       'role': role,
       'photo': photo != null ? base64Encode(photo!) : null,

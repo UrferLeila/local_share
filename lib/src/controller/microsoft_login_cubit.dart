@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:aad_oauth/aad_oauth.dart';
 import 'package:aad_oauth/model/config.dart';
 import 'package:dio/dio.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/services/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'microsoft_login_state.dart';
 
@@ -70,7 +72,7 @@ class AuthCubit extends Cubit<AuthState> {
       Response jsonResponse = await API().getUserDetails(token: accessToken);
       final Map<String, dynamic> userData = jsonResponse.data;
 
-      final String azureId = userData["id"];
+      final String azureId = userData["id"]; // This is your Azure UUID
       final String name = userData["displayName"] ?? "Not Available";
       final String email = userData["mail"] ?? "Not Available";
       final String mobilePhone = userData['mobilePhone'] ?? 'Not Available';
@@ -84,6 +86,16 @@ class AuthCubit extends Cubit<AuthState> {
           "https://localhost:7024/api/User/sync",
           data: {"azureId": azureId, "userName": name, "email": email},
         );
+
+        // ADD THIS: Save the user to SharedPreferences so CreateOfferScreen can read the AzureId!
+        final prefs = await SharedPreferences.getInstance();
+        final userJson = jsonEncode({
+          'azureId': azureId,
+          'userName': name,
+          'email': email,
+          'role': 'user',
+        });
+        await prefs.setString('user', userJson);
       } catch (e) {
         print("Erreur lors de la synchronisation avec le backend : $e");
       }
@@ -123,8 +135,9 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await oauth.logout();
-      emit(AuthInitial());
     } catch (e) {
+      print("Logout error: $e");
+    } finally {
       emit(AuthInitial());
     }
   }

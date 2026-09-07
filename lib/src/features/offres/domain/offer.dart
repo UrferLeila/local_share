@@ -37,7 +37,7 @@ class Offre {
   final String name;
   final String? description;
   final String? image;
-  final OffreID user;
+  final String user; // This holds the azureId
   final OfferType type;
   final List<Proposition> propositions;
 
@@ -56,7 +56,12 @@ class Offre {
     name: json['name'] ?? '',
     description: json['description'],
     image: json['image'],
-    user: json['userId']?.toString() ?? '',
+    // Fix: Look for azureId / AzureId first, then fallback to userId
+    user:
+        json['azureId']?.toString() ??
+        json['AzureId']?.toString() ??
+        json['userId']?.toString() ??
+        '',
     type: parseOfferType(json["type"]),
     propositions: json['propositions'] != null
         ? (json['propositions'] as List)
@@ -86,7 +91,8 @@ class Offre {
     'name': name,
     'description': description,
     'image': image,
-    'userId': user,
+    // Send azureId to match the C# model property
+    'azureId': user,
     'type': type.index,
     'propositions': propositions.map((p) => p.toJson()).toList(),
   };
