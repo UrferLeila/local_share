@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:local_share/src/features/offres/routing/app_router.dart';
 import 'package:local_share/src/services/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'microsoft_login_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -61,7 +60,7 @@ class AuthCubit extends Cubit<AuthState> {
       final accessToken = await oauth.getAccessToken().timeout(
         const Duration(seconds: 4),
         onTimeout: () =>
-            throw TimeoutException('Token acquisition iframe timed out'),
+            throw TimeoutException("Token acquisition iframe timed out"),
       );
 
       if (accessToken == null) {
@@ -72,14 +71,14 @@ class AuthCubit extends Cubit<AuthState> {
       Response jsonResponse = await API().getUserDetails(token: accessToken);
       final Map<String, dynamic> userData = jsonResponse.data;
 
-      final String azureId = userData["id"]; // This is your Azure UUID
+      final String azureId = userData["id"];
       final String name = userData["displayName"] ?? "Not Available";
       final String email = userData["mail"] ?? "Not Available";
-      final String mobilePhone = userData['mobilePhone'] ?? 'Not Available';
-      final String jobTitle = userData['jobTitle'] ?? 'Not Available';
+      final String mobilePhone = userData["mobilePhone"] ?? "Not Available";
+      final String jobTitle = userData["jobTitle"] ?? "Not Available";
       final String officeLocation =
-          userData['officeLocation'] ?? 'Not Available';
-      final String department = userData['department'] ?? 'Not Available';
+          userData["officeLocation"] ?? "Not Available";
+      final String department = userData["department"] ?? "Not Available";
 
       try {
         await Dio().post(
@@ -87,13 +86,12 @@ class AuthCubit extends Cubit<AuthState> {
           data: {"azureId": azureId, "userName": name, "email": email},
         );
 
-        // ADD THIS: Save the user to SharedPreferences so CreateOfferScreen can read the AzureId!
         final prefs = await SharedPreferences.getInstance();
         final userJson = jsonEncode({
-          'azureId': azureId,
-          'userName': name,
-          'email': email,
-          'role': 'user',
+          "azureId": azureId,
+          "userName": name,
+          "email": email,
+          "role": 'user',
         });
         await prefs.setString('user', userJson);
       } catch (e) {

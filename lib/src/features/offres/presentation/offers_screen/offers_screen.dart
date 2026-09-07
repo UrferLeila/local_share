@@ -78,7 +78,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
     }
   }
 
-  List<Offre> filterOffers(List<Offre> offers) {
+  List<Offer> filterOffers(List<Offer> offers) {
     return offers.where((offer) {
       final query = currentSearchQuery.toLowerCase();
 
@@ -130,7 +130,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
         }
 
         // Safely extract offers and filter by matching the user's azureId
-        final allOffers = dataMap["offres"] as List<Offre>;
+        final allOffers = dataMap["offres"] as List<Offer>;
         final listOfoffers = allOffers.where((offre) {
           // Adjust based on your Offre model field names (e.g., azureId, userId, or user)
           final String offerUserId = offre.user;

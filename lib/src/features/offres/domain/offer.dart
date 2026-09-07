@@ -9,11 +9,11 @@ enum OfferType {
 
   static OfferType fromString(String value) {
     switch (value.toLowerCase()) {
-      case 'achat':
+      case "achat":
         return OfferType.achat;
-      case 'service':
+      case "service":
         return OfferType.service;
-      case 'pret':
+      case "pret":
         return OfferType.pret;
       default:
         return OfferType.pret;
@@ -23,25 +23,25 @@ enum OfferType {
   String toShortString() {
     switch (this) {
       case OfferType.achat:
-        return 'achat';
+        return "achat";
       case OfferType.service:
-        return 'service';
+        return "service";
       case OfferType.pret:
-        return 'pret';
+        return "pret";
     }
   }
 }
 
-class Offre {
+class Offer {
   final OffreID id;
   final String name;
   final String? description;
   final String? image;
-  final String user; // This holds the azureId
+  final String user;
   final OfferType type;
   final List<Suggestion> suggestions;
 
-  Offre({
+  Offer({
     required this.id,
     required this.name,
     required this.user,
@@ -51,17 +51,16 @@ class Offre {
     this.suggestions = const [],
   });
 
-  factory Offre.fromJson(Map<String, dynamic> json) => Offre(
-    id: json['offerId']?.toString() ?? '',
-    name: json['name'] ?? '',
-    description: json['description'],
-    image: json['image'],
-    // Fix: Look for azureId / AzureId first, then fallback to userId
+  factory Offer.fromJson(Map<String, dynamic> json) => Offer(
+    id: json["offerId"]?.toString() ?? '',
+    name: json["name"] ?? '',
+    description: json["description"],
+    image: json["image"],
     user:
-        json['azureId']?.toString() ??
-        json['AzureId']?.toString() ??
-        json['userId']?.toString() ??
-        '',
+        json["azureId"]?.toString() ??
+        json["AzureId"]?.toString() ??
+        json["userId"]?.toString() ??
+        "",
     type: parseOfferType(json["type"]),
     suggestions: json["suggestions"] != null
         ? (json["suggestions"] as List)
@@ -87,13 +86,12 @@ class Offre {
   }
 
   Map<String, dynamic> toJson() => {
-    'offerId': id,
-    'name': name,
-    'description': description,
-    'image': image,
-    // Send azureId to match the C# model property
-    'azureId': user,
-    'type': type.index,
-    'propositions': propositions.map((p) => p.toJson()).toList(),
+    "offerId": id,
+    "name": name,
+    "description": description,
+    "image": image,
+    "azureId": user,
+    "type": type.index,
+    "suggestions": suggestions.map((p) => p.toJson()).toList(),
   };
 }

@@ -59,7 +59,7 @@ final goRouter = GoRouter(
       path: '/editOffre',
       name: AppRoute.editOffre.name,
       builder: (context, state) {
-        final offer = state.extra as Offre;
+        final offer = state.extra as Offer;
         return EditOfferScreen(offer: offer);
       },
     ),

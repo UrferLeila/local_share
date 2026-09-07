@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:local_share/src/common_widgets/styled_text.dart';
+import 'package:local_share/src/common_widgets/suggestion_card.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offer_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
@@ -21,7 +22,7 @@ class OfferCard extends ConsumerStatefulWidget {
     required this.onDelete,
   });
 
-  final Offre offer;
+  final Offer offer;
   final bool isAdmin;
   final Future<void> Function(String) onDelete;
 
@@ -303,104 +304,8 @@ class OffreCardState extends ConsumerState<OfferCard> {
                       shrinkWrap: false,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: widget.offer.suggestions.length,
-                      itemBuilder: (context, index) {
-                        final prop = widget.offer.suggestions[index];
-                        final bool isOwner = prop.userId == widget.offer.user;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Sizes.p4,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: Sizes.p16,
-                                backgroundColor: isOwner
-                                    ? AppColors.cyan
-                                    : AppColors.lightBrown,
-                                backgroundImage:
-                                    prop.userPhoto != null &&
-                                        prop.userPhoto!.isNotEmpty
-                                    ? MemoryImage(base64Decode(prop.userPhoto!))
-                                    : null,
-                                child:
-                                    prop.userPhoto == null ||
-                                        prop.userPhoto!.isEmpty
-                                    ? Icon(
-                                        Icons.person,
-                                        size: Sizes.p16,
-                                        color: AppColors.lightwhite,
-                                      )
-                                    : null,
-                              ),
-                              gapW12,
-                              Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.all(Sizes.p8),
-                                  decoration: BoxDecoration(
-                                    color: isOwner
-                                        ? AppColors.cyan.withValues(alpha: 0.15)
-                                        : AppColors.lightPurple.withValues(
-                                            alpha: 0.1,
-                                          ),
-                                    borderRadius: BorderRadius.circular(
-                                      Sizes.p8,
-                                    ),
-                                    border: isOwner
-                                        ? Border.all(
-                                            color: AppColors.cyan.withValues(
-                                              alpha: 0.4,
-                                            ),
-                                            width: 1,
-                                          )
-                                        : null,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              StyledLink(prop.username),
-                                              if (isOwner) ...[
-                                                const SizedBox(width: 6),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        horizontal: 6,
-                                                        vertical: 2,
-                                                      ),
-                                                  decoration: BoxDecoration(
-                                                    color: AppColors.cyan,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          4,
-                                                        ),
-                                                  ),
-                                                  child: StyledBase("Auteur"),
-                                                ),
-                                              ],
-                                            ],
-                                          ),
-                                          StyledBase(
-                                            "${prop.date.hour.toString().padLeft(2, '0')}:${prop.date.minute.toString().padLeft(2, '0')}",
-                                          ),
-                                        ],
-                                      ),
-                                      gapH4,
-                                      StyledBase(prop.description),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                      itemBuilder: (context, index) =>
+                          SuggestionCard(offer: widget.offer, index: index),
                     ),
                   ),
                 gapH12,

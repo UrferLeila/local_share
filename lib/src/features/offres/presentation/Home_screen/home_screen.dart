@@ -74,7 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  List<Offre> filterOffers(List<Offre> offers) {
+  List<Offer> filterOffers(List<Offer> offers) {
     return offers.where((offer) {
       final query = currentSearchQuery.toLowerCase();
 
@@ -110,7 +110,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
       data: (dataMap) {
-        final listOfoffers = (dataMap["offres"] as List<Offre>);
+        final listOfoffers = (dataMap["offres"] as List<Offer>);
         final filteredOffers = filterOffers(listOfoffers);
         return Scaffold(
           appBar: AppBarWidget(
