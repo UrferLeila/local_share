@@ -52,9 +52,7 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
         headers: {"Content-Type": "application/json"},
       );
 
-      final data = jsonDecode(response.body);
-
-      if (response.statusCode == Sizes.p200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         if (!mounted) return;
 
         ref.invalidate(offerListNotifierProvider);
@@ -63,6 +61,8 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
           const SnackBar(content: Text("Offer successfully removed!")),
         );
       } else {
+        final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(

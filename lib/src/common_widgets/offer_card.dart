@@ -142,31 +142,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                         width: Sizes.p70,
                         height: Sizes.p70,
                         color: AppColors.lightBrown,
-                        child: hasImage
-                            ? (() {
-                                try {
-                                  Uint8List decodedBytes = base64Decode(
-                                    widget.offer.image!,
-                                  );
-                                  return Image.memory(
-                                    decodedBytes,
-                                    fit: BoxFit.cover,
-                                    width: Sizes.p70,
-                                    height: Sizes.p70,
-                                  );
-                                } catch (e) {
-                                  return Icon(
-                                    Icons.broken_image_outlined,
-                                    color: AppColors.lightPurple,
-                                    size: Sizes.p32,
-                                  );
-                                }
-                              })()
-                            : Icon(
-                                Icons.image_outlined,
-                                color: AppColors.lightPurple,
-                                size: Sizes.p32,
-                              ),
+                        child: _buildOfferImage(),
                       ),
                     ),
                   ),
@@ -357,5 +333,57 @@ class OffreCardState extends ConsumerState<OfferCard> {
         ),
       ),
     );
+  }
+
+  Widget _buildOfferImage() {
+    final imgStr = widget.offer.image;
+
+    // Check for null, empty, or literal string "null" from backend
+    if (imgStr == null || imgStr.isEmpty || imgStr.toLowerCase() == "null") {
+      return Icon(
+        Icons.image_outlined,
+        color: AppColors.lightPurple,
+        size: Sizes.p32,
+      );
+    }
+
+    try {
+      // Strip data URI prefix if present (e.g., "data:image/jpeg;base64,...")
+      String cleanBase64 = imgStr;
+      if (imgStr.contains(',')) {
+        cleanBase64 = imgStr.split(',').last;
+      }
+
+      Uint8List decodedBytes = base64Decode(cleanBase64);
+
+      if (decodedBytes.isEmpty) {
+        return Icon(
+          Icons.image_outlined,
+          color: AppColors.lightPurple,
+          size: Sizes.p32,
+        );
+      }
+
+      return Image.memory(
+        decodedBytes,
+        fit: BoxFit.cover,
+        width: Sizes.p70,
+        height: Sizes.p70,
+        // Fallback widget if Image.memory fails to render the bytes
+        errorBuilder: (context, error, stackTrace) {
+          return Icon(
+            Icons.broken_image_outlined,
+            color: AppColors.lightPurple,
+            size: Sizes.p32,
+          );
+        },
+      );
+    } catch (e) {
+      return Icon(
+        Icons.broken_image_outlined,
+        color: AppColors.lightPurple,
+        size: Sizes.p32,
+      );
+    }
   }
 }

@@ -44,13 +44,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       String baseUrl = kIsWeb
           ? "https://localhost:7024"
           : "https://10.0.2.2:7024";
+
       final response = await http.delete(
         Uri.parse("$baseUrl/api/offer/$offreId"),
         headers: {'Content-Type': 'application/json'},
       );
-      final data = jsonDecode(response.body);
 
-      if (response.statusCode == Sizes.p200) {
+      if (response.statusCode == 200 || response.statusCode == 204) {
         if (!mounted) return;
 
         ref.invalidate(offerListNotifierProvider);
@@ -59,6 +59,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           const SnackBar(content: Text("Offer successfully removed!")),
         );
       } else {
+        final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -161,8 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               offer: filteredOffers[index],
                               isAdmin: user?.isAdmin ?? false,
                               onDelete: deleteOffer,
-                              user:
-                                  user!,
+                              user: user!,
                             );
                           },
                         ),
