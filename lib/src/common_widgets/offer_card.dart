@@ -29,10 +29,10 @@ class OfferCard extends ConsumerStatefulWidget {
   final Future<void> Function(String) onDelete;
 
   @override
-  ConsumerState<OfferCard> createState() => OffreCardState();
+  ConsumerState<OfferCard> createState() => OfferCardState();
 }
 
-class OffreCardState extends ConsumerState<OfferCard> {
+class OfferCardState extends ConsumerState<OfferCard> {
   bool isExpanded = false;
   final TextEditingController suggestionController = TextEditingController();
 
@@ -42,11 +42,12 @@ class OffreCardState extends ConsumerState<OfferCard> {
     super.dispose();
   }
 
-  Future<void> deleteSuggestion(dynamic suggestionId) async {
-    String baseUrl = kIsWeb
-        ? "https://localhost:7024"
-        : "https://10.0.2.2:7024";
+  String getBaseUrl() {
+    return kIsWeb ? "https://localhost:7024" : "https://10.0.2.2:7024";
+  }
 
+  Future<void> deleteSuggestion(dynamic suggestionId) async {
+    final baseUrl = getBaseUrl();
     final response = await http.delete(
       Uri.parse("$baseUrl/api/Suggestion/$suggestionId"),
       headers: {'Content-Type': 'application/json'},
@@ -55,7 +56,35 @@ class OffreCardState extends ConsumerState<OfferCard> {
     if (response.statusCode == 204 || response.statusCode == 200) {
       ref.invalidate(offerListNotifierProvider);
     } else {
-      throw Exception("Échec de la suppression de la suggestion");
+      throw Exception("Failed to delete the suggestion: ${response.body}");
+    }
+  }
+
+  Future<void> editSuggestion(
+    dynamic suggestionId,
+    String newText,
+    dynamic suggestion,
+  ) async {
+    final baseUrl = getBaseUrl();
+    final response = await http.put(
+      Uri.parse("$baseUrl/api/Suggestion/$suggestionId"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        "suggestionId": suggestionId,
+        "offerId": widget.offer.id,
+        "name": newText,
+        "username": suggestion.username,
+        "userPhoto": suggestion.userPhoto ?? 0,
+        "userId": suggestion.userId,
+        "room": "DefaultRoom",
+        "date": suggestion.date.toIso8601String(),
+      }),
+    );
+
+    if (response.statusCode == 204 || response.statusCode == 200) {
+      ref.invalidate(offerListNotifierProvider);
+    } else {
+      throw Exception("Failed to edit the suggestion: ${response.body}");
     }
   }
 
@@ -65,22 +94,34 @@ class OffreCardState extends ConsumerState<OfferCard> {
     if (text.isEmpty || currentUser == null) return;
 
     try {
-      String baseUrl = kIsWeb
-          ? "https://localhost:7024"
-          : "https://10.0.2.2:7024";
+      final baseUrl = getBaseUrl();
+      final url = Uri.parse("$baseUrl/api/Suggestion");
+
+      final bodyData = {
+        "offerId": widget.offer.id,
+        "name": text,
+        "username": currentUser.username,
+        "userPhoto": 0,
+        "userId": azureId,
+        "room": "DefaultRoom",
+        "date": DateTime.now().toIso8601String(),
+      };
+
+      if (kDebugMode) {
+        print("Envoi vers: $url");
+        print("Payload: ${jsonEncode(bodyData)}");
+      }
+
       final response = await http.post(
-        Uri.parse("$baseUrl/api/suggestion"),
+        url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "offerId": widget.offer.id,
-          "name": text,
-          "username": currentUser.username,
-          "userPhoto": 0,
-          "userId": azureId,
-          "room": "DefaultRoom",
-          "date": DateTime.now().toIso8601String(),
-        }),
+        body: jsonEncode(bodyData),
       );
+
+      if (kDebugMode) {
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+      }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         suggestionController.clear();
@@ -88,14 +129,19 @@ class OffreCardState extends ConsumerState<OfferCard> {
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Failed to send suggestion")),
+          SnackBar(
+            content: Text(
+              "Erreur serveur (${response.statusCode}) : ${response.body}",
+            ),
+          ),
         );
       }
     } catch (e) {
+      if (kDebugMode) print("Exception attrapée : $e");
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ).showSnackBar(SnackBar(content: Text("Erreur de connexion : $e")));
     }
   }
 
@@ -208,7 +254,7 @@ class OffreCardState extends ConsumerState<OfferCard> {
                                     "Confirmer la suppression",
                                   ),
                                   content: StyledBase(
-                                    "Voulez-vous vraiment supprimer cet offres ?",
+                                    "Voulez-vous vraiment supprimer cet offre ?",
                                   ),
                                   actions: <Widget>[
                                     TextButton(
@@ -305,6 +351,48 @@ class OffreCardState extends ConsumerState<OfferCard> {
                           offer: widget.offer,
                           index: index,
                           onDelete: () => deleteSuggestion(suggestion.id),
+                          onEdit: () async {
+                            final textController = TextEditingController(
+                              text: suggestion.description,
+                            );
+
+                            final bool? confirmed = await showDialog<bool>(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const StyledSmallTitle(
+                                    "Modifier la suggestion",
+                                  ),
+                                  content: TextField(
+                                    controller: textController,
+                                    decoration: const InputDecoration(
+                                      hintText: "Nouveau texte...",
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(false),
+                                      child: const StyledText("Annuler"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(true),
+                                      child: const StyledText("Enregistrer"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            if (confirmed == true &&
+                                textController.text.trim().isNotEmpty) {
+                              await editSuggestion(
+                                suggestion.id,
+                                textController.text.trim(),
+                                suggestion,
+                              );
+                            }
+                          },
                         );
                       },
                     ),

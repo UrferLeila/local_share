@@ -11,11 +11,13 @@ class SuggestionCard extends StatelessWidget {
     required this.offer,
     required this.index,
     required this.onDelete,
+    required this.onEdit,
   });
 
   final Offer offer;
   final int index;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -93,14 +95,28 @@ class SuggestionCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       StyledBase(prop.description),
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: onDelete,
-                        child: Icon(
-                          Icons.delete,
-                          size: Sizes.p20,
-                          color: AppColors.lightRed,
-                        ),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: onEdit,
+                            child: Icon(
+                              Icons.edit,
+                              size: Sizes.p20,
+                              color: AppColors.lightwhite,
+                            ),
+                          ),
+                          gapW4,
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: onDelete,
+                            child: Icon(
+                              Icons.delete,
+                              size: Sizes.p20,
+                              color: AppColors.lightRed,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
