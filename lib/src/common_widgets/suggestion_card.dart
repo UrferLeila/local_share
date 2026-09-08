@@ -94,7 +94,13 @@ class SuggestionCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      StyledBase(prop.description),
+                      Expanded(
+                        child: StyledBase(
+                          prop.description,
+                          maxLines: null,
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
                       Row(
                         children: [
                           GestureDetector(
