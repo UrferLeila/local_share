@@ -96,9 +96,9 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
         body: jsonEncode({
           "name": name,
           "description": description,
-          "azureId": azureId, 
+          "azureId": azureId,
           "image": base64Image ?? "url_de_image",
-          "type": typeIndex, 
+          "type": typeIndex,
         }),
       );
 
@@ -233,7 +233,7 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                         ),
                         gapH20,
                         StyledForms(
-                          hintText: "Perçeuse Bosch / Cours de guitare",
+                          hintText: "Perçeuse Bosch",
                           labelText: "Titre de l'offre",
                           typeForm: TextInputType.text,
                           textController: nameController,

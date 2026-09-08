@@ -17,16 +17,16 @@ import 'package:local_share/src/theme/theme.dart';
 class OfferCard extends ConsumerStatefulWidget {
   const OfferCard({
     super.key,
-    required this.offer,
     required this.isAdmin,
-    required this.user,
+    required this.offer,
     required this.onDelete,
+    required this.user,
   });
 
-  final Offer offer;
   final bool isAdmin;
-  final User user;
+  final Offer offer;
   final Future<void> Function(String) onDelete;
+  final User user;
 
   @override
   ConsumerState<OfferCard> createState() => OfferCardState();
@@ -107,21 +107,11 @@ class OfferCardState extends ConsumerState<OfferCard> {
         "date": DateTime.now().toIso8601String(),
       };
 
-      if (kDebugMode) {
-        print("Envoi vers: $url");
-        print("Payload: ${jsonEncode(bodyData)}");
-      }
-
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(bodyData),
       );
-
-      if (kDebugMode) {
-        print("Status Code: ${response.statusCode}");
-        print("Response Body: ${response.body}");
-      }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         suggestionController.clear();
@@ -147,8 +137,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage =
-        widget.offer.image != null && widget.offer.image!.isNotEmpty;
+    // final hasImage = widget.offer.image != null && widget.offer.image!.isNotEmpty;
     final currentUser = ref.watch(userProvider);
 
     return Card(
@@ -188,7 +177,7 @@ class OfferCardState extends ConsumerState<OfferCard> {
                         width: Sizes.p70,
                         height: Sizes.p70,
                         color: AppColors.lightBrown,
-                        child: _buildOfferImage(),
+                        child: buildOfferImage(),
                       ),
                     ),
                   ),
@@ -240,10 +229,37 @@ class OfferCardState extends ConsumerState<OfferCard> {
                       ],
                     ),
                   ),
-                  gapW12,
-                  Column(
+                  gapW8,
+                  Row(
                     children: [
                       if (widget.isAdmin) ...[
+                        gapH8,
+                        InkWell(
+                          onTap: () async {
+                            final result = await context.pushNamed<bool>(
+                              AppRoute.editOffre.name,
+                              extra: widget.offer,
+                            );
+                            if (result == true && mounted) {
+                              ref.invalidate(offerListNotifierProvider);
+                            }
+                          },
+                          borderRadius: BorderRadius.circular(Sizes.p8),
+                          child: Container(
+                            width: Sizes.p40,
+                            height: Sizes.p40,
+                            decoration: BoxDecoration(
+                              color: AppColors.lightPurple,
+                              borderRadius: BorderRadius.circular(Sizes.p8),
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: AppColors.lightwhite,
+                              size: Sizes.p20,
+                            ),
+                          ),
+                        ),
+                        gapW8,
                         InkWell(
                           onTap: () async {
                             final bool? confirm = await showDialog<bool>(
@@ -290,34 +306,8 @@ class OfferCardState extends ConsumerState<OfferCard> {
                             ),
                           ),
                         ),
-                        gapH8,
-                        InkWell(
-                          onTap: () async {
-                            final result = await context.pushNamed<bool>(
-                              AppRoute.editOffre.name,
-                              extra: widget.offer,
-                            );
-                            if (result == true && mounted) {
-                              ref.invalidate(offerListNotifierProvider);
-                            }
-                          },
-                          borderRadius: BorderRadius.circular(Sizes.p8),
-                          child: Container(
-                            width: Sizes.p40,
-                            height: Sizes.p40,
-                            decoration: BoxDecoration(
-                              color: AppColors.lightPurple,
-                              borderRadius: BorderRadius.circular(Sizes.p8),
-                            ),
-                            child: Icon(
-                              Icons.edit,
-                              color: AppColors.lightwhite,
-                              size: Sizes.p20,
-                            ),
-                          ),
-                        ),
-                        gapH8,
                       ],
+                      gapW8,
                       Icon(
                         isExpanded
                             ? Icons.keyboard_arrow_up
@@ -336,7 +326,9 @@ class OfferCardState extends ConsumerState<OfferCard> {
                 if (widget.offer.suggestions.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: Sizes.p8),
-                    child: StyledBase("Aucune suggestion pour le moment."),
+                    child: Center(
+                      child: StyledBase("Aucune suggestion pour le moment."),
+                    ),
                   )
                 else
                   SizedBox(
@@ -423,10 +415,9 @@ class OfferCardState extends ConsumerState<OfferCard> {
     );
   }
 
-  Widget _buildOfferImage() {
+  Widget buildOfferImage() {
     final imgStr = widget.offer.image;
 
-    // Check for null, empty, or literal string "null" from backend
     if (imgStr == null || imgStr.isEmpty || imgStr.toLowerCase() == "null") {
       return Icon(
         Icons.image_outlined,
@@ -436,10 +427,9 @@ class OfferCardState extends ConsumerState<OfferCard> {
     }
 
     try {
-      // Strip data URI prefix if present (e.g., "data:image/jpeg;base64,...")
       String cleanBase64 = imgStr;
-      if (imgStr.contains(',')) {
-        cleanBase64 = imgStr.split(',').last;
+      if (imgStr.contains(",")) {
+        cleanBase64 = imgStr.split(",").last;
       }
 
       Uint8List decodedBytes = base64Decode(cleanBase64);
@@ -457,7 +447,6 @@ class OfferCardState extends ConsumerState<OfferCard> {
         fit: BoxFit.cover,
         width: Sizes.p70,
         height: Sizes.p70,
-        // Fallback widget if Image.memory fails to render the bytes
         errorBuilder: (context, error, stackTrace) {
           return Icon(
             Icons.broken_image_outlined,

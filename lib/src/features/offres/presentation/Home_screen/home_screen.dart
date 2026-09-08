@@ -7,6 +7,7 @@ import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/inline_filter.dart';
 import 'package:local_share/src/common_widgets/offer_card.dart';
 import 'package:local_share/src/common_widgets/search_bar_offer.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offer_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
@@ -139,34 +140,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             gapH12,
                             InlineFilter(
                               onFilterChanged: onFilterChanged,
-                              typeOffers: {
-                                OfferType.achat: "Achat",
-                                OfferType.service: "Service",
-                                OfferType.pret: "Prêt",
-                              },
-                              selectedColor: AppColors.lightPurple,
-                              selectedTextColor: AppColors.lightwhite,
-                              unselectedColor: AppColors.lightBrown,
-                              unselectedTextColor: AppColors.lightwhite,
-                              borderColor: AppColors.lightwhite,
-                              borderWidth: Sizes.p0,
                             ),
                           ],
                         ),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                          padding: const EdgeInsets.only(top: Sizes.p12),
-                          itemCount: filteredOffers.length,
-                          itemBuilder: (context, index) {
-                            return OfferCard(
-                              offer: filteredOffers[index],
-                              isAdmin: user?.isAdmin ?? false,
-                              onDelete: deleteOffer,
-                              user: user!,
-                            );
-                          },
-                        ),
+                        child: filteredOffers.isEmpty
+                            ? Center(
+                                child: StyledText(
+                                  "Aucune offre n'est disponible.",
+                                ),
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.only(top: Sizes.p12),
+                                itemCount: filteredOffers.length,
+                                itemBuilder: (context, index) {
+                                  return OfferCard(
+                                    offer: filteredOffers[index],
+                                    isAdmin: user?.isAdmin ?? false,
+                                    onDelete: deleteOffer,
+                                    user: user!,
+                                  );
+                                },
+                              ),
                       ),
                     ],
                   ),

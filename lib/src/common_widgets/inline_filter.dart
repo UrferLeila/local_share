@@ -1,46 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/domain/offer.dart';
+import 'package:local_share/src/theme/theme.dart';
 
 class InlineFilter extends StatefulWidget {
   final Function(List<OfferType>) onFilterChanged;
-  final Map<OfferType, String> typeOffers;
-  final Color selectedColor;
-  final Color unselectedColor;
-  final Color selectedTextColor;
-  final Color unselectedTextColor;
-  final Color borderColor;
-  final double borderWidth;
 
-  const InlineFilter({
-    super.key,
-    required this.onFilterChanged,
-    required this.typeOffers,
-    required this.selectedColor,
-    required this.unselectedColor,
-    required this.selectedTextColor,
-    required this.unselectedTextColor,
-    required this.borderColor,
-    required this.borderWidth,
-  });
+  const InlineFilter({super.key, required this.onFilterChanged});
 
   @override
-  State<InlineFilter> createState() => _InlineFilterState();
+  State<InlineFilter> createState() => InlineFilterState();
 }
 
-class _InlineFilterState extends State<InlineFilter> {
-  final List<OfferType> _selectedFilters = [];
+class InlineFilterState extends State<InlineFilter> {
+  final List<OfferType> selectedFilters = [];
 
   void _toggleFilter(OfferType type) {
     setState(() {
-      if (_selectedFilters.contains(type)) {
-        _selectedFilters.remove(type);
+      if (selectedFilters.contains(type)) {
+        selectedFilters.remove(type);
       } else {
-        _selectedFilters.add(type);
+        selectedFilters.add(type);
       }
     });
-    widget.onFilterChanged(_selectedFilters);
+    widget.onFilterChanged(selectedFilters);
   }
+
+  static const Map<OfferType, String> typeOffers = {
+    OfferType.achat: "Achat",
+    OfferType.service: "Service",
+    OfferType.pret: "Prêt",
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +39,10 @@ class _InlineFilterState extends State<InlineFilter> {
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: Sizes.p16),
       child: Row(
-        children: widget.typeOffers.entries.map((entry) {
+        children: typeOffers.entries.map((entry) {
           final type = entry.key;
           final label = entry.value;
-          final isSelected = _selectedFilters.contains(type);
+          final isSelected = selectedFilters.contains(type);
 
           return Padding(
             padding: const EdgeInsets.only(right: Sizes.p8),
@@ -61,18 +51,20 @@ class _InlineFilterState extends State<InlineFilter> {
                 label,
                 style: TextStyle(
                   color: isSelected
-                      ? widget.selectedTextColor
-                      : widget.unselectedTextColor,
+                      ? AppColors.lightwhite
+                      : AppColors.lightwhite,
                   fontWeight: FontWeight.w600,
                   fontSize: Sizes.p16,
                 ),
               ),
               selected: isSelected,
-              selectedColor: widget.selectedColor,
-              backgroundColor: widget.unselectedColor,
+              selectedColor: AppColors.lightPurple,
+              backgroundColor: AppColors.lightBrown,
               side: BorderSide(
-                color: isSelected ? Colors.transparent : widget.borderColor,
-                width: widget.borderWidth,
+                color: isSelected
+                    ? AppColors.transparent
+                    : AppColors.lightwhite,
+                width: Sizes.p0,
               ),
               showCheckmark: false,
               onSelected: (_) => _toggleFilter(type),

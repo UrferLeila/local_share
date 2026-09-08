@@ -8,6 +8,7 @@ import 'package:local_share/src/common_widgets/app_bar_widget.dart';
 import 'package:local_share/src/common_widgets/inline_filter.dart';
 import 'package:local_share/src/common_widgets/offer_card.dart';
 import 'package:local_share/src/common_widgets/search_bar_offer.dart';
+import 'package:local_share/src/common_widgets/styled_text.dart';
 import 'package:local_share/src/constant/app_size.dart';
 import 'package:local_share/src/features/offres/data/offer_list_provider.dart';
 import 'package:local_share/src/features/offres/data/user_provider.dart';
@@ -162,17 +163,6 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                             Center(
                               child: InlineFilter(
                                 onFilterChanged: onFilterChanged,
-                                typeOffers: {
-                                  OfferType.achat: "Achat",
-                                  OfferType.service: "Service",
-                                  OfferType.pret: "Prêt",
-                                },
-                                selectedColor: AppColors.lightPurple,
-                                selectedTextColor: AppColors.lightwhite,
-                                unselectedColor: AppColors.lightBrown,
-                                unselectedTextColor: AppColors.lightwhite,
-                                borderColor: AppColors.lightwhite,
-                                borderWidth: Sizes.p0,
                               ),
                             ),
                           ],
@@ -181,13 +171,8 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
                       Expanded(
                         child: filteredOffers.isEmpty
                             ? Center(
-                                child: Text(
+                                child: StyledText(
                                   "Vous n'avez publié aucune offre.",
-                                  style: TextStyle(
-                                    color: AppColors.lightwhite.withValues(
-                                      alpha: 0.6,
-                                    ),
-                                  ),
                                 ),
                               )
                             : ListView.builder(

@@ -11,6 +11,7 @@ class AppColors {
   static Color lightBrown = Color(0xFF2C2C2C);
   static Color darkBrown = Color(0xFF1E1E1E);
   static Color black = Color(0xFF121212);
+  static Color transparent = Colors.transparent;
 }
 
 ThemeData primaryTheme = ThemeData(
